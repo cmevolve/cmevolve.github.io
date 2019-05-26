@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="单点登陆,sso,">
 
 
 
@@ -79,17 +79,23 @@
 
 
 
-<meta name="description" content="我从不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现更广阔的人生，那样的自由才是珍贵的、有价值的。我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="标签">
-<meta property="og:url" content="http://iamlfc.top/tags/index.html">
+<meta name="description" content="起源在一个企业发展的过程中，用到的系统会慢慢增多，在使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不同登陆。 实现过程在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过c">
+<meta name="keywords" content="单点登陆,sso">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSO 单点登陆">
+<meta property="og:url" content="http://iamlfc.top/2019/05/26/SSO-单点登陆/index.html">
 <meta property="og:site_name" content="邪恶小代码">
-<meta property="og:description" content="我从不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现更广阔的人生，那样的自由才是珍贵的、有价值的。我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。">
+<meta property="og:description" content="起源在一个企业发展的过程中，用到的系统会慢慢增多，在使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不同登陆。 实现过程在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过c">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-23T13:27:19.936Z">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g3f399vjwgj30gz07aaaa.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g3f3l64301j30cz09htat.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g3f497tyzdj30jh0hm758.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g3f4lplmitj30l80ipgmp.jpg">
+<meta property="og:updated_time" content="2019-05-26T15:59:20.999Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="标签">
-<meta name="twitter:description" content="我从不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现更广阔的人生，那样的自由才是珍贵的、有价值的。我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。">
+<meta name="twitter:title" content="SSO 单点登陆">
+<meta name="twitter:description" content="起源在一个企业发展的过程中，用到的系统会慢慢增多，在使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不同登陆。 实现过程在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过c">
+<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g3f399vjwgj30gz07aaaa.jpg">
 
 
 
@@ -119,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://iamlfc.top/tags/">
+  <link rel="canonical" href="http://iamlfc.top/2019/05/26/SSO-单点登陆/">
 
 
 
 
 
-  <title>标签 | 邪恶小代码</title>
+  <title>SSO 单点登陆 | 邪恶小代码</title>
   
 
 
@@ -272,40 +278,231 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/05/26/SSO-单点登陆/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     919 字
+	</span>
+	<span title="阅读时长">
+     3 分钟
+	</span>
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">标签</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-                目前共计 5 个标签
+          <h1 class="post-title" itemprop="name headline">SSO 单点登陆</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-26T23:56:14+08:00">
+                2019-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/26/SSO-单点登陆/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/26/SSO-单点登陆/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  919
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
             </div>
-            <div class="tag-cloud-tags">
-              <a href="/tags/git/" style="font-size: 12px; color: #ccc">git</a> <a href="/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/tags/sso/" style="font-size: 12px; color: #ccc">sso</a> <a href="/tags/单点登陆/" style="font-size: 12px; color: #ccc">单点登陆</a> <a href="/tags/算法/" style="font-size: 30px; color: #111">算法</a>
-            </div>
-          </div>
-        
-      </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p>在一个企业发展的过程中，用到的系统会慢慢增多，在使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不同登陆。</p>
+<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><p>在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过cookie发送给浏览器，下次再请求系统时cookie会跟着发送过去，此时就已经知道该账号已经登陆了。</p>
+<h3 id="那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？"><a href="#那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？" class="headerlink" title="那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？"></a>那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？</h3><p>首先要解决的是session共享问题，系统A认证登录过后在服务器中建立了一个session对应的当前会话，并把sessionId放到了cookie中返回给了浏览器，系统B显然是没有系统A的session的，此时可以使用Redis 把session缓存其中多个系统都共用。 <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f399vjwgj30gz07aaaa.jpg" alt="avatar"><br>session的问题解决了那么前端的cookie呢？浏览器请求系统A获得的cookie 是不能跨域请求到系统中B的。<br>cookie不能跨域，那么我们可以把这两个系统放到同一域名下，分为不同的二级域名。比如<a href="http://www.abc.OA.com" target="_blank" rel="noopener">www.abc.OA.com</a> 和<a href="http://www.abc.HR.com" target="_blank" rel="noopener">www.abc.HR.com</a>  它们的父级域名 <a href="http://www.abc.com。" target="_blank" rel="noopener">www.abc.com。</a></p>
+<h3 id="但是考虑到多个系统架构不同，语言也可能不同，共享session-有点麻烦，且如果是不同域呢？有没有更好的方式呢？"><a href="#但是考虑到多个系统架构不同，语言也可能不同，共享session-有点麻烦，且如果是不同域呢？有没有更好的方式呢？" class="headerlink" title="但是考虑到多个系统架构不同，语言也可能不同，共享session 有点麻烦，且如果是不同域呢？有没有更好的方式呢？"></a>但是考虑到多个系统架构不同，语言也可能不同，共享session 有点麻烦，且如果是不同域呢？有没有更好的方式呢？</h3><p>此时引入正题，就是由耶鲁大学提出的CAS（Central Authentication Service）一个著名的SSO解决方案。<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f3l64301j30cz09htat.jpg" alt="avatar"><br>流程如下：</p>
+<ol>
+<li>用户访问A系统，验证此用户未登陆。</li>
+<li>重定向至cas，cas中也没有登陆，返回登陆页面</li>
+<li>填写用户名、密码，cas进行认证后，产生一个Ticket（随机字符串认证用的）将登录状态写入cas的session，返回给浏览器cas下的Cookie，并将将Ticket放入URL中返回（如：<a href="http://www.a.com/pageA?ticket=123）" target="_blank" rel="noopener">www.a.com/pageA?ticket=123）</a></li>
+<li>浏览器被重定向请求系统A，系统A拿着ticket去cas验证是否是伪造的，cas认证通过，在cas中注册系统A创建全局会话，并通知系统A验证通过。</li>
+<li>系统A建立session，返回给浏览器系统A的cookie，并把浏览器请求的页面返回。</li>
+<li>再次访问A系统另一个受限页面时因为浏览器中已携带该域cookie，则直接返回资源给浏览器。<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f497tyzdj30jh0hm758.jpg" alt="avatar"></li>
+</ol>
+<p>验证后系统B登陆流程如下：<br> <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f4lplmitj30l80ipgmp.jpg" alt="avatar"></p>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p> <strong>CAS的SSO实现方式可简化理解为：1个Cookie和N个Session。CAS Server创建cookie，在所有应用认证时使用，各应用通过创建各自的Session来标识用户是否已登录。</strong></p>
+<p> ST（Service Ticket）<br> 1、  ST只能使用一次<br>CAS协议规定，无论 Service Ticket验证是否成功， CAS Server都会清除服务端缓存中的该Ticket，从而可以确保一个Service Ticket不被使用两次。</p>
+<p>2、  ST在一段时间内失效<br>CAS规定ST只能存活一定的时间，然后CAS Server会让它失效。默认有效时间为5分钟。</p>
+<p>3、  ST是基于随机数生成的<br>ST必须足够随机，如果ST生成规则被猜出，Hacker就等于绕过CAS认证，直接访问对应的服务。</p>
+<p>码农翻身读后感</p>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/单点登陆/" rel="tag"># 单点登陆</a>
+          
+            <a href="/tags/sso/" rel="tag"># sso</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/26/hexo搭建个人博客/" rel="next" title="hexo搭建个人博客">
+                <i class="fa fa-chevron-left"></i> hexo搭建个人博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -314,6 +511,16 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDQyNC8yMDk1Ng=="></div>
+    </div>
+
+
+  
+
+
 
 
         </div>
@@ -335,8 +542,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -434,6 +650,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#起源"><span class="nav-number">1.</span> <span class="nav-text">起源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现过程"><span class="nav-number">2.</span> <span class="nav-text">实现过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？"><span class="nav-number">2.1.</span> <span class="nav-text">那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#但是考虑到多个系统架构不同，语言也可能不同，共享session-有点麻烦，且如果是不同域呢？有没有更好的方式呢？"><span class="nav-number">2.2.</span> <span class="nav-text">但是考虑到多个系统架构不同，语言也可能不同，共享session 有点麻烦，且如果是不同域呢？有没有更好的方式呢？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充"><span class="nav-number">3.</span> <span class="nav-text">补充</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -592,6 +824,18 @@
     
 
     
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://iamlfc.top/2019/05/26/SSO-单点登陆/';
+          this.page.identifier = '2019/05/26/SSO-单点登陆/';
+          this.page.title = 'SSO 单点登陆';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
 
   
 
@@ -610,6 +854,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
