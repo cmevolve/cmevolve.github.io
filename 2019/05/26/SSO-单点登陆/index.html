@@ -79,22 +79,22 @@
 
 
 
-<meta name="description" content="起源在一个企业发展的过程中，用到的系统会慢慢增多，在使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不同登陆。 实现过程在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过c">
+<meta name="description" content="起源在一个企业发展的过程中，用到的系统会慢慢增多，使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不用登陆。 实现过程在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过co">
 <meta name="keywords" content="单点登陆,sso">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SSO 单点登陆">
 <meta property="og:url" content="http://iamlfc.top/2019/05/26/SSO-单点登陆/index.html">
 <meta property="og:site_name" content="邪恶小代码">
-<meta property="og:description" content="起源在一个企业发展的过程中，用到的系统会慢慢增多，在使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不同登陆。 实现过程在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过c">
+<meta property="og:description" content="起源在一个企业发展的过程中，用到的系统会慢慢增多，使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不用登陆。 实现过程在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过co">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g3f399vjwgj30gz07aaaa.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g3f3l64301j30cz09htat.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g3f497tyzdj30jh0hm758.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g3f4lplmitj30l80ipgmp.jpg">
-<meta property="og:updated_time" content="2019-05-26T15:59:20.999Z">
+<meta property="og:updated_time" content="2019-05-26T16:05:00.467Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SSO 单点登陆">
-<meta name="twitter:description" content="起源在一个企业发展的过程中，用到的系统会慢慢增多，在使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不同登陆。 实现过程在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过c">
+<meta name="twitter:description" content="起源在一个企业发展的过程中，用到的系统会慢慢增多，使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不用登陆。 实现过程在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过co">
 <meta name="twitter:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g3f399vjwgj30gz07aaaa.jpg">
 
 
@@ -302,7 +302,7 @@
       <meta itemprop="name" content="邪恶小代码">
     </span>
 	<span title="字数统计">
-     919 字
+     918 字
 	</span>
 	<span title="阅读时长">
      3 分钟
@@ -388,7 +388,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  919
+                  918
                 </span>
               
 
@@ -425,7 +425,7 @@
       
 
       
-        <h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p>在一个企业发展的过程中，用到的系统会慢慢增多，在使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不同登陆。</p>
+        <h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p>在一个企业发展的过程中，用到的系统会慢慢增多，使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不用登陆。</p>
 <h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><p>在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过cookie发送给浏览器，下次再请求系统时cookie会跟着发送过去，此时就已经知道该账号已经登陆了。</p>
 <h3 id="那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？"><a href="#那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？" class="headerlink" title="那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？"></a>那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？</h3><p>首先要解决的是session共享问题，系统A认证登录过后在服务器中建立了一个session对应的当前会话，并把sessionId放到了cookie中返回给了浏览器，系统B显然是没有系统A的session的，此时可以使用Redis 把session缓存其中多个系统都共用。 <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f399vjwgj30gz07aaaa.jpg" alt="avatar"><br>session的问题解决了那么前端的cookie呢？浏览器请求系统A获得的cookie 是不能跨域请求到系统中B的。<br>cookie不能跨域，那么我们可以把这两个系统放到同一域名下，分为不同的二级域名。比如<a href="http://www.abc.OA.com" target="_blank" rel="noopener">www.abc.OA.com</a> 和<a href="http://www.abc.HR.com" target="_blank" rel="noopener">www.abc.HR.com</a>  它们的父级域名 <a href="http://www.abc.com。" target="_blank" rel="noopener">www.abc.com。</a></p>
 <h3 id="但是考虑到多个系统架构不同，语言也可能不同，共享session-有点麻烦，且如果是不同域呢？有没有更好的方式呢？"><a href="#但是考虑到多个系统架构不同，语言也可能不同，共享session-有点麻烦，且如果是不同域呢？有没有更好的方式呢？" class="headerlink" title="但是考虑到多个系统架构不同，语言也可能不同，共享session 有点麻烦，且如果是不同域呢？有没有更好的方式呢？"></a>但是考虑到多个系统架构不同，语言也可能不同，共享session 有点麻烦，且如果是不同域呢？有没有更好的方式呢？</h3><p>此时引入正题，就是由耶鲁大学提出的CAS（Central Authentication Service）一个著名的SSO解决方案。<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f3l64301j30cz09htat.jpg" alt="avatar"><br>流程如下：</p>
@@ -484,6 +484,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/28/Spring学习一-IOC、DI/" rel="prev" title="Spring学习一 IOC、DI">
+                Spring学习一 IOC、DI <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -569,7 +573,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -580,7 +584,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -591,7 +595,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
