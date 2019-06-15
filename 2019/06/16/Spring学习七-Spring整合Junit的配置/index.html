@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="邪恶小代码">
 <meta property="og:description" content="##问题：在Junit测试时，在将通用的bean注入提到方法外面形成全局变量时，在运行测试类代码时，会无法注入bean对象。在Junit单元测试中，没有main方法也能执行，其实是因为Junit集成了一个main方法，该方法会判断当前测试类哪些方法使用了@Test注解，Junit会让有注解的方法执行，但是Junit不会探测是否使用了Spring框架，在执行方法时也不会读取配置文件创建Spring核">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-15T16:41:17.144Z">
+<meta property="og:updated_time" content="2019-06-15T16:52:06.978Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring学习七-Spring整合Junit的配置">
 <meta name="twitter:description" content="##问题：在Junit测试时，在将通用的bean注入提到方法外面形成全局变量时，在运行测试类代码时，会无法注入bean对象。在Junit单元测试中，没有main方法也能执行，其实是因为Junit集成了一个main方法，该方法会判断当前测试类哪些方法使用了@Test注解，Junit会让有注解的方法执行，但是Junit不会探测是否使用了Spring框架，在执行方法时也不会读取配置文件创建Spring核">
@@ -435,7 +435,7 @@
 <p>##方法：Spring整合Junit的配置</p>
 <p>1.导入spring整合junit的配置<br>2.使用junit提供的注解把原有的runner方法替换为Spring提供的@Runwith<br>3.告知Spring运行器，spring和IOC创建是基于注解的还是xml配置的，描述文件位置。<br>4.@ContextConfiguration<br>    locations：指定xml文件的位置，加上classpath关键字，标识在类路径下<br>    classes：指定注解类所在的地址<br><strong>注：当使用spring5.x版本的时候，要求junit的版本必须是4.12及以上</strong>    </p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="comment">//@ContextConfiguration(locations = "classpath:applicationContext.xml")</span></span><br><span class="line"><span class="meta">@ContextConfiguration</span>(classes = Car.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> Car car;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testFindAll</span><span class="params">()</span></span>&#123;</span><br><span class="line">        car.produce();</span><br><span class="line">        System.out.println(<span class="string">"收拾收拾"</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p><a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/spring/day06_ioc" target="_blank" rel="noopener">练习资源</a></p>
+<p><a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/spring/day07_ioc" target="_blank" rel="noopener">练习资源</a></p>
 
       
     </div>
