@@ -284,6 +284,426 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/16/Spring学习七-Spring整合Junit的配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     332 字
+	</span>
+	<span title="阅读时长">
+     1 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/16/Spring学习七-Spring整合Junit的配置/" itemprop="url">Spring学习七-Spring整合Junit的配置</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-16T00:30:09+08:00">
+                2019-06-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/06/16/Spring学习七-Spring整合Junit的配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/16/Spring学习七-Spring整合Junit的配置/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  332
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##问题：<br>在Junit测试时，在将通用的bean注入提到方法外面形成全局变量时，在运行测试类代码时，会无法注入bean对象。<br>在Junit单元测试中，没有main方法也能执行，其实是因为Junit集成了一个main方法，该方法会判断当前测试类哪些方法使用了@Test注解，Junit会让有注解的方法执行，但是Junit不会探测是否使用了Spring框架，在执行方法时也不会读取配置文件创建Spring核心容器，所以在Junit中没有没有ioc容器就算写了Autowired注解，bean对象也没办法注入。</p>
+<p>##方法：Spring整合Junit的配置</p>
+<p>1.导入spring整合junit的配置<br>2.使用junit提供的注解把原有的runner方法替换为Spring提供的@Runwith<br>3.告知Spring运行器，spring和IOC创建是基于注解的还是xml配置的，描述文件位置。<br>4.@ContextConfiguration<br>    locations：指定xml文件的位置，加上classpath关键字，标识在类路径下<br>    classes：指定注解类所在的地址<br><strong>注：当使用spring5.x版本的时候，要求junit的版本必须是4.12及以上</strong>    </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="comment">//@ContextConfiguration(locations = "classpath:applicationContext.xml")</span></span><br><span class="line"><span class="meta">@ContextConfiguration</span>(classes = Car.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> Car car;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testFindAll</span><span class="params">()</span></span>&#123;</span><br><span class="line">        car.produce();</span><br><span class="line">        System.out.println(<span class="string">"收拾收拾"</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/spring/day06_ioc" target="_blank" rel="noopener">练习资源</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/15/Spring学习六-注解IOC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     1.1k 字
+	</span>
+	<span title="阅读时长">
+     4 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/15/Spring学习六-注解IOC/" itemprop="url">Spring学习六-注解IOC</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-15T00:41:58+08:00">
+                2019-06-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/06/15/Spring学习六-注解IOC/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/15/Spring学习六-注解IOC/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.1k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h2><p>@Component 注解是用于创建bean对象的，但是只使用@Component注解是无法使用的，需要在配置文件中去声明，告知spring在创建容器时要扫描的包，配置所需要的标签不是在bean的约束中，而是一个mingcheng为context名称空间和约束中<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.how2java.pojo"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>且在beans的头信息中需要导入如下信息<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xmlns:aop="http://www.springframework.org/schema/aop"</span><br><span class="line">xmlns:context="http://www.springframework.org/schema/context"</span><br></pre></td></tr></table></figure></p>
+<h2 id="详解："><a href="#详解：" class="headerlink" title="详解："></a>详解：</h2><h3 id="用于创建bean对象的"><a href="#用于创建bean对象的" class="headerlink" title="用于创建bean对象的"></a>用于创建bean对象的</h3><p>他们的作用就和xml配置文件中编写一个bean标签实现的功能是一样的<br>@Component<br>    作用：用于把当前的对象放入到spring容器中。<br>    属性：<br>    value:用于指定bean的id，如果不写beanname默认是当前类名，首字母小写。<br>    Controller：一般用于表现层<br>    Service:一般用于业务层<br>    Respository:一般用于持久层<br>以上三个注解的作用和属性和Component是一样的，他们三个是用来提供明确的三层使用的注解，使结构更加清晰。</p>
+<p>###用于注入数据的<br>作用相当于xml配置文件中的bean标签中写一个<property>标签<br>Autowired:<br>    作用：自动按照类型注入，只要有容器中有唯一的一个bean对象类型和要注入的变量类型匹配就可以成功。</property></p>
+<pre><code>1. 如果没有匹配类型则产生异常
+2. 如果被spring管理的有多个相同类型对象则按照参数去匹配beanid如果匹配到就成功加载，匹配不到则抛出异常
+</code></pre><p> 出现位置：可以是方法上也可以是变量上。（无需有set方法）<br> Qualifier :<br>    作用:按照名称注入，在给类成员注入时不得单独使用(需和Autowired搭配使用)，但是给参数注入时可以使用。<br>    属性：<br>    value:用于指定注入bean的id.</p>
+<p>Resource<br>    作用：直接按照bean的id注入，可以独立使用<br>    属性：name：用于指定bean的id<br>以上三个注入类型都只能注入bean类型的数据，基本类型和string类型无法注入，另外集合类型注入只能通过xml注入。</p>
+<p> Value:<br>    作用：用于注入基本类型和String类型的数据<br>    属性：<br>        value:用于指定数据的值，它可以使用SpEL（srping的EL表达式） 写法：$｛表达式｝</p>
+<h3 id="用于改变作用范围的"><a href="#用于改变作用范围的" class="headerlink" title="用于改变作用范围的"></a>用于改变作用范围的</h3><p>Scope<br>    作用：用于指定bean的作用范围<br>    属性：<br>        value：指定范围的取值。常用取值：singleton  prototype</p>
+<h3 id="声明周期相关"><a href="#声明周期相关" class="headerlink" title="声明周期相关"></a>声明周期相关</h3><pre><code>PreDestroy
+    作用：指定销毁方法 
+PostConstruct
+    作用：指定初始化方法
+</code></pre><h2 id="利用配置类来代替xml"><a href="#利用配置类来代替xml" class="headerlink" title="利用配置类来代替xml"></a>利用配置类来代替xml</h2><p>Configuration<br>    作用：指定当前类是一个配置类<br>ComponentScan<br>    作用：通过注释指定spring在创建容器时要扫描的包<br>    属性：<br>        value：作用和basePackages的作用是一样的，都是用于指定创建容器时要扫描的包路径。等同于在xml配置了：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.how2java.pojo"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(value = <span class="string">"com.how2java.pojo"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringConfig</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Bean<br>    作用：用于把当前方法的返回值放入到spring容器中。<br>    属性：<br>        name：用于指定bean的id，不写时默认id是当前方法名。<br>    细节：当使用注解配置方法时，如果方法有参数，spring框架会去容器中查找有没有可用的bean对象。查找方式和Aturowired方式是一样的，如果类型一样且只有一个对象就注入。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(value = <span class="string">"com.how2java.pojo"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span>(name =<span class="string">"c"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Category <span class="title">getCategory</span><span class="params">(Product p)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Category();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span>(name = <span class="string">"p"</span>)</span><br><span class="line">    <span class="meta">@Scope</span>(<span class="string">"prototype"</span>)<span class="comment">//多例对象</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Product <span class="title">getProduct</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Product();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line">ApplicationContext context = <span class="keyword">new</span> AnnotationConfigApplicationContext(SpringConfig.class);</span><br><span class="line">Product d = (Product) context.getBean(<span class="string">"p"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>import<br>    作用：用于导入其他的配置类<br>    属性：<br>        value:用于指定其他配置类的字节码<br>            当使用import的注解以后，有import的类就是父配置类，导入的类是子配置类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(value = <span class="string">"com.how2java.pojo"</span>)</span><br><span class="line"><span class="meta">@Import</span>(SpringBean.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringConfig</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringBean</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span>(name =<span class="string">"c"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Category <span class="title">getCategory</span><span class="params">(Product p)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Category();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span>(name = <span class="string">"p"</span>)</span><br><span class="line">    <span class="meta">@Scope</span>(<span class="string">"prototype"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Product <span class="title">getProduct</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Product();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>PropertySource<br>    作用：指定Propertys文件的位置<br>    属性：<br>        value:用于指定文件的名称和路径。<br>        关键字：classpath： 表示类路径下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(value = <span class="string">"com.how2java.pojo"</span>)</span><br><span class="line"><span class="meta">@Import</span>(SpringBean.class)</span><br><span class="line"><span class="meta">@PropertySource</span>(<span class="string">"classpath:config.properties"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用方式el表达式</span></span><br><span class="line">   <span class="meta">@Value</span>(<span class="string">"$&#123;product.name&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;product.no&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String no;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/10/Spirng学习五-依赖注入的几种方式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1995,214 +2415,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/05/20/散列表（上）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     1.4k 字
-	</span>
-	<span title="阅读时长">
-     5 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/20/散列表（上）/" itemprop="url">散列表（上）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-20T23:26:28+08:00">
-                2019-05-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法与数据结构/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/20/散列表（上）/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/20/散列表（上）/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.4k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  5
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、散列表的由来？"><a href="#一、散列表的由来？" class="headerlink" title="一、散列表的由来？"></a>一、散列表的由来？</h2><p>1.散列表又称Hash Table ,平时也叫它“哈希表”。<br>散列表来源于数组，它借助散列函数对数组这种数据结构进行扩展，利用的是数组支持按照下标随机访问元素的特性。<br>2.需要存储在散列表中的数据我们称为(key)，将key转化为数组下标的方法称为散列函数，散列函数的计算结果称为散列值。<br>3.将数据存储在散列值对应的数组下标位置。</p>
-<h2 id="二、如何设计散列函数？"><a href="#二、如何设计散列函数？" class="headerlink" title="二、如何设计散列函数？"></a>二、如何设计散列函数？</h2><p>散列函数的三个基本要求：</p>
-<pre><code>1.散列函数计算得到的散列值是一个非负整数。
-2.若key1=key2，则hash(key1)=hash(key2)
-3.若key≠key2，则hash(key1)≠hash(key2)
-</code></pre><p><strong><font color="red">对于第三点，在实际场景中因为鸽笼效应（既21只鸽子，20个鸽笼肯定有一个鸽笼有两只鸽子）对应代码问题是数组的大小有限，比如常见的哈希算法取模法。数组的长度是5，这时有一个数据是6。那么如何把这个6存放到长度只有5的数组中呢？按照取模法，计算6％5，结果是1，那么就把6放到数组下标是1的位置。所以在数组大小受限的情况下散列冲突是必然产生的。</font></strong></p>
-<h2 id="三、散列冲突的解放方法？"><a href="#三、散列冲突的解放方法？" class="headerlink" title="三、散列冲突的解放方法？"></a>三、散列冲突的解放方法？</h2><p>那么既然散列冲突无法避免如何去解决散列冲突呢？<br><strong>常用的散列冲突解决方法有2类：开放寻址法（open addressing）和链表法（chaining）</strong></p>
-<h3 id="1-开放寻址法"><a href="#1-开放寻址法" class="headerlink" title="1.开放寻址法"></a>1.开放寻址法</h3><p><strong>核心思想：如果出现散列冲突，就重新探测一个空闲位置，将其插入。</strong></p>
-<h4 id="线性探测法（Linear-Probing）："><a href="#线性探测法（Linear-Probing）：" class="headerlink" title="线性探测法（Linear Probing）："></a>线性探测法（Linear Probing）：</h4><p>插入数据：当我们往散列表中插入数据时，如果某个数据经过散列函数之后，存储的位置已经被占用了，我们就从当前位置开始，依次往后查找，看是否有空闲位置，直到找到空闲位置，将其插入。<br>查找数据：我们通过散列函数求出要查找元素的键值对应的散列值，然后比较数组中下标为散列值的元素和要查找的元素是否相等，若相等，则说明就是我们要查找的元素；否则，就顺序往后依次查找。如果遍历到数组的空闲位置还未找到，就说明要查找的元素并没有在散列表中。<br>删除数据：在查找时如果元素为空则表示不在散列表中，为了不让查找算法失效，可以将删除的元素特殊标记为deleted，当线性探测查找的时候，遇到标记为deleted的空间，并不是停下来，而是继续往下探测。<br><strong><font color="#FF6600">极端情况下需要遍历整个数组所以最坏时间复杂度为O(n) </font></strong></p>
-<h4 id="二次探测（Quadratic-probing）："><a href="#二次探测（Quadratic-probing）：" class="headerlink" title="二次探测（Quadratic probing）："></a>二次探测（Quadratic probing）：</h4><p>线性探测每次探测的步长为1，即在数组中一个一个探测，而二次探测的步长变为原来的平方。</p>
-<h4 id="双重散列（Double-hashing）："><a href="#双重散列（Double-hashing）：" class="headerlink" title="双重散列（Double hashing）："></a>双重散列（Double hashing）：</h4><p>不使用一个散列函数而是使用一组散列函数（hash1(),hash2()），先用第一个散列函数，如果得到的存储位置被占用则使用第二个，依次类推，直到找到空闲位置为止。</p>
-<p><strong>不管使用什么方法，当散列表空闲位置不多时，散列冲突概率就会很高，为了保证散列表的操作效率，一般情况都会保证散列表有一定比例的空位在此用“装载因子”来表示空位多少。</strong></p>
-<pre><code>散列表装载因子=填入表中的个数/散列表的长度。
-</code></pre><p>装载因子越大，说明空闲位置越少，冲突越多，散列表的性能会下降。</p>
-<h3 id="2-链表法（常用）"><a href="#2-链表法（常用）" class="headerlink" title="2.链表法（常用）"></a>2.链表法（常用）</h3><p><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g32fwwdnwrj30vq0hsmyy.jpg" alt="avatar"><br>插入数据：当插入的时候，我们需要通过散列函数计算出对应的散列槽位，将其插入到对应的链表中即可，所以插入的时间复杂度为O(1)。<br>查找或删除数据：当查找、删除一个元素时，通过散列函数计算对应的槽，然后遍历链表查找或删除。对于散列比较均匀的散列函数，链表的节点个数k=n/m，其中n表示散列表中数据的个数，m表示散列表中槽的个数，所以是时间复杂度为O(k)。</p>
-<h2 id="四、思考"><a href="#四、思考" class="headerlink" title="四、思考"></a>四、思考</h2><p><strong>1.Word文档中单词拼写检查功能是如何实现的？</strong><br>字符串占用内存大小为8字节，20万单词占用内存大小不超过20MB，所以用散列表存储20万英文词典单词，然后对每个编辑进文档的单词进行查找，若未找到，则提示拼写错误。</p>
-<p><strong>2.假设我们有10万条URL访问日志，如何按照访问次数给URL排序？</strong><br>遍历 10 万条数据，以 URL 为 key，访问次数为value，存入散列表，同时记录下访问次数的最大值 K，时间复杂度 O(N)。如果k的数值不大，可使用桶排序，时间复杂度为O(n),如果K的数值较大，就使用快排，时间复杂度为O(NlogN)</p>
-<p><strong>3.有两个字符串数组，每个数组大约有10万条字符串，如何快速找出两个数组中相同的字符串？</strong><br>先将第一个字符串数组构建一个散列表，key为字符串value为次数。再以第二个字符串数组的值为key遍历，值相同的value+1，最后value大于1的说明有相同字符串。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -2249,7 +2468,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
