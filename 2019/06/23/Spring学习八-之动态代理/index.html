@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ptavvqw3y.bkt.clouddn.com/%E5%AF%BC%E5%9B%BE4.jpeg">
 <meta property="og:image" content="http://ptavvqw3y.bkt.clouddn.com/%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%90%86%E5%9B%BE%E8%A7%A3.jpg">
-<meta property="og:updated_time" content="2019-06-23T14:40:02.479Z">
+<meta property="og:updated_time" content="2019-06-23T14:46:59.461Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring学习八-之动态代理">
 <meta name="twitter:description" content="一、问题来源在进行软件设计的时候往往会将一个大的系统按照业务模块拆分成一个个的低耦合、高内聚的模块，分而治之。如图：拆分后发现一些问题，这些问题是通用的，跨模块的。比如：1.日志：对执行某些操作分支判断时输出日志。2.安全：在执行某些操作前进行权限检查。3.事务：在方法开始前开始事务，方法结束时提交或者回滚事务。4.性能统计：统计某些方法的执行时间。以上这些属于非功能型需求，是多个业务模块都需要的">
@@ -474,6 +474,7 @@
 <p>输出结果：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderDecorator</span></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">PlaceOrderDecorator</span>$$<span class="title">EnhancerByCGLIB</span>$$640<span class="title">bbc4f</span></span></span><br><span class="line"><span class="class">******** 开启事务 **************</span></span><br><span class="line"><span class="class">执行支付</span></span><br><span class="line"><span class="class">********* 提交事务 ************</span></span><br></pre></td></tr></table></figure>
 <p><strong>总结：</strong><br>1.JDK动态代理需要目标对象和代理对象实现业务接口，拦截器需要实现InvocationHandler接口，其中invoke方法体中内容是具体代理对象方法体内容。<br>2.CGlib代理的目标类不需要实现接口，代理类是目标类的子类，拦截器需要实现MethodInterceptor接口，其中重写intercept方法时，进行具体功能增强操作。但是因为cglib是依靠继承目标对象重写其方法，所以目标对象不得是final类！！！</p>
+<p><a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/spring/day08_Aop" target="_blank" rel="noopener">练习资源</a></p>
 
       
     </div>

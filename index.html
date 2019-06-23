@@ -474,6 +474,7 @@
 <p>输出结果：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderDecorator</span></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">PlaceOrderDecorator</span>$$<span class="title">EnhancerByCGLIB</span>$$640<span class="title">bbc4f</span></span></span><br><span class="line"><span class="class">******** 开启事务 **************</span></span><br><span class="line"><span class="class">执行支付</span></span><br><span class="line"><span class="class">********* 提交事务 ************</span></span><br></pre></td></tr></table></figure>
 <p><strong>总结：</strong><br>1.JDK动态代理需要目标对象和代理对象实现业务接口，拦截器需要实现InvocationHandler接口，其中invoke方法体中内容是具体代理对象方法体内容。<br>2.CGlib代理的目标类不需要实现接口，代理类是目标类的子类，拦截器需要实现MethodInterceptor接口，其中重写intercept方法时，进行具体功能增强操作。但是因为cglib是依靠继承目标对象重写其方法，所以目标对象不得是final类！！！</p>
+<p><a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/spring/day08_Aop" target="_blank" rel="noopener">练习资源</a></p>
 
           
         
