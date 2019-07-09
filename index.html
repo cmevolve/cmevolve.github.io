@@ -284,7 +284,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/07/10/String-知必会/">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/07/10/String优化知必会/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="李斯大炮">
@@ -296,10 +296,10 @@
       <meta itemprop="name" content="邪恶小代码">
     </span>
 	<span title="字数统计">
-     2.3k 字
+     0 字
 	</span>
 	<span title="阅读时长">
-     9 分钟
+     1 分钟
 	</span>
     
       <header class="post-header">
@@ -308,7 +308,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/07/10/String-知必会/" itemprop="url">String 知必会</a></h1>
+                <a class="post-title-link" href="/2019/07/10/String优化知必会/" itemprop="url">String优化知必会</a></h1>
         
 
         <div class="post-meta">
@@ -320,7 +320,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-10T00:22:55+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-10T00:28:05+08:00">
                 2019-07-10
               </time>
             
@@ -339,8 +339,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/07/10/String-知必会/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/10/String-知必会/" itemprop="commentCount"></span>
+                <a href="/2019/07/10/String优化知必会/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/10/String优化知必会/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -362,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.3k
+                  0
                 </span>
               
 
@@ -378,7 +378,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  9
+                  1
                 </span>
               
             </div>
@@ -401,49 +401,7 @@
       
         
           
-            <h2 id="String-对象实现方式"><a href="#String-对象实现方式" class="headerlink" title="String 对象实现方式"></a>String 对象实现方式</h2><p>在众多版本中，String对象做了大量优化，下图是版本推进的演化过程：</p>
-<p><img src="http://ptavvqw3y.bkt.clouddn.com/String%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B.png" alt="String优化过程"></p>
-<p>1.在Java1.6之前的版本中，String对象是对char数组进行了封装实现的对象。<br>2.而从Java1.7到1.8版本，Java对String类做了一些改变。String类不在有offset和count两个变量。<br>3.从Java1.9开始，则将char[]字段改为了byte[]字段，又维护了一个新属性coder它是一个编码格式的标识。</p>
-<p><strong>那么为什么这样修改呢？</strong><br>如果仔细观察会发现一个char字符占16位，2字节。这个情况下，在存储拉丁语系的字符（占一个字节的字符）不需要太宽的char，这样无疑会很浪费，所以在1.9中为了节省内存，使用了占8位1字节的byte[]来存放字符串。（<strong>但是原来char[]时，字符串最大长度是数组本身长度的限制，在数组同样大小的前提下，byte[]存储能力理论上是退化了一倍的</strong>。）</p>
-<p>而新属性 coder的作用是，在计算字符串长度或者使用indexOf()函数时，需要根据这个字段判断如何计算字符串长度，1代表UTF-16,0代表Latin-1(单字节编码)。</p>
-<h2 id="Java对象不可变性"><a href="#Java对象不可变性" class="headerlink" title="Java对象不可变性"></a>Java对象不可变性</h2><p>1.保证String的安全性，final修饰属性属性不可改变引用，修饰类则不可继承，这里防止了String类继承被篡改其中的某些方法。</p>
-<p>2.线程安全性，在并发场景下，多个线程同时读一个资源，是不会引发竟态条件的。只有对资源做写操作才有危险。不可变对象不能被写，所以线程安全。</p>
-<p>3.不可变可以实现字符串常量池，在创建String对象时通常有两种方式，String str = “abc”；另一种是String str = new String(“abc”);<br>第一种方式创建字符串对象时，JVM会检查该对象是否在字符串常量池中，如果在，就返回对象引用，否则新的字符串将在常量池中被创建。这种方式可以减少同一个值的字符串对象重复创建，节约内存。<br>new String这种方式，首先在编译类文件时”abc”会被放入到常量结构中，类被加载时，”abc”将会在常量池中创建；在调用new时JVM调用String的构造函数，同时引用常量池中的”abc”字符串，在堆中创建一个String对象；最后将引用赋值给str。</p>
-<h3 id="对象优化"><a href="#对象优化" class="headerlink" title="对象优化"></a>对象优化</h3><h4 id="1-拼装超长字符串"><a href="#1-拼装超长字符串" class="headerlink" title="1.拼装超长字符串"></a>1.拼装超长字符串</h4><p>在日常中如果使用String相加拼接字符串会产生多个对象么？例如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str =<span class="string">"aa"</span>+<span class="string">"bb"</span>+<span class="string">"cc"</span>;</span><br></pre></td></tr></table></figure>
-<p>理论上上述代码会先产生aa对象，再生成aabb对象，最后再生成aabbcc对象。<br>但是实际运行过程中，发现只有一个对象生成，编译后的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"aabbcc"</span>;</span><br></pre></td></tr></table></figure></p>
-<p>在大多数情况下java还是十分智能的，会自己优化实际代码，但是在循环中使用”+”拼接，会产生大量无意义的StringBuider对象,如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"abcdef"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">1000</span>; i++) &#123;</span><br><span class="line">      str = str + i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>反编译后：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"abcdef"</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">1000</span>; i++) &#123;</span><br><span class="line">   str = (<span class="keyword">new</span> StringBuilder(String.valueOf(str))).append(i).toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在此场景下应使用StringBuilder来避免循环中重复产生对象的行为（多线程场景下使用StringBuffer）。</p>
-<h4 id="2-合理使用String-intern节省内存"><a href="#2-合理使用String-intern节省内存" class="headerlink" title="2.合理使用String.intern节省内存"></a>2.合理使用String.intern节省内存</h4><p>在日常开发中字符串最长使用，但是其中很多都是重复的，如果能避免创建重复字符串，可以有效降低内存消耗和对象创建开销。</p>
-<p>来看一段代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">s.intern();</span><br><span class="line">String str1 = <span class="string">"abc"</span>;</span><br><span class="line">System.out.println(s == s2);</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"a"</span>) + <span class="keyword">new</span> String(<span class="string">"b"</span>);</span><br><span class="line">s3.intern();</span><br><span class="line">String s4 = <span class="string">"ab"</span>;</span><br><span class="line">System.out.println(s3 == s4);</span><br></pre></td></tr></table></figure></p>
-<p>上面这段代码的执行结果在不同版本的JDK下结果是不同的：<br>JDK 1.6 : false  false<br>JDK 1.7 : false  true</p>
-<p>在分析内容前先理解下常量池这个概念。</p>
-<p><strong>常量池指的是在编译期就已经被确定，并且被保存在已编译的class文件中的一些数据，它包括了关于类、方法、接口等中的常量，也包括字符串常量。</strong></p>
-<p>例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">String s0=<span class="string">"abc"</span>;</span><br><span class="line">String s1=<span class="string">"abc"</span>;</span><br><span class="line">String s2=<span class="string">"a"</span>+<span class="string">"bc"</span>;</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">System.out.println( s0==s1 );</span><br><span class="line">System.out.println( s0==s2 );</span><br><span class="line">System.out.println( s0==s3 );</span><br></pre></td></tr></table></figure></p>
-<p>结果： true   true  false</p>
-<p>因为Java会保证字符串常量只有一个拷贝，s0和s1都是字符串常量，这个在编译期就可以确定了，所以s0==s1;而 s2中”a”和”bc”也都是字符串常量，当一个字符串由多个字符串常量组成，它本身肯定也是字符串常量，并且jvm编译时也会将代码”a”+”bc”优化成”abc”。<br>new String() 创建的字符串不是常量，是在堆内存中开辟地址空间，所以new String()创建的字符串不放入常量池中,s0 != s3。</p>
-<p>步入正题，来看一下String的intern()方法，它可以达到优化内存的作用，其效果在JDK1.6和1.7中表现并不一样来看下面这段代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">String s = <span class="keyword">new</span> String(<span class="string">"1"</span>);</span><br><span class="line">s.intern();</span><br><span class="line">String s2 = <span class="string">"1"</span>;</span><br><span class="line">System.out.println(s == s2);</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"a"</span>) + <span class="keyword">new</span> String(<span class="string">"b"</span>);</span><br><span class="line">s3.intern();</span><br><span class="line">String s4 = <span class="string">"ab"</span>;</span><br><span class="line">System.out.println(s3 == s4);</span><br><span class="line">String s5 = <span class="keyword">new</span> String(<span class="string">"ja"</span>) + <span class="keyword">new</span> String(<span class="string">"va"</span>);</span><br><span class="line">s5.intern();</span><br><span class="line">String s6 = <span class="string">"java"</span>;</span><br><span class="line">System.out.println(s5 == s6);</span><br></pre></td></tr></table></figure></p>
-<p>1.6运行结果：false false false;<br>1.7及以上：true false false;</p>
-<p>在1.6中，常量池在方法区，其位于臭名昭著的永久代，intern()会把首次遇到的字符串实例复制到永久代中，返回的也是这个永久代中字符串实例的引用，以此来达到，如果对字符串赋值，常量池中该值已存在则不会创建新的值，直接返回常量池中该值引用。<strong><em>（PermGen的空间是有限的,它主要存储一些加载类的信息，常量池，方法片段等内容，默认大小只有4m，并且基本不会被FullGC之外的垃圾回收照顾到，所以如果有大量长字符串放入其中，OOM可能就会光顾。此方法1.6慎用！）</em></strong></p>
-<p>在1.7中，字符串常量池迁移到了heap中。</p>
-<ul>
-<li>s3生成了三个最终对象常量池中的”a”，”b”和Heap中s3引用指向的对象。此时s3引用对象内容是”ab”，但是此时常量池中并没有”ab”。 (结合类加载过程，先在常量池中创建”a”,”b” 调用String构造函数生成两个匿名对象，然后进行字符串拼接最终对象)</li>
-<li>接来下调用s3.intern()函数，将s3中的”ab” 放入到String常量池中，因为常量池中并没有此对象，则常量池直接存储了堆中的引用，直接指向了s3，也就是说引用地址相同。</li>
-<li>最后String s4  =”ab” 是显示声明的，因此直接去常量池中创建，创建时发现已经存在该对象了，此时将指向s3 引用对象 的引用返回，s3 和 s4的引用一致 所以s3 == s4。</li>
-</ul>
-<p>s和s2对象中 String s=new String(“1”);中生成了两个对象，常量池中的”1”和Heap中的字符串对象。s.intern()s去常量池中创建，发现”1”已存在。接下来s2=”1”显示声明时，直接返回了指向常量池中的对象，结果s！= s2。<br>如图：<br><img src="http://ptavvqw3y.bkt.clouddn.com/String.png" alt="http://ptavvqw3y.bkt.clouddn.com/String.png"></p>
-<p>其中s5.s6的例子是练习中发现的一个坑，既其代码内容基本与s4一致，结果却不相同，经验证常量池中会维护一个常用的字符串常量池其中就有”java”字符串，所以使用了intern后直接将引用指向了默认对象，所以s5 != s6。</p>
-<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><ul>
-<li>将String常量池 从 Perm 区移动到了 Java Heap区</li>
-<li>String.intern() 方法时，如果存在堆中的对象，会直接返回对象的引用，而不会重新创建对象.</li>
-</ul>
-<h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h4><p>1.Twitter在发布消息的时候，会产生一个地址信息，以当时用户规模预估服务器需要32G的内存来存储地址信息。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Location</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String city;</span><br><span class="line">    <span class="keyword">private</span> String region;</span><br><span class="line">    <span class="keyword">private</span> String countryCode;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> longitude;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> latitude;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>考虑到中间有很多用户地址信息是有重合的，比如，国家，省份，城市等，此时将这部分信息单独列出一个类，以减少重复。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SharedLocation</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String city;</span><br><span class="line">	<span class="keyword">private</span> String region;</span><br><span class="line">	<span class="keyword">private</span> String countryCode;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Location</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> SharedLocation sharedLocation;</span><br><span class="line">	<span class="keyword">double</span> longitude;</span><br><span class="line">	<span class="keyword">double</span> latitude;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>通过优化存储大小减到了20G左右，此时再利用了String.intern来节省内存，具体做法是，每次赋值时使用intern方法，如果常量池中有相同的值，就会重复使用该对象，一开始的对象就可以被回收掉。这种方式可以使重复性非常高的地址信息存储大小从20G降到几百兆。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SharedLocation sharedLocation = <span class="keyword">new</span> SharedLocation();</span><br><span class="line">sharedLocation.setCity(messageInfo.getCity().intern());</span><br><span class="line">sharedLocation.setCountryCode(messageInfo.getRegion().intern());</span><br><span class="line">sharedLocation.setRegion(messageInfo.getCountryCode().intern());</span><br><span class="line">Location location = <span class="keyword">new</span> Location();</span><br><span class="line">location.set(sharedLocation);</span><br><span class="line">location.set(messageInfo.getLongitude());</span><br><span class="line">location.set(messageInfo.getLatitude());</span><br></pre></td></tr></table></figure>
-<h4 id="使用不当场景"><a href="#使用不当场景" class="headerlink" title="使用不当场景"></a>使用不当场景</h4><p>详看：<a href="https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html" target="_blank" rel="noopener">https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html</a></p>
-
+            
           
         
       
@@ -2584,7 +2542,7 @@ PostConstruct
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
