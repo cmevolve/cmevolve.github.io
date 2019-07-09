@@ -308,7 +308,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/07/10/String-知必会/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2019/07/10/String-知必会/" itemprop="url">String 知必会</a></h1>
         
 
         <div class="post-meta">
@@ -320,7 +320,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-10T00:19:50+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-10T00:22:55+08:00">
                 2019-07-10
               </time>
             
@@ -401,9 +401,7 @@
       
         
           
-            <hr>
-<p>title: String 知必会<br>date: 2019-07-10 00:19:50</p>
-<h2 id="tags-Java"><a href="#tags-Java" class="headerlink" title="tags: Java"></a>tags: Java</h2><h2 id="String-对象实现方式"><a href="#String-对象实现方式" class="headerlink" title="String 对象实现方式"></a>String 对象实现方式</h2><p>在众多版本中，String对象做了大量优化，下图是版本推进的演化过程：</p>
+            <h2 id="String-对象实现方式"><a href="#String-对象实现方式" class="headerlink" title="String 对象实现方式"></a>String 对象实现方式</h2><p>在众多版本中，String对象做了大量优化，下图是版本推进的演化过程：</p>
 <p><img src="http://ptavvqw3y.bkt.clouddn.com/String%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B.png" alt="String优化过程"></p>
 <p>1.在Java1.6之前的版本中，String对象是对char数组进行了封装实现的对象。<br>2.而从Java1.7到1.8版本，Java对String类做了一些改变。String类不在有offset和count两个变量。<br>3.从Java1.9开始，则将char[]字段改为了byte[]字段，又维护了一个新属性coder它是一个编码格式的标识。</p>
 <p><strong>那么为什么这样修改呢？</strong><br>如果仔细观察会发现一个char字符占16位，2字节。这个情况下，在存储拉丁语系的字符（占一个字节的字符）不需要太宽的char，这样无疑会很浪费，所以在1.9中为了节省内存，使用了占8位1字节的byte[]来存放字符串。（<strong>但是原来char[]时，字符串最大长度是数组本身长度的限制，在数组同样大小的前提下，byte[]存储能力理论上是退化了一倍的</strong>。）</p>
@@ -2586,7 +2584,7 @@ PostConstruct
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
