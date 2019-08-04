@@ -284,6 +284,224 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/08/04/HashMap多线程环境下死循环问题（记一次生产问题）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     2.1k 字
+	</span>
+	<span title="阅读时长">
+     9 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/04/HashMap多线程环境下死循环问题（记一次生产问题）/" itemprop="url">HashMap多线程环境下死循环问题（记一次生产问题）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-04T23:34:45+08:00">
+                2019-08-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/避坑指南/" itemprop="url" rel="index">
+                    <span itemprop="name">避坑指南</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/避坑指南/算法与数据结构/" itemprop="url" rel="index">
+                    <span itemprop="name">算法与数据结构</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/04/HashMap多线程环境下死循环问题（记一次生产问题）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/04/HashMap多线程环境下死循环问题（记一次生产问题）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.1k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>算法与数据结构</p>
+<h2 id="一-问题"><a href="#一-问题" class="headerlink" title="一.问题"></a>一.问题</h2><p>今天在工作的时候项目组的同事说他们系统生产环境有线程stuck了，我抱着学习生产问题定位的心态凑合过去。了解到出现此问题时，操作员有多人使用同一帐号在系统中进行操作，且此种情况之前因为大批量的人员登录系统出现过。在拿到了报错日志时，在其中一段日志细节中突然发现了些许端倪。</p>
+<p><img src="https://img.vim-cn.com/06/3a829bd16d0b00dab9bc05e1080bbfe85e6040.png" alt="日志报错"><br><em>下面连接防止图片连接失效备份图库（忽略）</em><br><a href="https://ws3.sinaimg.cn/large/006Xmmmgly1g5ke0d338mj31fl0gdwg3.jpg" target="_blank" rel="noopener">https://ws3.sinaimg.cn/large/006Xmmmgly1g5ke0d338mj31fl0gdwg3.jpg</a><br><a href="https://img04.sogoucdn.com/app/a/100520146/0265cf53f113ead98c352ee1c3bec72a" target="_blank" rel="noopener">https://img04.sogoucdn.com/app/a/100520146/0265cf53f113ead98c352ee1c3bec72a</a></p>
+<p>来整理一下线索，由于多人使用同一帐号进行操作出现，且有大量人员登录进行操作时出现，联想到之前看耗子叔的一篇文章讲述关于多线程环境下操作map导致死循环问题，是否是因为HashMap在执行put的方法时线程阻塞了呢？</p>
+<h2 id="二-定位"><a href="#二-定位" class="headerlink" title="二.定位"></a>二.定位</h2><p>在查看调用处的代码时发现，此处是cas-client的一个jar包。<br>点开了jar包中SingleSignOutFilter这个类找到了其中doFilter方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span> <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">    HttpServletRequest request = (HttpServletRequest)servletRequest;</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">"POST"</span>.equals(request.getMethod())) &#123;</span><br><span class="line">      String logoutRequest = request.getParameter(<span class="string">"logoutRequest"</span>);</span><br><span class="line">      <span class="keyword">if</span> (CommonUtils.isNotBlank(logoutRequest))&#123;</span><br><span class="line">        <span class="keyword">if</span> (log.isTraceEnabled()) &#123;</span><br><span class="line">          log.trace(<span class="string">"Logout request=["</span> + logoutRequest + <span class="string">"]"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        String sessionIdentifier = XmlUtils.getTextForElement(logoutRequest, <span class="string">"SessionIndex"</span>);</span><br><span class="line">        <span class="keyword">if</span> (CommonUtils.isNotBlank(sessionIdentifier)) &#123;</span><br><span class="line">          HttpSession session = SESSION_MAPPING_STORAGE.removeSessionByMappingId(sessionIdentifier);</span><br><span class="line">          <span class="keyword">if</span> (session != <span class="keyword">null</span>) &#123;</span><br><span class="line">            String sessionID = session.getId();</span><br><span class="line">            <span class="keyword">if</span> (log.isDebugEnabled()) &#123;</span><br><span class="line">              log.debug(<span class="string">"Invalidating session ["</span> + sessionID + <span class="string">"] for ST ["</span> + sessionIdentifier + <span class="string">"]"</span>);</span><br><span class="line">            &#125;<span class="keyword">try</span>&#123;</span><br><span class="line">              session.invalidate();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalStateException e) &#123;</span><br><span class="line">              log.debug(e, e);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      String artifact = request.getParameter(<span class="keyword">this</span>.artifactParameterName);</span><br><span class="line">      HttpSession session = request.getSession();</span><br><span class="line">      <span class="keyword">if</span> ((log.isDebugEnabled()) &amp;&amp; (session != <span class="keyword">null</span>)) &#123;</span><br><span class="line">        log.debug(<span class="string">"Storing session identifier for "</span> + session.getId());</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (CommonUtils.isNotBlank(artifact)) &#123;</span><br><span class="line">        SESSION_MAPPING_STORAGE.addSessionById(artifact, session);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    filterChain.doFilter(servletRequest, servletResponse);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p><em>此代码反编译而成，语法稍有变化</em><br>代码中的32行是引发报错的地方，根据SESSION_MAPPING_STORAGE 查看其代码定义处。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> SessionMappingStorage SESSION_MAPPING_STORAGE = <span class="keyword">new</span> HashMapBackedSessionMappingStorage();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SingleSignOutFilter</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.artifactParameterName = <span class="string">"ticket"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>SESSION_MAPPING_STORAGE 的key值是获取的请求中的ticket，而value则是当前session，下面来看SESSION_MAPPING_STORAGE到底是个啥。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMapBackedSessionMappingStorage</span></span></span><br><span class="line"><span class="class">  <span class="keyword">implements</span> <span class="title">SessionMappingStorage</span></span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Map MANAGED_SESSIONS;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Map ID_TO_SESSION_KEY_MAPPING;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">HashMapBackedSessionMappingStorage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.MANAGED_SESSIONS = <span class="keyword">new</span> HashMap();</span><br><span class="line">    <span class="keyword">this</span>.ID_TO_SESSION_KEY_MAPPING = <span class="keyword">new</span> HashMap(); </span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addSessionById</span><span class="params">(String mappingId, HttpSession session)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.ID_TO_SESSION_KEY_MAPPING.put(session.getId(), mappingId);</span><br><span class="line">    <span class="keyword">this</span>.MANAGED_SESSIONS.put(mappingId, session);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeBySessionById</span><span class="params">(String sessionId)</span></span>&#123;</span><br><span class="line">    String key = (String)<span class="keyword">this</span>.ID_TO_SESSION_KEY_MAPPING.get(sessionId);</span><br><span class="line">    <span class="keyword">this</span>.MANAGED_SESSIONS.remove(key);</span><br><span class="line">    <span class="keyword">this</span>.ID_TO_SESSION_KEY_MAPPING.remove(sessionId);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> HttpSession <span class="title">removeSessionByMappingId</span><span class="params">(String mappingId)</span> </span>&#123;</span><br><span class="line">    HttpSession session = (HttpSession)<span class="keyword">this</span>.MANAGED_SESSIONS.get(mappingId);</span><br><span class="line">    <span class="keyword">if</span> (session != <span class="keyword">null</span>) &#123;</span><br><span class="line">      removeBySessionById(session.getId());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> session;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>SessionMappingStorage 是一个接口而HashMapBackedSessionMappingStorage 是它的实现类，其中11行addSessionById方法中的MANAGED_SESSIONS、ID_TO_SESSION_KEY_MAPPING都是使用的HashMap！且用final修饰，联想到此类在SingleSignOutFilter中使用时定义为static，自此找到问题所在。<br>考虑到可能是由于jar包太过久远，查看了后续发布的jar包，其中对map操作时进行了加锁。<br><img src="https://img.vim-cn.com/15/fb751f594328b59f8e82899feb1130d6e76551.png" alt="新版jar包修改内容"><br><em>下面连接防止图片连接失效备份图库（忽略）</em><br><a href="https://ws1.sinaimg.cn/large/006Xmmmggy1g5kdyihqz8j30uy0adt9q.jpg" target="_blank" rel="noopener">https://ws1.sinaimg.cn/large/006Xmmmggy1g5kdyihqz8j30uy0adt9q.jpg</a><br><a href="https://i.loli.net/2019/08/01/5d42c85b65f4599497.jpg" target="_blank" rel="noopener">https://i.loli.net/2019/08/01/5d42c85b65f4599497.jpg</a></p>
+<h2 id="三-分析"><a href="#三-分析" class="headerlink" title="三.分析"></a>三.分析</h2><p>为何HashMap在多线程环境下使用会有死循环问题呢？在此来回顾下其具体原理。</p>
+<h3 id="1-HashMap-是什么？"><a href="#1-HashMap-是什么？" class="headerlink" title="1.HashMap 是什么？"></a>1.HashMap 是什么？</h3><p>hashMap是一个散列表，来源于数组，借助散列函数对数组进行了扩展，利用数组支持下标随机访问元素的特性进行存储。当key被加入的时候会通过散列函数计算出这个数组的下标i然后将这个&lt; key，value &gt;插入到array[i]中，如果有两个不同的key被计算到了同一个i的位置，叫做hash冲突，这时在数组i的位置会横向扩展成一个链表。（JDK1.8之前）</p>
+<h3 id="2-源码实现"><a href="#2-源码实现" class="headerlink" title="2.源码实现"></a>2.源码实现</h3><p>源码：<br>put方法实现<br>1、判断key是否已经存在<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> putForNullKey(value);</span><br><span class="line">    <span class="keyword">int</span> hash = hash(key);</span><br><span class="line">    <span class="keyword">int</span> i = indexFor(hash, table.length);</span><br><span class="line">    <span class="comment">// 如果key已经存在，则替换value，并返回旧值</span></span><br><span class="line">    <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[i]; e != <span class="keyword">null</span>; e = e.next) &#123;</span><br><span class="line">        Object k;</span><br><span class="line">        <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) &#123;</span><br><span class="line">            V oldValue = e.value;</span><br><span class="line">            e.value = value;</span><br><span class="line">            e.recordAccess(<span class="keyword">this</span>);</span><br><span class="line">            <span class="keyword">return</span> oldValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    modCount++;</span><br><span class="line">    <span class="comment">// key不存在，则插入新的元素</span></span><br><span class="line">    addEntry(hash, key, value, i);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2、检查容量是否达到阈值threshold<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addEntry</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">int</span> bucketIndex)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ((size &gt;= threshold) &amp;&amp; (<span class="keyword">null</span> != table[bucketIndex])) &#123;</span><br><span class="line">        resize(<span class="number">2</span> * table.length);</span><br><span class="line">        hash = (<span class="keyword">null</span> != key) ? hash(key) : <span class="number">0</span>;</span><br><span class="line">        bucketIndex = indexFor(hash, table.length);</span><br><span class="line">    &#125;</span><br><span class="line">    createEntry(hash, key, value, bucketIndex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果元素个数已经达到阈值，则扩容，并把原来的元素移动过去。<br>3、扩容实现<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> newCapacity)</span></span>&#123;</span><br><span class="line">    Entry[] oldTable = table;</span><br><span class="line">    <span class="keyword">int</span> oldCapacity = oldTable.length;</span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">//创建一个新的Hash Table</span></span><br><span class="line">    Entry[] newTable = <span class="keyword">new</span> Entry[newCapacity];</span><br><span class="line">    <span class="comment">//将Old Hash Table上的数据迁移到New Hash Table上</span></span><br><span class="line">    transfer(newTable);</span><br><span class="line">    table = newTable;</span><br><span class="line">    threshold = (<span class="keyword">int</span>)(newCapacity * loadFactor);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>4、通过方法将数据迁移到扩容后的数组<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">transfer</span><span class="params">(Entry[] newTable)</span></span>&#123;</span><br><span class="line">    Entry[] src = table;</span><br><span class="line">    <span class="keyword">int</span> newCapacity = newTable.length;</span><br><span class="line">    <span class="comment">//下面这段代码的意思是：</span></span><br><span class="line">    <span class="comment">//  从OldTable里摘一个元素出来，然后放到NewTable中</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; src.length; j++) &#123;</span><br><span class="line">        Entry&lt;K,V&gt; e = src[j];</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</span><br><span class="line">            src[j] = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                <span class="comment">//获得下一节点</span></span><br><span class="line">                Entry&lt;K,V&gt; next = e.next;</span><br><span class="line">                <span class="comment">//计算得到新数组下标位置</span></span><br><span class="line">                <span class="keyword">int</span> i = indexFor(e.hash, newCapacity);</span><br><span class="line">                <span class="comment">//头插法，将当前节点next指向新数组，如果为空则为null，如果有值则获得其值 </span></span><br><span class="line">                e.next = newTable[i];</span><br><span class="line">                <span class="comment">//将数组赋值为新插入的链表头</span></span><br><span class="line">                newTable[i] = e;</span><br><span class="line">                e = next;</span><br><span class="line">            &#125; <span class="keyword">while</span> (e != <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>原链表值a-b-c-null ，使用头插法链表反转后循环结果依次为 a-null, b-a-null, c-b-a-null<br>ok上述流程在单线程环境下是没有问题的，来看一下多线程场景。</p>
+<h3 id="3-多线程场景"><a href="#3-多线程场景" class="headerlink" title="3.多线程场景"></a>3.多线程场景</h3><p>假设HashMap初始化大小为2，插入了三个节点，且三个都在同一hash槽内，此处设置其负载因子为1，元素数量达到3，此时触发了扩容。<br><img src="https://i.loli.net/2019/08/02/5d43cd39b552a60748.jpg" alt="原始数组"><br><em>下面连接防止图片连接失效备份图库（忽略）</em><br><a href="https://ws2.sinaimg.cn/large/006Xmmmggy1g5la5c7yg3j30cw04zwea.jpg" target="_blank" rel="noopener">https://ws2.sinaimg.cn/large/006Xmmmggy1g5la5c7yg3j30cw04zwea.jpg</a></p>
+<p>插入第4个节点时，发生rehash，假设现在有两个线程同时进行，线程1和线程2，两个线程都会新建新的数组。<br><img src="https://i.loli.net/2019/08/02/5d43ce31ce00c24734.jpg" alt="触发rehash"><br><a href="https://ws1.sinaimg.cn/large/006Xmmmgly1g5la9qndm9j30ja08ddfp.jpg" target="_blank" rel="noopener">https://ws1.sinaimg.cn/large/006Xmmmgly1g5la9qndm9j30ja08ddfp.jpg</a><br>如果线程2 在执行到 Entry&lt;K,V&gt; next = e.next;之后，cpu时间片用完了，这时变量e指向节点a，变量next指向节点b。<br>线程2继续执行，此时<figure class="highlight plain"><figcaption><span>i </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">第一次循环移动节点a</span><br><span class="line">![第一次循环][5]</span><br><span class="line">https://ws2.sinaimg.cn/large/006Xmmmgly1g5las8g1pbj308p08pjr7.jpg</span><br><span class="line"></span><br><span class="line">第二次循环移动节点b</span><br><span class="line">![第二次循环][6]</span><br><span class="line">https://ws3.sinaimg.cn/large/006Xmmmgly1g5lav75hmej309d07y0sk.jpg</span><br><span class="line">使用的头插法，这里的顺序是反过来的继续移动节点c</span><br><span class="line">![第三次循环][7]</span><br><span class="line">https://ws2.sinaimg.cn/large/006Xmmmggy1g5laxk0dkrj30bj07ojr8.jpg</span><br><span class="line">在这个时候线程1的时间片用完，内部的oldTable还没有设置成新的数组， 线程2 开始执行。</span><br><span class="line">此时回顾下线程2时间片到了的时候</span><br><span class="line">变量e指向节点a，变量next指向节点b。**（注意此时因为线程1的干扰，这里的节点b.next已经不在指向c而是指向了a）**</span><br></pre></td></tr></table></figure></p>
+<p>1.首先插入节点a，e=next循环。Entry&lt; K,V &gt; next = e.next 此时next为a，e为b。再次插入节点b，e=next循环。<br>2.第三次循环进来的时候执行完Entry&lt; K,V &gt; next = e.next; e为a节点，a的next指向null，next为null(循环退出条件)。<br>3.e.next = newTable[i]; 此时newTable[i]指向节点b，链表节点依次为b-a-null。而e.next =b,就等于把a的next指向了b，这样a和b就互相引用了，形成了一个环。<br>4.newTable[i] = e 把节点a放到了数组i位置此时链表节点依次为a-b-a（环）<br>5.e=next 变量e=null 此时满足 while (e != null)条件，退出循环。<br><code>`</code><br>最终引用关系：<br><img src="https://i.loli.net/2019/08/02/5d43d523b32e674511.jpg" alt="首先插入节点a"><br><a href="https://ws1.sinaimg.cn/large/006Xmmmggy1g5lb4k5z52j30o609mq2x.jpg" target="_blank" rel="noopener">https://ws1.sinaimg.cn/large/006Xmmmggy1g5lb4k5z52j30o609mq2x.jpg</a><br>节点a和节点b的互相引用形成了一个环，当把当前newTable[i]赋值到原来的oldTable中时。数组在使用对应的get时就会发生死循环。并且因为a、b节点的互相引用也会导致c节点的丢失。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>并发场景下，发生扩容时，可能会产生链表循环，在执行get时触发死循环，引起cpu100%，所以并发环境下一定要慎用HashMap。要并发可以使用线程安全的ConcurrentHashmap或者对map操作时加锁。</p>
+<p>参考资料：<a href="https://coolshell.cn/articles/9606.html" target="_blank" rel="noopener">coolshell</a>   <a href="https://juejin.im/post/5a66a08d5188253dc3321da0" target="_blank" rel="noopener">占小狼</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/07/28/Spirng学习十一-事务管理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2366,245 +2584,6 @@ PostConstruct
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/05/Spring学习三-ApplicationContext/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     1.2k 字
-	</span>
-	<span title="阅读时长">
-     5 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/05/Spring学习三-ApplicationContext/" itemprop="url">Spring学习三-ApplicationContext</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-05T00:23:59+08:00">
-                2019-06-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/05/Spring学习三-ApplicationContext/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/05/Spring学习三-ApplicationContext/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.2k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  5
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Spring中的Resource接口"><a href="#Spring中的Resource接口" class="headerlink" title="Spring中的Resource接口"></a>Spring中的Resource接口</h2><p> 在Spring内部实现机制，针对于资源文件(配置的xml文件)有一个统一的接口Resource。</p>
-<h3 id="Resource具体实现类："><a href="#Resource具体实现类：" class="headerlink" title="Resource具体实现类："></a>Resource具体实现类：</h3><ol>
-<li>ClassPathResource:类路径下的资源，位置在classes路径下 </li>
-<li>FileSystemResource:文件系统资源，资源以文件系统路径的方式表示，如：D:/File/conf.xml; </li>
-<li>InputStreamResource:对应一个InputStream的资源</li>
-<li>ServletContextResource:访问web容器上下文中资源的类，负责以相对于web应用根目录的路径加载资源，支持以流和URL的方式访问。</li>
-<li>UrlResource :用户能够访问任何可以通过URL表示的资源。如http资源，ftp资源。 </li>
-</ol>
-<h3 id="Spring的资源类型的地址前缀"><a href="#Spring的资源类型的地址前缀" class="headerlink" title="Spring的资源类型的地址前缀"></a>Spring的资源类型的地址前缀</h3><p>地址前缀对应资源类型</p>
-<ul>
-<li>classpath:从类路径中加载资源，相对于类的根路径。</li>
-<li>file:使用URLResource从文件系统目录中装载资源。</li>
-<li>http://：使用URLResource从web服务器中装载资源。</li>
-<li>ftp://:使用URLResource从ftp服务器中装载资源。</li>
-<li>无前缀：根据ApplicationContext具体实现类采用对应类型的Resource。<br>在web项目中可以使用Resource 来代替java的IO来获取资源，并且还支持Ant通配符。<br><strong>Ant风格:</strong></li>
-<li>?:匹配文件名中的一个字符.</li>
-<li>*:匹配文件命中的任意字符.</li>
-<li>** :匹配多层路径.<br>示例：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">PathMatchingResourcePatternResolver resolver = <span class="keyword">new</span> PathMatchingResourcePatternResolver();</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           Resource[] res = resolver.getResources(<span class="string">"classpath:/test.txt"</span>);</span><br><span class="line">           <span class="keyword">for</span> (Resource  resource : res)&#123;</span><br><span class="line">      System.out.println(resource.getDescription()+<span class="string">"----"</span>+resource.getFilename());</span><br><span class="line">               <span class="comment">//System.out.println(resource.getFile().);</span></span><br><span class="line">               BufferedReader bf = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(resource.getFile()));</span><br><span class="line">               String data = <span class="string">""</span>;</span><br><span class="line">               <span class="keyword">while</span>((data = bf.readLine())!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                   System.out.println(data);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">               <span class="keyword">if</span> (<span class="keyword">null</span> != bf)bf.close();</span><br><span class="line">           &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">               e.printStackTrace();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>输出结果<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">class path resource [test.txt]----test.txt</span><br><span class="line">springResource加载</span><br></pre></td></tr></table></figure></p>
-<h2 id="BeanFactory和ApplicationContext"><a href="#BeanFactory和ApplicationContext" class="headerlink" title="BeanFactory和ApplicationContext"></a>BeanFactory和ApplicationContext</h2><h3 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h3><p>BeanFactory 是延迟加载，如果bean的某一属性没有注入，BeanFactory加载后，直到调用getBean方法的时候才会抛出异常，而ApplicationContext在初始化的时候会进行校验，这样有利于检查依赖的属性是否注入。且ApplicationContext继承自Beanfactory，其实现更为丰富，故通常我们选择使用ApplicationContext。<br>初始化Beanfactory的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//调用资源加载器加载Spring配置文件</span></span><br><span class="line">   PathMatchingResourcePatternResolver resolver=<span class="keyword">new</span> PathMatchingResourcePatternResolver();</span><br><span class="line">   Resource res =resolver.getResource(<span class="string">"classpath:/applicationContext.xml"</span>);</span><br><span class="line">   DefaultListableBeanFactory bf =<span class="keyword">new</span> DefaultListableBeanFactory();</span><br><span class="line">   <span class="comment">//BeanDefinition 读取器,专门读取资源到容器</span></span><br><span class="line">   XmlBeanDefinitionReader reader =<span class="keyword">new</span> XmlBeanDefinitionReader(bf);</span><br><span class="line"></span><br><span class="line">   <span class="comment">//读取资源进到容器</span></span><br><span class="line">   reader.loadBeanDefinitions(res);</span><br><span class="line"></span><br><span class="line">   <span class="comment">//此时容器初始化完毕后可以取里面的bean了.</span></span><br><span class="line">   bf.getBean(<span class="string">"car"</span>);</span><br></pre></td></tr></table></figure></p>
-<h3 id="ApplicationContext"><a href="#ApplicationContext" class="headerlink" title="ApplicationContext"></a>ApplicationContext</h3><p>主要类和接口<br>ApplicationEventPublisher: 让容器拥有发布应用程序上下文事件的功能.<br>ResourcePatternResolver:实现了类似于资源加载器的功能，能够识别特定前缀加Ant风格的路径并加载到容器中.<br>LifeCycle：管理容器中bean的生命周期。<br>ConfigurableApplicationContext:主要新增了refresh()和close()方法，让ApplicationContext有用了启动，关系和刷新上下文的功能。<br>ClassPathXmlApplicationContext与FileSystemXmlApplicationContext:Spring提供的两个常用的ApplicationContext实现类，前者默认从类路径加载配置文件，后者从文件系统加载。<br>然后初始化一个ApplicationContext看看:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ac =<span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"application.xml"</span>);</span><br><span class="line">ApplicationContext ac =<span class="keyword">new</span> FileSystemXmlApplicationContext(/User/Desktop/application.xml);</span><br></pre></td></tr></table></figure></p>
-<p>ClassPathXmlApplicationContext如果没有前缀默认就是classpath: FileSystemXmlApplicationContext如果没有前缀默认就是 file:<br> Spring容器不仅可以通过xml来初始化，也可以通过@Configuration注解来注册Bean，Spring也提供了相应的AnnotationConfigApplicationContext。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext context =<span class="keyword">new</span> AnnotationConfigApplicationContext(Config.class);</span><br></pre></td></tr></table></figure>
-<p>其中Config类就是加了@Configuration的类.</p>
-<p>###WebApplicationContext<br>WebApplicationContext是Spring专门为web应用准备的，它可以从现对于web根目录的路径中装配文件来完成初始化。WebApplicationContext与ServletContext可以相互获得.<br>在非Web应用的环境下，Bean只有singleton和prototype两种作用域，而WebApplicationContext为Bean添加了三个新的作用域:request,session,global session。</p>
-<p>WebApplicationContext和ServletContext是如何相互获取的，其实很简单，在WebApplicationContext里有ServletContext成员变量，直接get就完了。在ServletContext里有一个写死的attrbute，也是直接get..而且Spring提供了一个WebApplicationContextUtils来封装了这个写死的attribute.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">其实就是直接调用了ServletContext.getAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> WebApplicationContext <span class="title">getWebApplicationContext</span><span class="params">(ServletContext sc)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> getWebApplicationContext(sc, WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p><strong>WebApplication的初始化</strong><br>初始化的方式有两种：</p>
-<ol>
-<li><p>在web.xml中配置一个ContextLoaderListener；</p>
-</li>
-<li><p>配置一个自启动的LoaderServlet</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">&lt;!-- 加载spring容器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">context-param</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>contextConfigLocation<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>classpath:spring/applicationContext-*.xml<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context-param</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">listener</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">listener-class</span>&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">listener</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>不根据xml启动Spring而使用@Configuration类启动</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">context-param</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>contextClass<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>org.springframework.web.context.support.AnnotationConfigWebApplicationContext<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context-param</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 加载spring容器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">context-param</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>contextConfigLocation<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>com.zdy.Configuration<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context-param</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">listener</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">listener-class</span>&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">listener</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>配置一个contextClass参数ApplicationContext改为AnnotationConfigWebApplicationContext，然后contextConfigLocation不是指定配置文件xml位置了，改为指定Configuration类的位置。就OK了。</p>
-<p><a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/spring/springDay3" target="_blank" rel="noopener">练习</a><br>来源：<a href="https://juejin.im/post/5a4d92d8f265da4311209f40" target="_blank" rel="noopener">我又不是架构师</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2658,7 +2637,7 @@ PostConstruct
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2669,7 +2648,7 @@ PostConstruct
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2680,7 +2659,7 @@ PostConstruct
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
