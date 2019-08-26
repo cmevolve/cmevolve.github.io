@@ -284,6 +284,241 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/08/25/SpringCloud学习一-服务注册和发现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     943 字
+	</span>
+	<span title="阅读时长">
+     3 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/25/SpringCloud学习一-服务注册和发现/" itemprop="url">SpringCloud学习一-服务注册和发现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-25T22:37:55+08:00">
+                2019-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringCloud</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/eureka/" itemprop="url" rel="index">
+                    <span itemprop="name">eureka</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/25/SpringCloud学习一-服务注册和发现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/25/SpringCloud学习一-服务注册和发现/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  943
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="注册中心-Eureka"><a href="#注册中心-Eureka" class="headerlink" title="注册中心-Eureka"></a>注册中心-Eureka</h2><p>参考资料<br><a href="https://blog.csdn.net/forezp/article/details/81040925" target="_blank" rel="noopener">史上最简单的 SpringCloud 教程 | 第一篇： 服务的注册与发现Eureka(Finchley版本)</a></p>
+<p>Eureka 自我保护机制：<br>某时刻微服务不可用，Eureka不会立刻清理，依旧保存该微服务的信息。</p>
+<p> 在spring cloud中，除了可以使用eureka作为注册中心外，还可以通过配置的方式使用zookeeper作为注册中心。既然这样，该如何选择？<br>   著名的CAP理论指出，一个分布式系统不可能同时满足C(一致性)、A(可用性)和P(分区容错性)。由于分区容错性在是分布式系统中必须要保证的，因此我们只能在A和C之间进行权衡。在此Zookeeper保证的是CP, 而Eureka则是AP。</p>
+<ol start="2">
+<li>Zookeeper保证CP<br> 当向注册中心查询服务列表时，我们可以容忍注册中心返回的是几分钟以前的注册信息，但不能接受服务直接down掉不可用。也就是说，服务注册功能对可用性的要求要高于一致性。但是zk会出现这样一种情况，当master节点因为网络故障与其他节点失去联系时，剩余节点会重新进行leader选举。问题在于，选举leader的时间太长，30 ~ 120s, 且选举期间整个zk集群都是不可用的，这就导致在选举期间注册服务瘫痪。在云部署的环境下，因网络问题使得zk集群失去master节点是较大概率会发生的事，虽然服务能够最终恢复，但是漫长的选举时间导致的注册长期不可用是不能容忍的。</li>
+<li>Eureka保证AP<br> Eureka看明白了这一点，因此在设计时就优先保证可用性。Eureka各个节点都是平等的，几个节点挂掉不会影响正常节点的工作，剩余的节点依然可以提供注册和查询服务。而Eureka的客户端在向某个Eureka注册或如果发现连接失败，则会自动切换至其它节点，只要有一台Eureka还在，就能保证注册服务可用(保证可用性)，只不过查到的信息可能不是最新的(不保证强一致性)。除此之外，Eureka还有一种自我保护机制，如果在15分钟内超过85%的节点都没有正常的心跳，那么Eureka就认为客户端与注册中心出现了网络故障，此时会出现以下几种情况： <ol>
+<li>Eureka不再从注册列表中移除因为长时间没收到心跳而应该过期的服务 </li>
+<li>Eureka仍然能够接受新服务的注册和查询请求，但是不会被同步到其它节点上(即保证当前节点依然可用) </li>
+<li>当网络稳定时，当前实例新的注册信息会被同步到其它节点中<br>因此， Eureka可以很好的应对因网络故障导致部分节点失去联系的情况，而不会像zookeeper那样使整个注册服务瘫痪。<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="1-pom文件引入依赖"><a href="#1-pom文件引入依赖" class="headerlink" title="1.pom文件引入依赖"></a>1.pom文件引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="2-启动类"><a href="#2-启动类" class="headerlink" title="2. 启动类"></a>2. 启动类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableEurekaServer</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EurekaServerApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run( EurekaServerApplication.class, args );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-配置文件"><a href="#3-配置文件" class="headerlink" title="3.配置文件"></a>3.配置文件</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8761</span>   <span class="comment">#端口</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  instance:</span></span><br><span class="line"><span class="attr">    hostname:</span> <span class="string">localhost</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    registerWithEureka:</span> <span class="literal">false</span>    <span class="comment"># 禁止自己注册</span></span><br><span class="line"><span class="attr">    fetchRegistry:</span> <span class="literal">false</span>       </span><br><span class="line"><span class="attr">    serviceUrl:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://$&#123;eureka.instance.hostname&#125;:$&#123;server.port&#125;/eureka/</span>   <span class="comment">#服务地址</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">eurka-server</span>   <span class="comment"># 服务名称</span></span><br><span class="line"><span class="attr"> instance:</span></span><br><span class="line"><span class="attr">    instance-id:</span> <span class="string">eurekaclient8762</span>   <span class="comment">#显示别名</span></span><br><span class="line"><span class="attr">    prefer-ip-address:</span> <span class="literal">true</span> <span class="comment">#访问路径显示ip地址</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/08/18/SpringMVC学习一/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2470,223 +2705,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/15/Spring学习六-注解IOC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     1.1k 字
-	</span>
-	<span title="阅读时长">
-     4 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/15/Spring学习六-注解IOC/" itemprop="url">Spring学习六-注解IOC</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-15T00:41:58+08:00">
-                2019-06-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/15/Spring学习六-注解IOC/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/15/Spring学习六-注解IOC/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.1k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h2><p>@Component 注解是用于创建bean对象的，但是只使用@Component注解是无法使用的，需要在配置文件中去声明，告知spring在创建容器时要扫描的包，配置所需要的标签不是在bean的约束中，而是一个mingcheng为context名称空间和约束中<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.how2java.pojo"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>且在beans的头信息中需要导入如下信息<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xmlns:aop="http://www.springframework.org/schema/aop"</span><br><span class="line">xmlns:context="http://www.springframework.org/schema/context"</span><br></pre></td></tr></table></figure></p>
-<h2 id="详解："><a href="#详解：" class="headerlink" title="详解："></a>详解：</h2><h3 id="用于创建bean对象的"><a href="#用于创建bean对象的" class="headerlink" title="用于创建bean对象的"></a>用于创建bean对象的</h3><p>他们的作用就和xml配置文件中编写一个bean标签实现的功能是一样的<br>@Component<br>    作用：用于把当前的对象放入到spring容器中。<br>    属性：<br>    value:用于指定bean的id，如果不写beanname默认是当前类名，首字母小写。<br>    Controller：一般用于表现层<br>    Service:一般用于业务层<br>    Respository:一般用于持久层<br>以上三个注解的作用和属性和Component是一样的，他们三个是用来提供明确的三层使用的注解，使结构更加清晰。</p>
-<p>###用于注入数据的<br>作用相当于xml配置文件中的bean标签中写一个<property>标签<br>Autowired:<br>    作用：自动按照类型注入，只要有容器中有唯一的一个bean对象类型和要注入的变量类型匹配就可以成功。</property></p>
-<pre><code>1. 如果没有匹配类型则产生异常
-2. 如果被spring管理的有多个相同类型对象则按照参数去匹配beanid如果匹配到就成功加载，匹配不到则抛出异常
-</code></pre><p> 出现位置：可以是方法上也可以是变量上。（无需有set方法）<br> Qualifier :<br>    作用:按照名称注入，在给类成员注入时不得单独使用(需和Autowired搭配使用)，但是给参数注入时可以使用。<br>    属性：<br>    value:用于指定注入bean的id.</p>
-<p>Resource<br>    作用：直接按照bean的id注入，可以独立使用<br>    属性：name：用于指定bean的id<br>以上三个注入类型都只能注入bean类型的数据，基本类型和string类型无法注入，另外集合类型注入只能通过xml注入。</p>
-<p> Value:<br>    作用：用于注入基本类型和String类型的数据<br>    属性：<br>        value:用于指定数据的值，它可以使用SpEL（srping的EL表达式） 写法：$｛表达式｝</p>
-<h3 id="用于改变作用范围的"><a href="#用于改变作用范围的" class="headerlink" title="用于改变作用范围的"></a>用于改变作用范围的</h3><p>Scope<br>    作用：用于指定bean的作用范围<br>    属性：<br>        value：指定范围的取值。常用取值：singleton  prototype</p>
-<h3 id="声明周期相关"><a href="#声明周期相关" class="headerlink" title="声明周期相关"></a>声明周期相关</h3><pre><code>PreDestroy
-    作用：指定销毁方法 
-PostConstruct
-    作用：指定初始化方法
-</code></pre><h2 id="利用配置类来代替xml"><a href="#利用配置类来代替xml" class="headerlink" title="利用配置类来代替xml"></a>利用配置类来代替xml</h2><p>Configuration<br>    作用：指定当前类是一个配置类<br>ComponentScan<br>    作用：通过注释指定spring在创建容器时要扫描的包<br>    属性：<br>        value：作用和basePackages的作用是一样的，都是用于指定创建容器时要扫描的包路径。等同于在xml配置了：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.how2java.pojo"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(value = <span class="string">"com.how2java.pojo"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringConfig</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Bean<br>    作用：用于把当前方法的返回值放入到spring容器中。<br>    属性：<br>        name：用于指定bean的id，不写时默认id是当前方法名。<br>    细节：当使用注解配置方法时，如果方法有参数，spring框架会去容器中查找有没有可用的bean对象。查找方式和Aturowired方式是一样的，如果类型一样且只有一个对象就注入。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(value = <span class="string">"com.how2java.pojo"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span>(name =<span class="string">"c"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Category <span class="title">getCategory</span><span class="params">(Product p)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Category();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span>(name = <span class="string">"p"</span>)</span><br><span class="line">    <span class="meta">@Scope</span>(<span class="string">"prototype"</span>)<span class="comment">//多例对象</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Product <span class="title">getProduct</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Product();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line">ApplicationContext context = <span class="keyword">new</span> AnnotationConfigApplicationContext(SpringConfig.class);</span><br><span class="line">Product d = (Product) context.getBean(<span class="string">"p"</span>);</span><br></pre></td></tr></table></figure></p>
-<p>import<br>    作用：用于导入其他的配置类<br>    属性：<br>        value:用于指定其他配置类的字节码<br>            当使用import的注解以后，有import的类就是父配置类，导入的类是子配置类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(value = <span class="string">"com.how2java.pojo"</span>)</span><br><span class="line"><span class="meta">@Import</span>(SpringBean.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringConfig</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringBean</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span>(name =<span class="string">"c"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Category <span class="title">getCategory</span><span class="params">(Product p)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Category();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span>(name = <span class="string">"p"</span>)</span><br><span class="line">    <span class="meta">@Scope</span>(<span class="string">"prototype"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Product <span class="title">getProduct</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Product();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>PropertySource<br>    作用：指定Propertys文件的位置<br>    属性：<br>        value:用于指定文件的名称和路径。<br>        关键字：classpath： 表示类路径下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(value = <span class="string">"com.how2java.pojo"</span>)</span><br><span class="line"><span class="meta">@Import</span>(SpringBean.class)</span><br><span class="line"><span class="meta">@PropertySource</span>(<span class="string">"classpath:config.properties"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用方式el表达式</span></span><br><span class="line">   <span class="meta">@Value</span>(<span class="string">"$&#123;product.name&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;product.no&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String no;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2740,7 +2758,7 @@ PostConstruct
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2751,7 +2769,7 @@ PostConstruct
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
