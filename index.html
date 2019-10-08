@@ -284,6 +284,933 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/08/SpringCloud学习三-zuul网关搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     365 字
+	</span>
+	<span title="阅读时长">
+     1 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/08/SpringCloud学习三-zuul网关搭建/" itemprop="url">SpringCloud学习三-zuul网关搭建</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-08T23:20:56+08:00">
+                2019-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringCloud</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/Zuul/" itemprop="url" rel="index">
+                    <span itemprop="name">Zuul</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/08/SpringCloud学习三-zuul网关搭建/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/08/SpringCloud学习三-zuul网关搭建/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  365
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>由于最后技术选型使用的是GateWay，所以zuul只是搭建的基本功能。</p>
+<h2 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h2><h3 id="1-依赖"><a href="#1-依赖" class="headerlink" title="1.依赖"></a>1.依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties&gt;</span><br><span class="line">     &lt;java.version&gt;1.8&lt;/java.version&gt;</span><br><span class="line">     &lt;spring-cloud.version&gt;Dalston.SR1&lt;/spring-cloud.version&gt;</span><br><span class="line"> &lt;/properties&gt;</span><br><span class="line"></span><br><span class="line"> &lt;dependencies&gt;</span><br><span class="line">     &lt;dependency&gt;</span><br><span class="line">         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">         &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</span><br><span class="line">     &lt;/dependency&gt;</span><br><span class="line">     &lt;dependency&gt;</span><br><span class="line">         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">         &lt;artifactId&gt;spring-cloud-starter-zuul&lt;/artifactId&gt;</span><br><span class="line">     &lt;/dependency&gt;</span><br><span class="line">     &lt;dependency&gt;</span><br><span class="line">         &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">         &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line">     &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">     &lt;dependency&gt;</span><br><span class="line">         &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">         &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</span><br><span class="line">         &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">     &lt;/dependency&gt;</span><br><span class="line"> &lt;/dependencies&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="2-配置文件"><a href="#2-配置文件" class="headerlink" title="2.配置文件"></a>2.配置文件</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8762</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">zuul-server</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    service-url:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://localhost:8761/eureka/</span></span><br><span class="line"><span class="attr">zuul:</span></span><br><span class="line"><span class="attr">  routes:</span></span><br><span class="line"><span class="attr">    api-a:</span></span><br><span class="line"><span class="attr">      path:</span> <span class="string">/api-a/**</span></span><br><span class="line"><span class="attr">      serviceId:</span> <span class="string">law-server</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-启动类"><a href="#3-启动类" class="headerlink" title="3.启动类"></a>3.启动类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableZuulProxy</span></span><br><span class="line"><span class="meta">@EnableEurekaClient</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceZuulApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(ServiceZuulApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-测试"><a href="#4-测试" class="headerlink" title="4.测试"></a>4.测试</h3><p>启动两个服务law-server端口分别是8888 和9999<br>访问 <a href="http://localhost:8762/api-a/hi?name=zuul" target="_blank" rel="noopener">http://localhost:8762/api-a/hi?name=zuul</a> 两次，服务端返回数据如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hi zuul, I am from port: 8888</span><br><span class="line">Hi zuul, I am from port: 9999</span><br></pre></td></tr></table></figure></p>
+<p>这说明Zuul 起到了 路由 的作用。如果某个 服务 存在 多个实例，Zuul 会结合 Ribbon 做 负载均衡，将请求 均分并路由 到不同的 服务实例。<br>更多zuul相关配置参考文章：<a href="https://juejin.im/post/5c52d858e51d4532e963d51b" target="_blank" rel="noopener">Spring Cloud实战系列(五) - 服务网关Zuul</a><br><a href="http://www.ityouknow.com/springcloud/2017/06/01/gateway-service-zuul.html" target="_blank" rel="noopener">http://www.ityouknow.com/springcloud/2017/06/01/gateway-service-zuul.html</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/07/SpringCloud学习二-网关技术选型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     920 字
+	</span>
+	<span title="阅读时长">
+     3 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/07/SpringCloud学习二-网关技术选型/" itemprop="url">SpringCloud学习二-网关技术选型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-07T22:22:00+08:00">
+                2019-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringCloud</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/Zuul/" itemprop="url" rel="index">
+                    <span itemprop="name">Zuul</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/Zuul/GateWay/" itemprop="url" rel="index">
+                    <span itemprop="name">GateWay</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/07/SpringCloud学习二-网关技术选型/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/07/SpringCloud学习二-网关技术选型/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  920
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="什么是网关？"><a href="#什么是网关？" class="headerlink" title="什么是网关？"></a>什么是网关？</h2><p>Eureka用于服务的注册和发现，在发现服务后外部的客户端请求如何访问到服务呢？在微服务中，后端服务一般不会直接对外开放，而是通过一个API网关根据请求的url路由到对应的服务中去。就像家里的路由器一样在服务和客户端之间作为中转，来保护内部的服务，也可以将请求进行负载均衡。</p>
+<p><strong><a href="https://imgchr.com/i/uhgahn" target="_blank" rel="noopener">网关的基本功能如下：</a></strong><br><img src="https://i.loli.net/2019/10/08/qcDbaLrpKSXROVn.png" alt="网关基本功能.png"></p>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p>网关相当于微服务世界的大门，可以说是微服务中的核心组件，那么网关的选择又有哪些呢？</p>
+<h3 id="Gateway-VS-Zuul"><a href="#Gateway-VS-Zuul" class="headerlink" title="Gateway VS Zuul"></a>Gateway VS Zuul</h3><p>Spring Cloud Gateway 是 Spring Cloud 微服务平台的一个子项目，属于 Spring 开源社区，依赖名叫：spring-cloud-starter-gateway。<br><a href="https://spring.io/projects/spring-cloud-gateway" target="_blank" rel="noopener">https://spring.io/projects/spring-cloud-gateway</a></p>
+<p>Zuul 是 Netflix 公司的开源项目，Spring Cloud 在 Netflix 项目中也已经集成了 Zuul，依赖名叫：spring-cloud-starter-netflix-zuul。<br><a href="https://link.zhihu.com/?target=https%3A//github.com/Netflix/zuul" target="_blank" rel="noopener">https://link.zhihu.com/?target=https%3A//github.com/Netflix/zuul</a></p>
+<h4 id="功能点："><a href="#功能点：" class="headerlink" title="功能点："></a>功能点：</h4><p>身份认证和安全: 识别每一个资源的验证要求，并拒绝那些不符的请求<br>审查与监控：在边缘位置追踪有意义的数据和统计结果，从而带来精确的生产视图。<br>动态路由：动态将请求路由到不同后端集群<br>压力测试：逐渐增加指向集群的流量，以了解性能<br>负载分配：为每一种负载类型分配对应容量，并弃用超出限定值的请求<br>静态响应处理：边缘位置进行响应，避免转发到内部集群<br>多区域弹性：跨域AWS Region进行请求路由，旨在实现ELB(ElasticLoad Balancing)使用多样化</p>
+<p>对比：<br>Zuul构建于 Servlet 2.5，兼容 3.x，使用的是阻塞式的 API，不支持长连接，比如 websockets。（替代方案：<a href="http://webfuse.cn/2017/11/15/%E5%9C%A8SpringCloud%20Zuul%E4%B8%AD%E4%BD%BF%E7%94%A8WebSockets/" target="_blank" rel="noopener">Zuul 支持websockets方案</a>）</p>
+<p>Spring Cloud Gateway构建于 Spring 5+，基于 Spring Boot 2.x 响应式的、非阻塞式的 API。同时，它支持 websockets，和 Spring 框架紧密集成，开发体验相对来说十分不错。<strong>（在后续开发中发现因其基于webflux 整合shiro时与Servlet整合方式不一致，此处需注意）</strong></p>
+<h4 id="如何选择？"><a href="#如何选择？" class="headerlink" title="如何选择？"></a>如何选择？</h4><p>Netflix 早就发布了最新的 Zuul 2.x，但 Spring Cloud一直没有整合计划，在此场景下spring推出了自己的服务网关Spring Cloud Gateway，作为亲儿子在后续版本的更新上比较zuul应该是更有优势的。</p>
+<h3 id="网关过滤器"><a href="#网关过滤器" class="headerlink" title="网关过滤器"></a><a href="https://imgchr.com/i/uhf3Cj" target="_blank" rel="noopener">网关过滤器</a></h3><p>过滤器可以说是网关的核心组件了，其中过滤器主要的过滤类型有如下几种。<br><img src="https://i.loli.net/2019/10/08/zHYMpFs4xhuZPVG.png" alt="过滤器类型.png"></p>
+<p>Zuul过滤器配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">filterType：返回一个字符串代表过滤器的类型，在zuul中定义了四种不同生命周期的过滤器类型，具体如下：</span><br><span class="line">pre：路由之前</span><br><span class="line">routing：路由之时</span><br><span class="line">post： 路由之后</span><br><span class="line">error：发送错误调用</span><br><span class="line">filterOrder：过滤的顺序</span><br><span class="line">shouldFilter：这里可以写逻辑判断，是否要过滤，本文true,永远过滤。</span><br><span class="line">run：过滤器的具体逻辑。可用很复杂，包括查sql，nosql去判断该请求到底有没有权限访问。</span><br><span class="line">原文链接：https://blog.csdn.net/forezp/article/details/81041012</span><br></pre></td></tr></table></figure></p>
+<p>GateWay过滤器配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GateWay的过滤器类型没有Zuul丰富，只有pre 和 post 两种tilter方式.</span><br><span class="line">客户端的请求先经过“pre”类型的filter,然后将请求转发到具体的业务服务,收到业务服务响应后，在经过“post” 类型filter处理，返回给客户端。</span><br><span class="line"></span><br><span class="line">与Zuul不同的地方是，GateWay的filter除了单个路由的filter外还有针对所有路由的global GateWay filter。</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/05/SpringCloud学习一-服务注册和发现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     943 字
+	</span>
+	<span title="阅读时长">
+     3 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/05/SpringCloud学习一-服务注册和发现/" itemprop="url">SpringCloud学习一-服务注册和发现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-05T22:37:55+08:00">
+                2019-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringCloud</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/eureka/" itemprop="url" rel="index">
+                    <span itemprop="name">eureka</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/05/SpringCloud学习一-服务注册和发现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/05/SpringCloud学习一-服务注册和发现/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  943
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="注册中心-Eureka"><a href="#注册中心-Eureka" class="headerlink" title="注册中心-Eureka"></a>注册中心-Eureka</h2><p>参考资料<br><a href="https://blog.csdn.net/forezp/article/details/81040925" target="_blank" rel="noopener">史上最简单的 SpringCloud 教程 | 第一篇： 服务的注册与发现Eureka(Finchley版本)</a></p>
+<p>Eureka 自我保护机制：<br>某时刻微服务不可用，Eureka不会立刻清理，依旧保存该微服务的信息。</p>
+<p> 在spring cloud中，除了可以使用eureka作为注册中心外，还可以通过配置的方式使用zookeeper作为注册中心。既然这样，该如何选择？<br>   著名的CAP理论指出，一个分布式系统不可能同时满足C(一致性)、A(可用性)和P(分区容错性)。由于分区容错性在是分布式系统中必须要保证的，因此我们只能在A和C之间进行权衡。在此Zookeeper保证的是CP, 而Eureka则是AP。</p>
+<ol start="2">
+<li>Zookeeper保证CP<br> 当向注册中心查询服务列表时，我们可以容忍注册中心返回的是几分钟以前的注册信息，但不能接受服务直接down掉不可用。也就是说，服务注册功能对可用性的要求要高于一致性。但是zk会出现这样一种情况，当master节点因为网络故障与其他节点失去联系时，剩余节点会重新进行leader选举。问题在于，选举leader的时间太长，30 ~ 120s, 且选举期间整个zk集群都是不可用的，这就导致在选举期间注册服务瘫痪。在云部署的环境下，因网络问题使得zk集群失去master节点是较大概率会发生的事，虽然服务能够最终恢复，但是漫长的选举时间导致的注册长期不可用是不能容忍的。</li>
+<li>Eureka保证AP<br> Eureka看明白了这一点，因此在设计时就优先保证可用性。Eureka各个节点都是平等的，几个节点挂掉不会影响正常节点的工作，剩余的节点依然可以提供注册和查询服务。而Eureka的客户端在向某个Eureka注册或如果发现连接失败，则会自动切换至其它节点，只要有一台Eureka还在，就能保证注册服务可用(保证可用性)，只不过查到的信息可能不是最新的(不保证强一致性)。除此之外，Eureka还有一种自我保护机制，如果在15分钟内超过85%的节点都没有正常的心跳，那么Eureka就认为客户端与注册中心出现了网络故障，此时会出现以下几种情况： <ol>
+<li>Eureka不再从注册列表中移除因为长时间没收到心跳而应该过期的服务 </li>
+<li>Eureka仍然能够接受新服务的注册和查询请求，但是不会被同步到其它节点上(即保证当前节点依然可用) </li>
+<li>当网络稳定时，当前实例新的注册信息会被同步到其它节点中<br>因此， Eureka可以很好的应对因网络故障导致部分节点失去联系的情况，而不会像zookeeper那样使整个注册服务瘫痪。<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="1-pom文件引入依赖"><a href="#1-pom文件引入依赖" class="headerlink" title="1.pom文件引入依赖"></a>1.pom文件引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="2-启动类"><a href="#2-启动类" class="headerlink" title="2. 启动类"></a>2. 启动类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableEurekaServer</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EurekaServerApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run( EurekaServerApplication.class, args );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-配置文件"><a href="#3-配置文件" class="headerlink" title="3.配置文件"></a>3.配置文件</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8761</span>   <span class="comment">#端口</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  instance:</span></span><br><span class="line"><span class="attr">    hostname:</span> <span class="string">localhost</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    registerWithEureka:</span> <span class="literal">false</span>    <span class="comment"># 禁止自己注册</span></span><br><span class="line"><span class="attr">    fetchRegistry:</span> <span class="literal">false</span>       </span><br><span class="line"><span class="attr">    serviceUrl:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://$&#123;eureka.instance.hostname&#125;:$&#123;server.port&#125;/eureka/</span>   <span class="comment">#服务地址</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">eurka-server</span>   <span class="comment"># 服务名称</span></span><br><span class="line"><span class="attr"> instance:</span></span><br><span class="line"><span class="attr">    instance-id:</span> <span class="string">eurekaclient8762</span>   <span class="comment">#显示别名</span></span><br><span class="line"><span class="attr">    prefer-ip-address:</span> <span class="literal">true</span> <span class="comment">#访问路径显示ip地址</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/03/SpringCloud-学习笔记-资源整合/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     746 字
+	</span>
+	<span title="阅读时长">
+     3 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/03/SpringCloud-学习笔记-资源整合/" itemprop="url">SpringCloud 学习笔记(资源整合)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-03T23:19:57+08:00">
+                2019-10-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringCloud</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/03/SpringCloud-学习笔记-资源整合/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/03/SpringCloud-学习笔记-资源整合/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  746
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、微服务"><a href="#一、微服务" class="headerlink" title="一、微服务"></a>一、微服务</h2><p>单体架构：<br>——优点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1、易于开发：开发的方式简单，方便运行也容易调试。</span><br><span class="line">2、易于测试。</span><br><span class="line">3、易于部署。</span><br></pre></td></tr></table></figure></p>
+<p>——缺点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、项目过于臃肿，维护成本大，出现bug难定位。</span><br><span class="line">2、资源无法隔离：共享一个数据库，或者一块内存。</span><br><span class="line">如果一个功能模块突然访问量过大，可能影响整个系统的性能。</span><br><span class="line">3、无法灵活扩展：单体系统也可以集群部署，但是不够灵活，我明明只是订单系统遇到了瓶颈，</span><br><span class="line">只需要将订单模块水平扩展就行，但现在要将整个系统水平扩展。不灵活！</span><br><span class="line">4、交付周期长：所有功能得一起上线，一起构建，一起部署。</span><br><span class="line">任何一个环节出错，都可能影响交付。</span><br></pre></td></tr></table></figure></p>
+<p>分布式的优点与单体应用缺点对立，但是也带来了一些问题<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.性能，访问速度受带宽影响。</span><br><span class="line">2.可靠性，高度依赖网络。</span><br><span class="line">3.数据一致性：C（一致性）A（可用性）P（分区容错），cap原理</span><br><span class="line">4.运维成本：一个系统拆成了多个服务，每个服务都得配置，部署，监控，日志处理</span><br></pre></td></tr></table></figure></p>
+<p>CAP 定理:<a href="http://www.ruanyifeng.com/blog/2018/07/cap.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2018/07/cap.html</a></p>
+<p>微服务就是在分布式的特点上对业务的的一个横向划分，拆分成不同模块对外提供服务。</p>
+<h2 id="二-Spring-Cloud是什么"><a href="#二-Spring-Cloud是什么" class="headerlink" title="二.Spring Cloud是什么?"></a>二.Spring Cloud是什么?</h2><p>Spring Cloud是一系列框架的有序集合。它利用Spring Boot的开发便利性巧妙地简化了分布式系统基础设施的开发，如服务发现注册、配置中心、消息总线、负载均衡、断路器、数据监控等，都可以用Spring Boot的开发风格做到一键启动和部署。Spring Cloud就像一个老大哥带了一帮小弟，是一个资源的整合。</p>
+<h2 id="三-微服务入门"><a href="#三-微服务入门" class="headerlink" title="三.微服务入门"></a>三.微服务入门</h2><p>服务链路过程图：<br><img src="https://i.loli.net/2019/08/28/hUK8V2we1f4HNFG.png" alt="请求链路"></p>
+<h3 id="技术选择"><a href="#技术选择" class="headerlink" title="技术选择"></a>技术选择</h3><p><img src="https://s3.amazonaws.com/infoq.content.live.0/articles/comparing-api-gateway-performances/zh/resources/1269-1523696433477.png" alt="技术选择"></p>
+<h3 id="1-注册中心"><a href="#1-注册中心" class="headerlink" title="1.注册中心"></a>1.注册中心</h3><p>参考文章链接：<a href="https://blog.csdn.net/forezp/article/details/81040925" target="_blank" rel="noopener">https://blog.csdn.net/forezp/article/details/81040925</a><br>整理内容连接：<a href="https://www.iamlfc.top/2019/08/25/SpringCloud%E5%AD%A6%E4%B9%A0%E4%B8%80-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%92%8C%E5%8F%91%E7%8E%B0/" target="_blank" rel="noopener">https://www.iamlfc.top/2019/08/25/SpringCloud%E5%AD%A6%E4%B9%A0%E4%B8%80-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%92%8C%E5%8F%91%E7%8E%B0/</a></p>
+<h3 id="2-服务消费"><a href="#2-服务消费" class="headerlink" title="2.服务消费"></a>2.服务消费</h3><p>参考链接：<a href="https://blog.csdn.net/forezp/article/details/81040965" target="_blank" rel="noopener">https://blog.csdn.net/forezp/article/details/81040965</a></p>
+<h3 id="3-路由网关"><a href="#3-路由网关" class="headerlink" title="3.路由网关"></a>3.路由网关</h3><p>zuul:<br>    – 参考连接：<a href="https://blog.csdn.net/forezp/article/details/81041012" target="_blank" rel="noopener">https://blog.csdn.net/forezp/article/details/81041012</a><br>gateway:<br>    – 参考连接：<a href="https://blog.csdn.net/forezp/article/details/85210153" target="_blank" rel="noopener">https://blog.csdn.net/forezp/article/details/85210153</a></p>
+<h3 id="4-配置中心"><a href="#4-配置中心" class="headerlink" title="4.配置中心"></a>4.配置中心</h3><p>SpringColud Config：<br>    – 参考链接：<a href="https://www.cnblogs.com/lfalex0831/p/9206605.html" target="_blank" rel="noopener">https://www.cnblogs.com/lfalex0831/p/9206605.html</a></p>
+<p>推荐学习资料<br><a href="http://xujin.org/categories/%E8%B7%9F%E6%88%91%E5%AD%A6Spring-Cloud/" target="_blank" rel="noopener">http://xujin.org/categories/%E8%B7%9F%E6%88%91%E5%AD%A6Spring-Cloud/</a><br><a href="http://www.itmuch.com/categories/Spring-Cloud/" target="_blank" rel="noopener">http://www.itmuch.com/categories/Spring-Cloud/</a><br><a href="http://blog.didispace.com/Spring-Cloud%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" target="_blank" rel="noopener">http://blog.didispace.com/Spring-Cloud%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/</a></p>
+<p>demo地址：<a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/springcloud/springCloud" target="_blank" rel="noopener">https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/springcloud/springCloud</a><br>用途 | 技术<br>—-|——<br>基础容器 | spring-boot 2.0.6<br>分布式服务框架 | Spring cloud F SR3<br>项目构建 | Maven<br>注册中心 | eureka<br>网关    |gateway<br>服务消费者|Fegin<br>配置中心 | Spring Cloud Config<br><em>…</em></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/01/同一机器配置多个git账号的ssh秘钥/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -415,241 +1342,6 @@ PreferredAuthentications　#　认证方式
 User　        #　用户名
 </code></pre><p>config 文件内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># ~/.ssh/config 配置多个git的ssh-key</span><br><span class="line"># 第一个默认的SSH Key</span><br><span class="line">Host github.com</span><br><span class="line">    HostName github.com</span><br><span class="line">    IdentityFile C:\\Users\\xx\\.ssh\\id_rsa</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line"></span><br><span class="line"># 第二个SSH Key</span><br><span class="line">Host gitlab.com</span><br><span class="line">    HostName gitlab.com</span><br><span class="line">    IdentityFile C:\\Users\\xx\\.ssh\\id_rsa_gitlab</span><br><span class="line">    PreferredAuthentications publickey</span><br></pre></td></tr></table></figure></p>
 <h2 id="4-为各自仓库配置不同的用户名和邮箱"><a href="#4-为各自仓库配置不同的用户名和邮箱" class="headerlink" title="4.为各自仓库配置不同的用户名和邮箱"></a>4.为各自仓库配置不同的用户名和邮箱</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --local user.name &apos;xx&apos; &amp;&amp; git config --local user.email &apos;xx@qq.com&apos;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/08/25/SpringCloud学习一-服务注册和发现/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     943 字
-	</span>
-	<span title="阅读时长">
-     3 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/25/SpringCloud学习一-服务注册和发现/" itemprop="url">SpringCloud学习一-服务注册和发现</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-25T22:37:55+08:00">
-                2019-08-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringCloud/eureka/" itemprop="url" rel="index">
-                    <span itemprop="name">eureka</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/25/SpringCloud学习一-服务注册和发现/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/25/SpringCloud学习一-服务注册和发现/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  943
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="注册中心-Eureka"><a href="#注册中心-Eureka" class="headerlink" title="注册中心-Eureka"></a>注册中心-Eureka</h2><p>参考资料<br><a href="https://blog.csdn.net/forezp/article/details/81040925" target="_blank" rel="noopener">史上最简单的 SpringCloud 教程 | 第一篇： 服务的注册与发现Eureka(Finchley版本)</a></p>
-<p>Eureka 自我保护机制：<br>某时刻微服务不可用，Eureka不会立刻清理，依旧保存该微服务的信息。</p>
-<p> 在spring cloud中，除了可以使用eureka作为注册中心外，还可以通过配置的方式使用zookeeper作为注册中心。既然这样，该如何选择？<br>   著名的CAP理论指出，一个分布式系统不可能同时满足C(一致性)、A(可用性)和P(分区容错性)。由于分区容错性在是分布式系统中必须要保证的，因此我们只能在A和C之间进行权衡。在此Zookeeper保证的是CP, 而Eureka则是AP。</p>
-<ol start="2">
-<li>Zookeeper保证CP<br> 当向注册中心查询服务列表时，我们可以容忍注册中心返回的是几分钟以前的注册信息，但不能接受服务直接down掉不可用。也就是说，服务注册功能对可用性的要求要高于一致性。但是zk会出现这样一种情况，当master节点因为网络故障与其他节点失去联系时，剩余节点会重新进行leader选举。问题在于，选举leader的时间太长，30 ~ 120s, 且选举期间整个zk集群都是不可用的，这就导致在选举期间注册服务瘫痪。在云部署的环境下，因网络问题使得zk集群失去master节点是较大概率会发生的事，虽然服务能够最终恢复，但是漫长的选举时间导致的注册长期不可用是不能容忍的。</li>
-<li>Eureka保证AP<br> Eureka看明白了这一点，因此在设计时就优先保证可用性。Eureka各个节点都是平等的，几个节点挂掉不会影响正常节点的工作，剩余的节点依然可以提供注册和查询服务。而Eureka的客户端在向某个Eureka注册或如果发现连接失败，则会自动切换至其它节点，只要有一台Eureka还在，就能保证注册服务可用(保证可用性)，只不过查到的信息可能不是最新的(不保证强一致性)。除此之外，Eureka还有一种自我保护机制，如果在15分钟内超过85%的节点都没有正常的心跳，那么Eureka就认为客户端与注册中心出现了网络故障，此时会出现以下几种情况： <ol>
-<li>Eureka不再从注册列表中移除因为长时间没收到心跳而应该过期的服务 </li>
-<li>Eureka仍然能够接受新服务的注册和查询请求，但是不会被同步到其它节点上(即保证当前节点依然可用) </li>
-<li>当网络稳定时，当前实例新的注册信息会被同步到其它节点中<br>因此， Eureka可以很好的应对因网络故障导致部分节点失去联系的情况，而不会像zookeeper那样使整个注册服务瘫痪。<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="1-pom文件引入依赖"><a href="#1-pom文件引入依赖" class="headerlink" title="1.pom文件引入依赖"></a>1.pom文件引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-</ol>
-<h3 id="2-启动类"><a href="#2-启动类" class="headerlink" title="2. 启动类"></a>2. 启动类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableEurekaServer</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EurekaServerApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run( EurekaServerApplication.class, args );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3-配置文件"><a href="#3-配置文件" class="headerlink" title="3.配置文件"></a>3.配置文件</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8761</span>   <span class="comment">#端口</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  instance:</span></span><br><span class="line"><span class="attr">    hostname:</span> <span class="string">localhost</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    registerWithEureka:</span> <span class="literal">false</span>    <span class="comment"># 禁止自己注册</span></span><br><span class="line"><span class="attr">    fetchRegistry:</span> <span class="literal">false</span>       </span><br><span class="line"><span class="attr">    serviceUrl:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://$&#123;eureka.instance.hostname&#125;:$&#123;server.port&#125;/eureka/</span>   <span class="comment">#服务地址</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">eurka-server</span>   <span class="comment"># 服务名称</span></span><br><span class="line"><span class="attr"> instance:</span></span><br><span class="line"><span class="attr">    instance-id:</span> <span class="string">eurekaclient8762</span>   <span class="comment">#显示别名</span></span><br><span class="line"><span class="attr">    prefer-ip-address:</span> <span class="literal">true</span> <span class="comment">#访问路径显示ip地址</span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -1946,742 +2638,6 @@ User　        #　用户名
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/07/10/String优化知必会/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     2.3k 字
-	</span>
-	<span title="阅读时长">
-     9 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/10/String优化知必会/" itemprop="url">String优化知必会</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-10T00:28:05+08:00">
-                2019-07-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/07/10/String优化知必会/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/10/String优化知必会/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.3k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  9
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="String-对象实现方式"><a href="#String-对象实现方式" class="headerlink" title="String 对象实现方式"></a>String 对象实现方式</h2><p>在众多版本中，String对象做了大量优化，下图是版本推进的演化过程：</p>
-<p><img src="http://ptavvqw3y.bkt.clouddn.com/String%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B.png" alt="String优化过程"></p>
-<p>1.在Java1.6之前的版本中，String对象是对char数组进行了封装实现的对象。<br>2.而从Java1.7到1.8版本，Java对String类做了一些改变。String类不在有offset和count两个变量。<br>3.从Java1.9开始，则将char[]字段改为了byte[]字段，又维护了一个新属性coder它是一个编码格式的标识。</p>
-<p><strong>那么为什么这样修改呢？</strong><br>如果仔细观察会发现一个char字符占16位，2字节。这个情况下，在存储拉丁语系的字符（占一个字节的字符）不需要太宽的char，这样无疑会很浪费，所以在1.9中为了节省内存，使用了占8位1字节的byte[]来存放字符串。（<strong>但是原来char[]时，字符串最大长度是数组本身长度的限制，在数组同样大小的前提下，byte[]存储能力理论上是退化了一倍的</strong>。）</p>
-<p>而新属性 coder的作用是，在计算字符串长度或者使用indexOf()函数时，需要根据这个字段判断如何计算字符串长度，1代表UTF-16,0代表Latin-1(单字节编码)。</p>
-<h2 id="Java对象不可变性"><a href="#Java对象不可变性" class="headerlink" title="Java对象不可变性"></a>Java对象不可变性</h2><p>1.保证String的安全性，final修饰属性属性不可改变引用，修饰类则不可继承，这里防止了String类继承被篡改其中的某些方法。</p>
-<p>2.线程安全性，在并发场景下，多个线程同时读一个资源，是不会引发竟态条件的。只有对资源做写操作才有危险。不可变对象不能被写，所以线程安全。</p>
-<p>3.不可变可以实现字符串常量池，在创建String对象时通常有两种方式，String str = “abc”；另一种是String str = new String(“abc”);<br>第一种方式创建字符串对象时，JVM会检查该对象是否在字符串常量池中，如果在，就返回对象引用，否则新的字符串将在常量池中被创建。这种方式可以减少同一个值的字符串对象重复创建，节约内存。<br>new String这种方式，首先在编译类文件时”abc”会被放入到常量结构中，类被加载时，”abc”将会在常量池中创建；在调用new时JVM调用String的构造函数，同时引用常量池中的”abc”字符串，在堆中创建一个String对象；最后将引用赋值给str。</p>
-<h3 id="对象优化"><a href="#对象优化" class="headerlink" title="对象优化"></a>对象优化</h3><h4 id="1-拼装超长字符串"><a href="#1-拼装超长字符串" class="headerlink" title="1.拼装超长字符串"></a>1.拼装超长字符串</h4><p>在日常中如果使用String相加拼接字符串会产生多个对象么？例如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str =<span class="string">"aa"</span>+<span class="string">"bb"</span>+<span class="string">"cc"</span>;</span><br></pre></td></tr></table></figure>
-<p>理论上上述代码会先产生aa对象，再生成aabb对象，最后再生成aabbcc对象。<br>但是实际运行过程中，发现只有一个对象生成，编译后的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"aabbcc"</span>;</span><br></pre></td></tr></table></figure></p>
-<p>在大多数情况下java还是十分智能的，会自己优化实际代码，但是在循环中使用”+”拼接，会产生大量无意义的StringBuider对象,如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"abcdef"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">1000</span>; i++) &#123;</span><br><span class="line">      str = str + i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>反编译后：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"abcdef"</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">1000</span>; i++) &#123;</span><br><span class="line">   str = (<span class="keyword">new</span> StringBuilder(String.valueOf(str))).append(i).toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在此场景下应使用StringBuilder来避免循环中重复产生对象的行为（多线程场景下使用StringBuffer）。</p>
-<h4 id="2-合理使用String-intern节省内存"><a href="#2-合理使用String-intern节省内存" class="headerlink" title="2.合理使用String.intern节省内存"></a>2.合理使用String.intern节省内存</h4><p>在日常开发中字符串最长使用，但是其中很多都是重复的，如果能避免创建重复字符串，可以有效降低内存消耗和对象创建开销。</p>
-<p>来看一段代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">s.intern();</span><br><span class="line">String str1 = <span class="string">"abc"</span>;</span><br><span class="line">System.out.println(s == s2);</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"a"</span>) + <span class="keyword">new</span> String(<span class="string">"b"</span>);</span><br><span class="line">s3.intern();</span><br><span class="line">String s4 = <span class="string">"ab"</span>;</span><br><span class="line">System.out.println(s3 == s4);</span><br></pre></td></tr></table></figure></p>
-<p>上面这段代码的执行结果在不同版本的JDK下结果是不同的：<br>JDK 1.6 : false  false<br>JDK 1.7 : false  true</p>
-<p>在分析内容前先理解下常量池这个概念。</p>
-<p><strong>常量池指的是在编译期就已经被确定，并且被保存在已编译的class文件中的一些数据，它包括了关于类、方法、接口等中的常量，也包括字符串常量。</strong></p>
-<p>例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">String s0=<span class="string">"abc"</span>;</span><br><span class="line">String s1=<span class="string">"abc"</span>;</span><br><span class="line">String s2=<span class="string">"a"</span>+<span class="string">"bc"</span>;</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">System.out.println( s0==s1 );</span><br><span class="line">System.out.println( s0==s2 );</span><br><span class="line">System.out.println( s0==s3 );</span><br></pre></td></tr></table></figure></p>
-<p>结果： true   true  false</p>
-<p>因为Java会保证字符串常量只有一个拷贝，s0和s1都是字符串常量，这个在编译期就可以确定了，所以s0==s1;而 s2中”a”和”bc”也都是字符串常量，当一个字符串由多个字符串常量组成，它本身肯定也是字符串常量，并且jvm编译时也会将代码”a”+”bc”优化成”abc”。<br>new String() 创建的字符串不是常量，是在堆内存中开辟地址空间，所以new String()创建的字符串不放入常量池中,s0 != s3。</p>
-<p>步入正题，来看一下String的intern()方法，它可以达到优化内存的作用，其效果在JDK1.6和1.7中表现并不一样来看下面这段代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">String s = <span class="keyword">new</span> String(<span class="string">"1"</span>);</span><br><span class="line">s.intern();</span><br><span class="line">String s2 = <span class="string">"1"</span>;</span><br><span class="line">System.out.println(s == s2);</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"a"</span>) + <span class="keyword">new</span> String(<span class="string">"b"</span>);</span><br><span class="line">s3.intern();</span><br><span class="line">String s4 = <span class="string">"ab"</span>;</span><br><span class="line">System.out.println(s3 == s4);</span><br><span class="line">String s5 = <span class="keyword">new</span> String(<span class="string">"ja"</span>) + <span class="keyword">new</span> String(<span class="string">"va"</span>);</span><br><span class="line">s5.intern();</span><br><span class="line">String s6 = <span class="string">"java"</span>;</span><br><span class="line">System.out.println(s5 == s6);</span><br></pre></td></tr></table></figure></p>
-<p>1.6运行结果：false false false;<br>1.7及以上：true false false;</p>
-<p>在1.6中，常量池在方法区，其位于臭名昭著的永久代，intern()会把首次遇到的字符串实例复制到永久代中，返回的也是这个永久代中字符串实例的引用，以此来达到，如果对字符串赋值，常量池中该值已存在则不会创建新的值，直接返回常量池中该值引用。<strong><em>（PermGen的空间是有限的,它主要存储一些加载类的信息，常量池，方法片段等内容，默认大小只有4m，并且基本不会被FullGC之外的垃圾回收照顾到，所以如果有大量长字符串放入其中，OOM可能就会光顾。此方法1.6慎用！）</em></strong></p>
-<p>在1.7中，字符串常量池迁移到了heap中。</p>
-<ul>
-<li>s3生成了三个最终对象常量池中的”a”，”b”和Heap中s3引用指向的对象。此时s3引用对象内容是”ab”，但是此时常量池中并没有”ab”。 (结合类加载过程，先在常量池中创建”a”,”b” 调用String构造函数生成两个匿名对象，然后进行字符串拼接最终对象)</li>
-<li>接来下调用s3.intern()函数，将s3中的”ab” 放入到String常量池中，因为常量池中并没有此对象，则常量池直接存储了堆中的引用，直接指向了s3，也就是说引用地址相同。</li>
-<li>最后String s4  =”ab” 是显示声明的，因此直接去常量池中创建，创建时发现已经存在该对象了，此时将指向s3 引用对象 的引用返回，s3 和 s4的引用一致 所以s3 == s4。</li>
-</ul>
-<p>s和s2对象中 String s=new String(“1”);中生成了两个对象，常量池中的”1”和Heap中的字符串对象。s.intern()s去常量池中创建，发现”1”已存在。接下来s2=”1”显示声明时，直接返回了指向常量池中的对象，结果s！= s2。<br>如图：<br><img src="http://ptavvqw3y.bkt.clouddn.com/String.png" alt="http://ptavvqw3y.bkt.clouddn.com/String.png"></p>
-<p>其中s5.s6的例子是练习中发现的一个坑，既其代码内容基本与s4一致，结果却不相同，经验证常量池中会维护一个常用的字符串常量池其中就有”java”字符串，所以使用了intern后直接将引用指向了默认对象，所以s5 != s6。</p>
-<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><ul>
-<li>将String常量池 从 Perm 区移动到了 Java Heap区</li>
-<li>String.intern() 方法时，如果存在堆中的对象，会直接返回对象的引用，而不会重新创建对象.</li>
-</ul>
-<h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h4><p>1.Twitter在发布消息的时候，会产生一个地址信息，以当时用户规模预估服务器需要32G的内存来存储地址信息。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Location</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String city;</span><br><span class="line">    <span class="keyword">private</span> String region;</span><br><span class="line">    <span class="keyword">private</span> String countryCode;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> longitude;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> latitude;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>考虑到中间有很多用户地址信息是有重合的，比如，国家，省份，城市等，此时将这部分信息单独列出一个类，以减少重复。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SharedLocation</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String city;</span><br><span class="line">	<span class="keyword">private</span> String region;</span><br><span class="line">	<span class="keyword">private</span> String countryCode;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Location</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> SharedLocation sharedLocation;</span><br><span class="line">	<span class="keyword">double</span> longitude;</span><br><span class="line">	<span class="keyword">double</span> latitude;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>通过优化存储大小减到了20G左右，此时再利用了String.intern来节省内存，具体做法是，每次赋值时使用intern方法，如果常量池中有相同的值，就会重复使用该对象，一开始的对象就可以被回收掉。这种方式可以使重复性非常高的地址信息存储大小从20G降到几百兆。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SharedLocation sharedLocation = <span class="keyword">new</span> SharedLocation();</span><br><span class="line">sharedLocation.setCity(messageInfo.getCity().intern());</span><br><span class="line">sharedLocation.setCountryCode(messageInfo.getRegion().intern());</span><br><span class="line">sharedLocation.setRegion(messageInfo.getCountryCode().intern());</span><br><span class="line">Location location = <span class="keyword">new</span> Location();</span><br><span class="line">location.set(sharedLocation);</span><br><span class="line">location.set(messageInfo.getLongitude());</span><br><span class="line">location.set(messageInfo.getLatitude());</span><br></pre></td></tr></table></figure>
-<h4 id="使用不当场景"><a href="#使用不当场景" class="headerlink" title="使用不当场景"></a>使用不当场景</h4><p>详看：<a href="https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html" target="_blank" rel="noopener">https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/30/Spring学习九-AOP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     2.4k 字
-	</span>
-	<span title="阅读时长">
-     10 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/30/Spring学习九-AOP/" itemprop="url">Spring学习九-AOP</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-30T00:06:46+08:00">
-                2019-06-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/30/Spring学习九-AOP/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/30/Spring学习九-AOP/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.4k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  10
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="AOP概念"><a href="#AOP概念" class="headerlink" title="AOP概念"></a>AOP概念</h2><h3 id="1-什么是AOP？"><a href="#1-什么是AOP？" class="headerlink" title="1.什么是AOP？"></a>1.什么是AOP？</h3><p>AOP：全称是 Aspect Oriented Programming 即：面向切面编程。简单来说AOP就是在程序中将重复的代码提取出来，在需要的时候，通过预编译方式运行时动态代理实现在不修改源代码的情况下，对已有的方法进行增强。</p>
-<h3 id="2-Spring-AOP代理机制"><a href="#2-Spring-AOP代理机制" class="headerlink" title="2.Spring AOP代理机制"></a>2.Spring AOP代理机制</h3><p>1.若目标对象实现了若干接口，spring使用JDK的java.lang.reflect.Proxy类代理。</p>
-<pre><code>优点：因为有接口，所以使系统更加松耦合
-缺点：为每一个目标类创建接口
-</code></pre><p>2、若目标对象没有实现任何接口，spring使用CGLIB库生成目标对象的子类。</p>
-<pre><code>优点：因为代理类与目标类是继承关系，所以不需要有接口的存在。
-缺点：因为没有使用接口，所以系统的耦合性没有使用JDK的动态代理好。
-</code></pre><h3 id="3-相关术语"><a href="#3-相关术语" class="headerlink" title="3.相关术语"></a>3.相关术语</h3><p>Joinpoint( 连接点):<br>所谓连接点是指那些被拦截到的点。在 spring 中,这些点指的是方法,因为 spring 只支持方法类型的<br>连接点。<br>Pointcut( 切入点):<br>所谓切入点是指我们要对哪些 Joinpoint 进行拦截的定义。<br>Advice( 通知/ 增强):<br>所谓通知是指拦截到 Joinpoint 之后所要做的事情就是通知。<br>通知的类型：前置通知,后置通知,异常通知,最终通知,环绕通知。<br>Introduction( 引介):<br>引介是一种特殊的通知在不修改类代码的前提下, Introduction可以在运行期为类动态地添加一些方法或 Field。<br>Target( 目标对象):<br>代理的目标对象。<br>Weaving( 织入):<br>是指把增强应用到目标对象来创建新的代理对象的过程。<br>spring 采用动态代理织入，而 AspectJ 采用编译期织入和类装载期织入。<br>Proxy （代理）:<br>一个类被 AOP 织入增强后，就产生一个结果代理类。<br>Aspect( 切面):<br>是切入点和通知（引介）的结合。 </p>
-<h3 id="4-AOP基于xml配置"><a href="#4-AOP基于xml配置" class="headerlink" title="4.AOP基于xml配置"></a>4.AOP基于xml配置</h3><p>使用前要明确先编写完成核心业务代码，然后把公用的代码抽取出来，制作成通知，然后在配置文件中声明切入点与通知的关系，及切面。<br>具体步骤如下：</p>
-<ol>
-<li>把通知Bean也交给spring来管理</li>
-<li>使用aop:config标签表明开始AOP的配置</li>
-<li>使用aop:aspect标签表明配置切面<ul>
-<li>id属性：是给切面提供一个唯一标识</li>
-<li>ref属性：是指定通知类bean的Id。</li>
-</ul>
-</li>
-<li><p>在aop:aspect标签的内部使用对应标签来配置通知的类型</p>
-<ul>
-<li>aop:before：表示配置前置通知<br>  method属性：用于指定Logger类中哪个方法是前置通知<br>  pointcut属性：用于指定切入点表达式，该表达式的含义指的是对业务层中哪些方法增强</li>
-<li>aop:after-returning :后置通知，切入点方法执行后执行</li>
-<li>aop:after-throwing ：异常通知，切入点方法产生异常时通知</li>
-<li><p>aop:after :最终通知，无论是否切入点方法异常都会通知类似 finally<br>切入点表达式的写法：<br>关键字：execution(表达式)</p>
-<pre><code>表达式：
-    访问修饰符  返回值  包名.包名.包名...类名.方法名(参数列表)
-标准的表达式写法：
-    public void com.itheima.service.impl.AccountServiceImpl.saveAccount()
-访问修饰符可以省略
-    void com.itheima.service.impl.AccountServiceImpl.saveAccount()
-返回值可以使用通配符，表示任意返回值
-    * com.itheima.service.impl.AccountServiceImpl.saveAccount()
-包名可以使用通配符，表示任意包。但是有几级包，就需要写几个*.
-    * *.*.*.*.AccountServiceImpl.saveAccount())
-包名可以使用..表示当前包及其子包
-    * *..AccountServiceImpl.saveAccount()
-类名和方法名都可以使用*来实现通配
-    * *..*.*()
-参数列表：
-    可以直接写数据类型：
-        基本类型直接写名称           int
-        引用类型写包名.类名的方式   java.lang.String
-    可以使用通配符表示任意类型，但是必须有参数
-    可以使用..表示有无参数均可，有参数可以是任意类型
-全通配写法：
-    * *..*.*(..)
-
-实际开发中切入点表达式的通常写法：
-    切到业务层实现类下的所有方法
-        * com.service.impl.*.*(..)
-</code></pre><p>Maven导入aspectj包 切入表达式</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 切入点表达式配置 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>aspectj<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aspectjweaver<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.5.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ol>
-<p>xml配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">   &lt;context:annotation-config/&gt;</span><br><span class="line">   &lt;!-- 配置srping的Ioc,把service对象配置进来--&gt;</span><br><span class="line">   &lt;bean id=&quot;accountService&quot; class=&quot;com.springAll.service.impl.AccountServiceImpl&quot;/&gt;</span><br><span class="line">   &lt;!-- 配置logger类 --&gt;</span><br><span class="line">   &lt;bean id=&quot;logger&quot; class=&quot;com.springAll.Logger&quot;/&gt;</span><br><span class="line">   &lt;!-- 配置AOP --&gt;</span><br><span class="line">   &lt;aop:config&gt;</span><br><span class="line">  &lt;!-- 配置切面 --&gt;</span><br><span class="line">  &lt;aop:aspect id=&quot;logAdvice&quot; ref=&quot;logger&quot;&gt;</span><br><span class="line">&lt;!-- 配置AOP --&gt;</span><br><span class="line">   &lt;aop:config&gt;</span><br><span class="line">       &lt;!-- 配置切面 --&gt;</span><br><span class="line">       &lt;aop:aspect id=&quot;logAdvice&quot; ref=&quot;logger&quot;&gt;</span><br><span class="line">           &lt;!-- 配置通知类型，简历通知方法和切入方法的关联 --&gt;</span><br><span class="line">           &lt;aop:before method=&quot;beforePrintLog&quot; pointcut=&quot;execution(* com.springAll.service.impl.*.*(..))&quot;&gt;&lt;/aop:before&gt;</span><br><span class="line">           &lt;!-- 后置通知 --&gt;</span><br><span class="line">           &lt;aop:after-returning method=&quot;afterPrintLog&quot; pointcut=&quot;execution(* com.springAll.service.impl.*.*(..))&quot;&gt;&lt;/aop:after-returning&gt;</span><br><span class="line">           &lt;!--异常通知--&gt;</span><br><span class="line">           &lt;aop:after-throwing method=&quot;errorPrintLog&quot; pointcut=&quot;execution(* com.springAll.service.impl.*.*(..))&quot;&gt;&lt;/aop:after-throwing&gt;</span><br><span class="line">           &lt;!-- 最终通知 --&gt;</span><br><span class="line">           &lt;aop:after method=&quot;finallyPrintLog&quot; pointcut=&quot;execution(* com.springAll.service.impl.*.*(..))&quot;&gt;&lt;/aop:after&gt;</span><br><span class="line">       &lt;/aop:aspect&gt;</span><br><span class="line">   &lt;/aop:config&gt;</span><br></pre></td></tr></table></figure></p>
-<p>测试代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(locations = <span class="string">"classpath:applicationContext.xml"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringAopTest</span> </span>&#123;</span><br><span class="line">     <span class="meta">@Resource</span></span><br><span class="line">     <span class="keyword">private</span> IAccountService accountService;</span><br><span class="line">     <span class="meta">@Test</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">xmlAopTest</span><span class="params">()</span></span>&#123;</span><br><span class="line">          accountService.saveAccount();</span><br><span class="line">          accountService.updateAccount();</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>但是每个切面中都需要有一个pointcut标签 配置切入点表达式，有些繁琐，所以这里可以将表达式提出来单独用标签来表示。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 配置切面 --&gt;</span><br><span class="line">&lt;aop:aspect id=<span class="string">"logAdvice"</span> ref=<span class="string">"logger"</span>&gt;</span><br><span class="line">    &lt;!-- 配置通知类型，简历通知方法和切入方法的关联 --&gt;</span><br><span class="line">    &lt;aop:before method="beforePrintLog" pointcut-ref="log"&gt;&lt;/aop:before&gt;</span><br><span class="line"> pointcut-ref="log"&gt;&lt;/aop:after&gt;</span><br><span class="line">    &lt;aop:pointcut id=<span class="string">"log"</span> expression=<span class="string">"execution(* com.springAll.service.impl.*.*(..))"</span>/&gt;</span><br><span class="line">&lt;/aop:aspect&gt;</span><br></pre></td></tr></table></figure></p>
-<p>将aop:pointcut标签写在aop:aspect内部时，只有当前的切面可以使用，此时可以将其放到aop:config标签下，让其他的切入点也可以使用。（<strong>注：一定要将配置放到引用文件之前，不然没法使用。</strong>）<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;aop:config&gt;</span><br><span class="line">    &lt;aop:pointcut id=<span class="string">"log"</span> expression=<span class="string">"execution(* com.springAll.service.impl.*.*(..))"</span>/&gt;</span><br><span class="line">    &lt;!-- 配置切面 --&gt;</span><br><span class="line">    &lt;aop:aspect id=<span class="string">"logAdvice"</span> ref=<span class="string">"logger"</span>&gt;</span><br><span class="line">        &lt;!-- 配置通知类型，简历通知方法和切入方法的关联 --&gt;</span><br><span class="line">        &lt;aop:before method="beforePrintLog" pointcut-ref="log"&gt;&lt;/aop:before&gt;</span><br><span class="line">        &lt;!-- 最终通知 --&gt;</span><br><span class="line">        &lt;aop:after method="finallyPrintLog" pointcut-ref="log"&gt;&lt;/aop:after&gt;</span><br><span class="line">    &lt;/aop:aspect&gt;</span><br><span class="line">&lt;/aop:config&gt;</span><br></pre></td></tr></table></figure></p>
-<p>在上面讲了后置通知，前置通知，异常通知，和最终通知，最后再来看<strong>环绕通知</strong>。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">&lt;!-- 环绕通知 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:around</span> <span class="attr">method</span>=<span class="string">"aroundPrintLog"</span> <span class="attr">pointcut-ref</span>=<span class="string">"log"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>Spring框架提供了一个接口ProceedingJoinPoint，此接口有一个方法proceed（）。相当于明确调用切入点方法。该接口可以作为环绕通知的方法参数，在程序执行时，Spring框架会提供该接口实现供我们使用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">aroundPrintLog</span><span class="params">(ProceedingJoinPoint pjp)</span></span>&#123;</span><br><span class="line">    Object returnVal = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Object obj[] = pjp.getArgs(); <span class="comment">//得到方法执行所需的参数</span></span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录开始日志================ 前置"</span>);</span><br><span class="line">        returnVal = pjp.proceed(); <span class="comment">//切入点方法</span></span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录开始日志================ 后置"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable throwable) &#123;</span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录开始日志================ 异常"</span>);</span><br><span class="line">        throwable.printStackTrace();</span><br><span class="line">    &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录开始日志================ 最终"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> returnVal;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>以上流程就叫做环绕通知，既可以定制化的决定使用何种通知，且可以在其中决定是否调用目标方法！！！在前置等其他通知中是不可以的，只是在方法调用前后执行通知而已。</li>
-<li>环绕通知也可以控制返回对象，既可以返回一个与目标对象方法完全不同的对象！</li>
-</ul>
-<h3 id="5-AOP基于注解"><a href="#5-AOP基于注解" class="headerlink" title="5.AOP基于注解"></a>5.AOP基于注解</h3><p>xml开启注解AOP的支持<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">aop:aspectj-autoproxy</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:aspectj-autoproxy</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>添加 @Aspect 表示当前类为切面类<br>使用 @Pointcut 来指定切入点表达式。（此注解需要引入jar包aspectjweaver 最好是1.8以后的，之前使用的1.5的使用注解时报错了，需注意）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span>(<span class="string">"logger"</span>)</span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="comment">//表示当前类是一个切面类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Logger</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Pointcut</span>(<span class="string">"execution(* com.springAll.service.impl.*.*(..))"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">pt1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *   用于打印日志切入点方法之前执行</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">   <span class="comment">// @Before("pt1()")</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">beforePrintLog</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录开始日志================"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@AfterReturning</span>(<span class="string">"pt1()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterPrintLog</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录结束日志================"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@AfterThrowing</span>(<span class="string">"pt1()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">errorPrintLog</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录异常日志================"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@After</span>(<span class="string">"pt1()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">finallyPrintLog</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录最终日志================"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//@Around("pt1()")</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">aroundPrintLog</span><span class="params">(ProceedingJoinPoint pjp)</span></span>&#123;</span><br><span class="line">        Object returnVal = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Object obj[] = pjp.getArgs(); <span class="comment">//得到方法执行所需的参数</span></span><br><span class="line">            System.out.println(<span class="string">"===============Logger类记录开始日志================ 前置"</span>);</span><br><span class="line">            returnVal = pjp.proceed(); <span class="comment">//切入点方法</span></span><br><span class="line">            System.out.println(<span class="string">"===============Logger类记录开始日志================ 后置"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable throwable) &#123;</span><br><span class="line">            System.out.println(<span class="string">"===============Logger类记录开始日志================ 异常"</span>);</span><br><span class="line">            throwable.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"===============Logger类记录开始日志================ 最终"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> returnVal;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>执行结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">===============Logger类记录开始日志================</span><br><span class="line">执行保存</span><br><span class="line">===============Logger类记录最终日志================</span><br><span class="line">===============Logger类记录结束日志================</span><br></pre></td></tr></table></figure></p>
-<p>此时发现执行结果的顺序有些问题，最终日志竟然输出在了结束日志的前面，经查spring注解aop中存在调用顺序异常的问题，所以在实际开发中可以考虑使用xml配置的方式或者使用注解的环绕通知，因为具体调用顺序由程序决定，所以不会有此问题。</p>
-<p><a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/spring/day09_Aop" target="_blank" rel="noopener">练习资源</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/23/Spring学习八-之动态代理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     3k 字
-	</span>
-	<span title="阅读时长">
-     12 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/23/Spring学习八-之动态代理/" itemprop="url">Spring学习八-之动态代理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-23T22:39:21+08:00">
-                2019-06-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/23/Spring学习八-之动态代理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/23/Spring学习八-之动态代理/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  12
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、问题来源"><a href="#一、问题来源" class="headerlink" title="一、问题来源"></a>一、问题来源</h2><p>在进行软件设计的时候往往会将一个大的系统按照业务模块拆分成一个个的低耦合、高内聚的模块，分而治之。<br>如图：<br><img src="http://ptavvqw3y.bkt.clouddn.com/%E5%AF%BC%E5%9B%BE4.jpeg" alt="软件系统模块划分"><br>拆分后发现一些问题，这些问题是通用的，跨模块的。比如：<br>1.日志：对执行某些操作分支判断时输出日志。<br>2.安全：在执行某些操作前进行权限检查。<br>3.事务：在方法开始前开始事务，方法结束时提交或者回滚事务。<br>4.性能统计：统计某些方法的执行时间。<br>以上这些属于非功能型需求，是多个业务模块都需要的，那么应该如何去写呢？</p>
-<h3 id="1-常规解决方法"><a href="#1-常规解决方法" class="headerlink" title="1.常规解决方法"></a>1.常规解决方法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Logger logger = Logger.getLogger(<span class="string">""</span>);</span><br><span class="line">        <span class="comment">//1.记录日志</span></span><br><span class="line">        logger.info(<span class="string">"XXXX"</span>);</span><br><span class="line">        <span class="comment">//2.性能统计</span></span><br><span class="line">        Long startTime = System.nanoTime();</span><br><span class="line">        <span class="comment">//3.权限检查</span></span><br><span class="line">        <span class="keyword">if</span>(!user.hasPreviledge())&#123;</span><br><span class="line">            <span class="comment">//抛出异常阻断流程</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//4.开始事务，进行增删改操作</span></span><br><span class="line">        ------业务代码-------</span><br><span class="line">        <span class="comment">//提交事务</span></span><br><span class="line">        commitTransaction();</span><br><span class="line">        Long endTime = System.nanoTime();</span><br><span class="line">        logger.info(<span class="string">"xxxxx"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面的代码虽然解决了问题，但是使用起来十分不爽，日志、安全、性能、事务等代码都耦合到了业务代码中，使一个简单的业务逻辑模块代码都异常的复杂，且重复代码充斥在各个业务逻辑中。</p>
-<p><strong>那么如何解决解决痛点呢？</strong></p>
-<h3 id="1-设计模式：模版方法"><a href="#1-设计模式：模版方法" class="headerlink" title="1.设计模式：模版方法"></a>1.设计模式：模版方法</h3><p>首先先来回顾下模版方法：<br>模版模式是当不变的和可变的行为混在一起的时候通过把不变的行为提取到超类并且定义一个算法的骨架，去除子类中的重复代码，以此摆脱重复不变行为的纠缠。<br>一堆啰嗦的话，还是看下具体实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义超类模版公共部分</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Logger logger = Logger.getLogger(<span class="string">""</span>);</span><br><span class="line">        <span class="comment">//1.记录日志</span></span><br><span class="line">        logger.info(<span class="string">"XXXX"</span>);</span><br><span class="line">        <span class="comment">//2.性能统计</span></span><br><span class="line">        Long startTime = System.nanoTime();</span><br><span class="line">        <span class="comment">//3.权限检查</span></span><br><span class="line">        <span class="keyword">if</span>(!user.hasPreviledge())&#123;</span><br><span class="line">            <span class="comment">//抛出异常阻断流程</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//4.开始事务，进行增删改操作</span></span><br><span class="line">        <span class="comment">//5.业务代码操作交由具体子类独自实现</span></span><br><span class="line">        doBusiness();</span><br><span class="line">        <span class="comment">//提交事务</span></span><br><span class="line">        commitTransaction();</span><br><span class="line">        Long endTime = System.nanoTime();</span><br><span class="line">        logger.info(<span class="string">"xxxxx"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//具体业务实现，交给对应模块的子类</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doBusiness</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderCommand</span> <span class="keyword">extends</span> <span class="title">Command</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doBusiness</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//执行订单操作</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PaymentCommand</span> <span class="keyword">extends</span> <span class="title">Command</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doBusiness</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//执行支付操作</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>OK，这样一来，代码看起来清爽了好多，各种无关业务的代码在子类中也不复存在了。<br>调用也很简单，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Command cmd = <span class="keyword">new</span> PlaceOrderCommand();</span><br><span class="line">cmd.execute();</span><br></pre></td></tr></table></figure></p>
-<p><strong>总结：</strong><br>仔细观察可以发现，使用这个方法会导致超类会定义所有的操作，要执行哪些非功能性代码，以什么顺序，等等。子类只能默默接受，那么有没有什么方法可以让子类达到定制化的效果，比如只需要进行事务的支持，其他的不需要。</p>
-<h3 id="2-设计模式：装饰者模式"><a href="#2-设计模式：装饰者模式" class="headerlink" title="2.设计模式：装饰者模式"></a>2.设计模式：装饰者模式</h3><p>内容复习：<br>装饰者模式可以动态的给一个对象添加一些额外的职责，有效的区分类的核心职责就增加功能而言，装饰者模式比生成子类更加灵活。<br>废话不多说，上代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *   日志类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoggerDecorator</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    Command cmd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LoggerDecorator</span><span class="params">(Command cmd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Logger logger = Logger.getLogger(<span class="string">""</span>);</span><br><span class="line">        logger.info(<span class="string">"记录日志start"</span>);</span><br><span class="line">        <span class="keyword">this</span>.cmd.execute();</span><br><span class="line">        logger.info(<span class="string">"记录日志end"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 性能统计</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">PerformanceDecorator</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    Command cmd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PerformanceDecorator</span><span class="params">(Command cmd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        PerformanceUtil.startTimer();</span><br><span class="line">        <span class="keyword">this</span>.cmd.execute();</span><br><span class="line">        PerformanceUtil.endTimer();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行订单操作，具体业务代码</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderDecorator</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    Command cmd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PlaceOrderDecorator</span><span class="params">(Command cmd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//执行支付</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>现在就像递归一样层层调用，可以自由的决定让PlaceOrderDecorator可以选择打印日志或者性能统计等等。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Command cmd = <span class="keyword">new</span> LoggerDecorator(</span><br><span class="line"><span class="keyword">new</span> PerformanceDecorator(<span class="keyword">new</span> PlaceOrderDecorator()));</span><br><span class="line">cmd.execute();</span><br></pre></td></tr></table></figure></p>
-<p>如果只需要其中部分功能只需要实例化对应的模块即可，例如只需要订单操作时打印日志<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Command cmd = <span class="keyword">new</span> LoggerDecorator(</span><br><span class="line"><span class="keyword">new</span> PlaceOrderDecorator());</span><br><span class="line">cmd.execute();</span><br></pre></td></tr></table></figure></p>
-<p><strong>总结：</strong><br>装饰者模式虽然可以通过装饰器灵活的使用各种方法，但是由此也带出了两个问题：<br>1.一个处理日志/安全/事务/性能统计的类为什么要去实现业务接口呢？<br>2.如果其他模块没有实现业务接口，但是想使用日志/安全/事务/性能统计等功能，那该怎么办呢？</p>
-<h3 id="3-代理模式"><a href="#3-代理模式" class="headerlink" title="3.代理模式"></a>3.代理模式</h3><h4 id="Ⅰ-介绍："><a href="#Ⅰ-介绍：" class="headerlink" title="Ⅰ.介绍："></a>Ⅰ.介绍：</h4><p>为其他对象提供一种代理以此来控制这个对象的访问，使客户端不直接引用对象，很好的在客户端和目标对象之间起到中介的作用。</p>
-<h4 id="Ⅱ-适用场景："><a href="#Ⅱ-适用场景：" class="headerlink" title="Ⅱ.适用场景："></a>Ⅱ.适用场景：</h4><ol>
-<li><strong>远程代理</strong>，为一个对象在不同的地址空间提供局部代表。这样即使远程方法在服务器，但是本地调用其代理类，内部屏蔽了远程调用过程，对于客户端而言与本地方法无异。（如：webService）<br><img src="http://ptavvqw3y.bkt.clouddn.com/%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%90%86%E5%9B%BE%E8%A7%A3.jpg" alt="远程代理"></li>
-<li><strong>虚拟代理</strong>，占用系统资源较多或者加载时间较长的对象，可以给这些对象提供一个虚拟代理。在真实对象创建成功之前虚拟代理扮演真实对象的替身，而当真实对象创建之后，虚拟代理将用户的请求转发给真实对象。（比如：HTML加载时，有很多图片，为了及时的响应页面，可以先将图片位置展示代理对象，待缓存完成时，再展示出来；当一个对象加载耗费资源很大时，利用虚拟代理，将那些耗费资源的操作直到具体使用时再加载，在此之前使用虚拟代理对象来代替。可达到资源重用，节省内存，以时间换空间。；参考浏览器加载可在因io阻塞导致对象加载缓慢的时候，结合多线程技术先行一步创建加载较快的代理对象，另起线程加载真实对象，先行返回代理对象，当调用真实对象时，此时资源可能已经加载完毕，以此来加快相应时间。）</li>
-<li><strong>安全代理,</strong> 也叫保护代理，用来控制真实对象访问时的权限，如果有必要的话，可以给不同调用者提供不同的权限。</li>
-<li><strong>智能指引,</strong>是指当调用真实对象时，代理处理另外一些事，比如记录对此对象的调用次数等。</li>
-</ol>
-<p>了解了代理模式及使用场景后，此处我们使用其中的智能指引的这种场景，既在代理类中对被代理的类添加一些功能。</p>
-<p>代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderDecorator</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"执行支付"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 代理类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">CommandProxy</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    Command cmd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CommandProxy</span><span class="params">(Command cmd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"记录日志start"</span>);</span><br><span class="line">        <span class="keyword">this</span>.cmd.execute();</span><br><span class="line">        System.out.println(<span class="string">"记录日志end"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Command cmd = <span class="keyword">new</span> CommandProxy(<span class="keyword">new</span> PlaceOrderDecorator());</span><br><span class="line">        cmd.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>总结：</strong><br>　　1、代理模式可以在不修改初始类的前提下对其功能进行了增强。<br>　　2、接口中有多少方法，在proxy层就得实现多少方法，有多少方法就要开启和提交多少事务，代码繁琐复杂。<br>　　3、如果一个proxy实现了多个接口，如果其中的一个接口发生变化（添加了一个方法），那么proxy也要做改变。<br>    4、静态代理模式并没有做到日志的重用</p>
-<p>由此引出今天的主角，动态代理。</p>
-<h3 id="4-动态代理"><a href="#4-动态代理" class="headerlink" title="4.动态代理"></a>4.动态代理</h3><h4 id="Ⅰ、JDK动态代理"><a href="#Ⅰ、JDK动态代理" class="headerlink" title="Ⅰ、JDK动态代理"></a>Ⅰ、JDK动态代理</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Interceptor</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span></span>&#123;</span><br><span class="line">    Transaction transaction;</span><br><span class="line">    Object target;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Interceptor</span><span class="params">(Transaction transaction, Object target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.transaction = transaction;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> proxy 目标对象的代理类实例</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> method 对应于在代理实例上调用接口方法的Method实例</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args 传入到代理实例上方法参数值的对象数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 方法的返回值，没有返回值是null</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        String methodName = method.getName();</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">"execute"</span>.equals(methodName))&#123;</span><br><span class="line">            transaction.beginTransaction();</span><br><span class="line">            method.invoke(target);</span><br><span class="line">            transaction.commit();</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            method.invoke(target);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 事务类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Transaction</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">beginTransaction</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"******** 开启事务 **************"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">commit</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"********* 提交事务 ************"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 测试类</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testSave</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 1、创建一个目标对象</span></span><br><span class="line"><span class="comment">         * 2、创建一个事务</span></span><br><span class="line"><span class="comment">         * 3、创建一个拦截器</span></span><br><span class="line"><span class="comment">         * 4、动态产生一个代理对象</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        Object target = <span class="keyword">new</span> PlaceOrderDecorator();</span><br><span class="line">        Transaction transaction = <span class="keyword">new</span> Transaction();</span><br><span class="line">        Interceptor proxy = <span class="keyword">new</span> Interceptor(transaction,target);</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 参数一：设置代码使用的类加载器，一般采用跟目标类相同的类加载器</span></span><br><span class="line"><span class="comment">         * 参数二：设置代理类实现的接口，跟目标类使用相同的接口</span></span><br><span class="line"><span class="comment">         * 参数三：设置回调对象，当代理对象的方法被调用时，会调用该参数指定对象的invoke方法</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        Command com = (Command) Proxy.newProxyInstance(</span><br><span class="line">                target.getClass().getClassLoader(),</span><br><span class="line">                target.getClass().getInterfaces(),proxy);</span><br><span class="line">        com.execute();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>基于上述流程进行优化：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProxyFactory</span> </span>&#123;</span><br><span class="line">    Transaction transaction = <span class="keyword">new</span> Transaction();</span><br><span class="line">    Object target;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ProxyFactory</span><span class="params">(Object target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 生成代理类</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getProxyInstance</span> <span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(target.getClass().getClassLoader(),</span><br><span class="line">                target.getClass().getInterfaces(), <span class="keyword">new</span> InvocationHandler() &#123;</span><br><span class="line">                    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">                        String methodName = method.getName();</span><br><span class="line">                        <span class="keyword">if</span>(<span class="string">"execute"</span>.equals(methodName))&#123;</span><br><span class="line">                            transaction.beginTransaction();</span><br><span class="line">                            method.invoke(target,args);</span><br><span class="line">                            transaction.commit();</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            method.invoke(target);</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testProxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Object target = <span class="keyword">new</span> PlaceOrderDecorator();</span><br><span class="line">        Command com = (Command)<span class="keyword">new</span> ProxyFactory(target).getProxyInstance();</span><br><span class="line">        com.execute();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>总结：</strong><br>静态代理与动态代理的区别：</p>
-<ul>
-<li>静态代理在编译时就已经实现，编译完成后代理类是一个实际的class文件。</li>
-<li>动态代理是在运行时动态生成的，即编译完成后没有实际的class文件，而是在运行时动态生成类字节码，并加载到JVM中。</li>
-</ul>
-<p>特点：</p>
-<ol>
-<li>因为使用了JDKProxy生成的代理类实现了接口，所以目标类中所有的方法在代理类中会有。</li>
-<li>动态代理对象不需要实现接口，但是要求目标对象必须实现接口，否则不能使用动态代理。</li>
-<li>invoke方法中的三个参数可以访问目标类的被调用方法的API、被调用方法的参数、被调用方法的返回类型。</li>
-</ol>
-<p>缺点：<br>    1.在拦截器中除了能调用目标对象的目标方法之外功能比较单一。<br>    2.在使用拦截器中的invoke方法的if判断语句进行功能增强的时候具体实施时因为要支持日志/安全/事务/性能统计等功能，if语句需要写很多，这无疑是个灾难。</p>
-<h4 id="Ⅰ、CGLIB动态代理"><a href="#Ⅰ、CGLIB动态代理" class="headerlink" title="Ⅰ、CGLIB动态代理"></a>Ⅰ、CGLIB动态代理</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CglibProxyFactory</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line">    Transaction transaction;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CglibProxyFactory</span><span class="params">(Object target, Transaction transaction)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">        <span class="keyword">this</span>.transaction = transaction;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getProxyInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//工具类</span></span><br><span class="line">        Enhancer en = <span class="keyword">new</span> Enhancer();</span><br><span class="line">        <span class="comment">//设置父类</span></span><br><span class="line">        en.setSuperclass(target.getClass());</span><br><span class="line">        <span class="comment">//设置回调函数 拦截调用intercept函数</span></span><br><span class="line">        en.setCallback(<span class="keyword">this</span>);</span><br><span class="line">        <span class="comment">//创建子类对象代理</span></span><br><span class="line">        <span class="keyword">return</span> en.create();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] args, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        transaction.beginTransaction();</span><br><span class="line">         <span class="comment">// 执行目标对象的方法</span></span><br><span class="line">        Object returnValue = method.invoke(target, args);</span><br><span class="line">        transaction.commit();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCGlibProxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        PlaceOrderDecorator target = <span class="keyword">new</span> PlaceOrderDecorator();</span><br><span class="line">        System.out.println(target.getClass());</span><br><span class="line">        PlaceOrderDecorator proxy = (PlaceOrderDecorator)<span class="keyword">new</span> CglibProxyFactory(target,<span class="keyword">new</span> Transaction())</span><br><span class="line">                .getProxyInstance();</span><br><span class="line">        System.out.println(proxy.getClass());</span><br><span class="line">        proxy.execute();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>输出结果：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderDecorator</span></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">PlaceOrderDecorator</span>$$<span class="title">EnhancerByCGLIB</span>$$640<span class="title">bbc4f</span></span></span><br><span class="line"><span class="class">******** 开启事务 **************</span></span><br><span class="line"><span class="class">执行支付</span></span><br><span class="line"><span class="class">********* 提交事务 ************</span></span><br></pre></td></tr></table></figure>
-<p><strong>总结：</strong><br>1.JDK动态代理需要目标对象和代理对象实现业务接口，拦截器需要实现InvocationHandler接口，其中invoke方法体中内容是具体代理对象方法体内容。<br>2.CGlib代理的目标类不需要实现接口，代理类是目标类的子类，拦截器需要实现MethodInterceptor接口，其中重写intercept方法时，进行具体功能增强操作。但是因为cglib是依靠继承目标对象重写其方法，所以目标对象不得是final类！！！</p>
-<p><a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/spring/day08_Aop" target="_blank" rel="noopener">练习资源</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2735,7 +2691,7 @@ User　        #　用户名
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2746,7 +2702,7 @@ User　        #　用户名
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2757,7 +2713,7 @@ User　        #　用户名
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

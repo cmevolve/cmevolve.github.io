@@ -284,6 +284,742 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/07/10/String优化知必会/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     2.3k 字
+	</span>
+	<span title="阅读时长">
+     9 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/10/String优化知必会/" itemprop="url">String优化知必会</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-10T00:28:05+08:00">
+                2019-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/10/String优化知必会/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/10/String优化知必会/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="String-对象实现方式"><a href="#String-对象实现方式" class="headerlink" title="String 对象实现方式"></a>String 对象实现方式</h2><p>在众多版本中，String对象做了大量优化，下图是版本推进的演化过程：</p>
+<p><img src="http://ptavvqw3y.bkt.clouddn.com/String%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B.png" alt="String优化过程"></p>
+<p>1.在Java1.6之前的版本中，String对象是对char数组进行了封装实现的对象。<br>2.而从Java1.7到1.8版本，Java对String类做了一些改变。String类不在有offset和count两个变量。<br>3.从Java1.9开始，则将char[]字段改为了byte[]字段，又维护了一个新属性coder它是一个编码格式的标识。</p>
+<p><strong>那么为什么这样修改呢？</strong><br>如果仔细观察会发现一个char字符占16位，2字节。这个情况下，在存储拉丁语系的字符（占一个字节的字符）不需要太宽的char，这样无疑会很浪费，所以在1.9中为了节省内存，使用了占8位1字节的byte[]来存放字符串。（<strong>但是原来char[]时，字符串最大长度是数组本身长度的限制，在数组同样大小的前提下，byte[]存储能力理论上是退化了一倍的</strong>。）</p>
+<p>而新属性 coder的作用是，在计算字符串长度或者使用indexOf()函数时，需要根据这个字段判断如何计算字符串长度，1代表UTF-16,0代表Latin-1(单字节编码)。</p>
+<h2 id="Java对象不可变性"><a href="#Java对象不可变性" class="headerlink" title="Java对象不可变性"></a>Java对象不可变性</h2><p>1.保证String的安全性，final修饰属性属性不可改变引用，修饰类则不可继承，这里防止了String类继承被篡改其中的某些方法。</p>
+<p>2.线程安全性，在并发场景下，多个线程同时读一个资源，是不会引发竟态条件的。只有对资源做写操作才有危险。不可变对象不能被写，所以线程安全。</p>
+<p>3.不可变可以实现字符串常量池，在创建String对象时通常有两种方式，String str = “abc”；另一种是String str = new String(“abc”);<br>第一种方式创建字符串对象时，JVM会检查该对象是否在字符串常量池中，如果在，就返回对象引用，否则新的字符串将在常量池中被创建。这种方式可以减少同一个值的字符串对象重复创建，节约内存。<br>new String这种方式，首先在编译类文件时”abc”会被放入到常量结构中，类被加载时，”abc”将会在常量池中创建；在调用new时JVM调用String的构造函数，同时引用常量池中的”abc”字符串，在堆中创建一个String对象；最后将引用赋值给str。</p>
+<h3 id="对象优化"><a href="#对象优化" class="headerlink" title="对象优化"></a>对象优化</h3><h4 id="1-拼装超长字符串"><a href="#1-拼装超长字符串" class="headerlink" title="1.拼装超长字符串"></a>1.拼装超长字符串</h4><p>在日常中如果使用String相加拼接字符串会产生多个对象么？例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str =<span class="string">"aa"</span>+<span class="string">"bb"</span>+<span class="string">"cc"</span>;</span><br></pre></td></tr></table></figure>
+<p>理论上上述代码会先产生aa对象，再生成aabb对象，最后再生成aabbcc对象。<br>但是实际运行过程中，发现只有一个对象生成，编译后的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"aabbcc"</span>;</span><br></pre></td></tr></table></figure></p>
+<p>在大多数情况下java还是十分智能的，会自己优化实际代码，但是在循环中使用”+”拼接，会产生大量无意义的StringBuider对象,如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"abcdef"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">1000</span>; i++) &#123;</span><br><span class="line">      str = str + i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>反编译后：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"abcdef"</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">1000</span>; i++) &#123;</span><br><span class="line">   str = (<span class="keyword">new</span> StringBuilder(String.valueOf(str))).append(i).toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在此场景下应使用StringBuilder来避免循环中重复产生对象的行为（多线程场景下使用StringBuffer）。</p>
+<h4 id="2-合理使用String-intern节省内存"><a href="#2-合理使用String-intern节省内存" class="headerlink" title="2.合理使用String.intern节省内存"></a>2.合理使用String.intern节省内存</h4><p>在日常开发中字符串最长使用，但是其中很多都是重复的，如果能避免创建重复字符串，可以有效降低内存消耗和对象创建开销。</p>
+<p>来看一段代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">s.intern();</span><br><span class="line">String str1 = <span class="string">"abc"</span>;</span><br><span class="line">System.out.println(s == s2);</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"a"</span>) + <span class="keyword">new</span> String(<span class="string">"b"</span>);</span><br><span class="line">s3.intern();</span><br><span class="line">String s4 = <span class="string">"ab"</span>;</span><br><span class="line">System.out.println(s3 == s4);</span><br></pre></td></tr></table></figure></p>
+<p>上面这段代码的执行结果在不同版本的JDK下结果是不同的：<br>JDK 1.6 : false  false<br>JDK 1.7 : false  true</p>
+<p>在分析内容前先理解下常量池这个概念。</p>
+<p><strong>常量池指的是在编译期就已经被确定，并且被保存在已编译的class文件中的一些数据，它包括了关于类、方法、接口等中的常量，也包括字符串常量。</strong></p>
+<p>例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">String s0=<span class="string">"abc"</span>;</span><br><span class="line">String s1=<span class="string">"abc"</span>;</span><br><span class="line">String s2=<span class="string">"a"</span>+<span class="string">"bc"</span>;</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">System.out.println( s0==s1 );</span><br><span class="line">System.out.println( s0==s2 );</span><br><span class="line">System.out.println( s0==s3 );</span><br></pre></td></tr></table></figure></p>
+<p>结果： true   true  false</p>
+<p>因为Java会保证字符串常量只有一个拷贝，s0和s1都是字符串常量，这个在编译期就可以确定了，所以s0==s1;而 s2中”a”和”bc”也都是字符串常量，当一个字符串由多个字符串常量组成，它本身肯定也是字符串常量，并且jvm编译时也会将代码”a”+”bc”优化成”abc”。<br>new String() 创建的字符串不是常量，是在堆内存中开辟地址空间，所以new String()创建的字符串不放入常量池中,s0 != s3。</p>
+<p>步入正题，来看一下String的intern()方法，它可以达到优化内存的作用，其效果在JDK1.6和1.7中表现并不一样来看下面这段代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">String s = <span class="keyword">new</span> String(<span class="string">"1"</span>);</span><br><span class="line">s.intern();</span><br><span class="line">String s2 = <span class="string">"1"</span>;</span><br><span class="line">System.out.println(s == s2);</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"a"</span>) + <span class="keyword">new</span> String(<span class="string">"b"</span>);</span><br><span class="line">s3.intern();</span><br><span class="line">String s4 = <span class="string">"ab"</span>;</span><br><span class="line">System.out.println(s3 == s4);</span><br><span class="line">String s5 = <span class="keyword">new</span> String(<span class="string">"ja"</span>) + <span class="keyword">new</span> String(<span class="string">"va"</span>);</span><br><span class="line">s5.intern();</span><br><span class="line">String s6 = <span class="string">"java"</span>;</span><br><span class="line">System.out.println(s5 == s6);</span><br></pre></td></tr></table></figure></p>
+<p>1.6运行结果：false false false;<br>1.7及以上：true false false;</p>
+<p>在1.6中，常量池在方法区，其位于臭名昭著的永久代，intern()会把首次遇到的字符串实例复制到永久代中，返回的也是这个永久代中字符串实例的引用，以此来达到，如果对字符串赋值，常量池中该值已存在则不会创建新的值，直接返回常量池中该值引用。<strong><em>（PermGen的空间是有限的,它主要存储一些加载类的信息，常量池，方法片段等内容，默认大小只有4m，并且基本不会被FullGC之外的垃圾回收照顾到，所以如果有大量长字符串放入其中，OOM可能就会光顾。此方法1.6慎用！）</em></strong></p>
+<p>在1.7中，字符串常量池迁移到了heap中。</p>
+<ul>
+<li>s3生成了三个最终对象常量池中的”a”，”b”和Heap中s3引用指向的对象。此时s3引用对象内容是”ab”，但是此时常量池中并没有”ab”。 (结合类加载过程，先在常量池中创建”a”,”b” 调用String构造函数生成两个匿名对象，然后进行字符串拼接最终对象)</li>
+<li>接来下调用s3.intern()函数，将s3中的”ab” 放入到String常量池中，因为常量池中并没有此对象，则常量池直接存储了堆中的引用，直接指向了s3，也就是说引用地址相同。</li>
+<li>最后String s4  =”ab” 是显示声明的，因此直接去常量池中创建，创建时发现已经存在该对象了，此时将指向s3 引用对象 的引用返回，s3 和 s4的引用一致 所以s3 == s4。</li>
+</ul>
+<p>s和s2对象中 String s=new String(“1”);中生成了两个对象，常量池中的”1”和Heap中的字符串对象。s.intern()s去常量池中创建，发现”1”已存在。接下来s2=”1”显示声明时，直接返回了指向常量池中的对象，结果s！= s2。<br>如图：<br><img src="http://ptavvqw3y.bkt.clouddn.com/String.png" alt="http://ptavvqw3y.bkt.clouddn.com/String.png"></p>
+<p>其中s5.s6的例子是练习中发现的一个坑，既其代码内容基本与s4一致，结果却不相同，经验证常量池中会维护一个常用的字符串常量池其中就有”java”字符串，所以使用了intern后直接将引用指向了默认对象，所以s5 != s6。</p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><ul>
+<li>将String常量池 从 Perm 区移动到了 Java Heap区</li>
+<li>String.intern() 方法时，如果存在堆中的对象，会直接返回对象的引用，而不会重新创建对象.</li>
+</ul>
+<h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h4><p>1.Twitter在发布消息的时候，会产生一个地址信息，以当时用户规模预估服务器需要32G的内存来存储地址信息。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Location</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String city;</span><br><span class="line">    <span class="keyword">private</span> String region;</span><br><span class="line">    <span class="keyword">private</span> String countryCode;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> longitude;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> latitude;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>考虑到中间有很多用户地址信息是有重合的，比如，国家，省份，城市等，此时将这部分信息单独列出一个类，以减少重复。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SharedLocation</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String city;</span><br><span class="line">	<span class="keyword">private</span> String region;</span><br><span class="line">	<span class="keyword">private</span> String countryCode;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Location</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> SharedLocation sharedLocation;</span><br><span class="line">	<span class="keyword">double</span> longitude;</span><br><span class="line">	<span class="keyword">double</span> latitude;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>通过优化存储大小减到了20G左右，此时再利用了String.intern来节省内存，具体做法是，每次赋值时使用intern方法，如果常量池中有相同的值，就会重复使用该对象，一开始的对象就可以被回收掉。这种方式可以使重复性非常高的地址信息存储大小从20G降到几百兆。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SharedLocation sharedLocation = <span class="keyword">new</span> SharedLocation();</span><br><span class="line">sharedLocation.setCity(messageInfo.getCity().intern());</span><br><span class="line">sharedLocation.setCountryCode(messageInfo.getRegion().intern());</span><br><span class="line">sharedLocation.setRegion(messageInfo.getCountryCode().intern());</span><br><span class="line">Location location = <span class="keyword">new</span> Location();</span><br><span class="line">location.set(sharedLocation);</span><br><span class="line">location.set(messageInfo.getLongitude());</span><br><span class="line">location.set(messageInfo.getLatitude());</span><br></pre></td></tr></table></figure>
+<h4 id="使用不当场景"><a href="#使用不当场景" class="headerlink" title="使用不当场景"></a>使用不当场景</h4><p>详看：<a href="https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html" target="_blank" rel="noopener">https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/30/Spring学习九-AOP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     2.4k 字
+	</span>
+	<span title="阅读时长">
+     10 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/30/Spring学习九-AOP/" itemprop="url">Spring学习九-AOP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-30T00:06:46+08:00">
+                2019-06-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/06/30/Spring学习九-AOP/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/30/Spring学习九-AOP/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="AOP概念"><a href="#AOP概念" class="headerlink" title="AOP概念"></a>AOP概念</h2><h3 id="1-什么是AOP？"><a href="#1-什么是AOP？" class="headerlink" title="1.什么是AOP？"></a>1.什么是AOP？</h3><p>AOP：全称是 Aspect Oriented Programming 即：面向切面编程。简单来说AOP就是在程序中将重复的代码提取出来，在需要的时候，通过预编译方式运行时动态代理实现在不修改源代码的情况下，对已有的方法进行增强。</p>
+<h3 id="2-Spring-AOP代理机制"><a href="#2-Spring-AOP代理机制" class="headerlink" title="2.Spring AOP代理机制"></a>2.Spring AOP代理机制</h3><p>1.若目标对象实现了若干接口，spring使用JDK的java.lang.reflect.Proxy类代理。</p>
+<pre><code>优点：因为有接口，所以使系统更加松耦合
+缺点：为每一个目标类创建接口
+</code></pre><p>2、若目标对象没有实现任何接口，spring使用CGLIB库生成目标对象的子类。</p>
+<pre><code>优点：因为代理类与目标类是继承关系，所以不需要有接口的存在。
+缺点：因为没有使用接口，所以系统的耦合性没有使用JDK的动态代理好。
+</code></pre><h3 id="3-相关术语"><a href="#3-相关术语" class="headerlink" title="3.相关术语"></a>3.相关术语</h3><p>Joinpoint( 连接点):<br>所谓连接点是指那些被拦截到的点。在 spring 中,这些点指的是方法,因为 spring 只支持方法类型的<br>连接点。<br>Pointcut( 切入点):<br>所谓切入点是指我们要对哪些 Joinpoint 进行拦截的定义。<br>Advice( 通知/ 增强):<br>所谓通知是指拦截到 Joinpoint 之后所要做的事情就是通知。<br>通知的类型：前置通知,后置通知,异常通知,最终通知,环绕通知。<br>Introduction( 引介):<br>引介是一种特殊的通知在不修改类代码的前提下, Introduction可以在运行期为类动态地添加一些方法或 Field。<br>Target( 目标对象):<br>代理的目标对象。<br>Weaving( 织入):<br>是指把增强应用到目标对象来创建新的代理对象的过程。<br>spring 采用动态代理织入，而 AspectJ 采用编译期织入和类装载期织入。<br>Proxy （代理）:<br>一个类被 AOP 织入增强后，就产生一个结果代理类。<br>Aspect( 切面):<br>是切入点和通知（引介）的结合。 </p>
+<h3 id="4-AOP基于xml配置"><a href="#4-AOP基于xml配置" class="headerlink" title="4.AOP基于xml配置"></a>4.AOP基于xml配置</h3><p>使用前要明确先编写完成核心业务代码，然后把公用的代码抽取出来，制作成通知，然后在配置文件中声明切入点与通知的关系，及切面。<br>具体步骤如下：</p>
+<ol>
+<li>把通知Bean也交给spring来管理</li>
+<li>使用aop:config标签表明开始AOP的配置</li>
+<li>使用aop:aspect标签表明配置切面<ul>
+<li>id属性：是给切面提供一个唯一标识</li>
+<li>ref属性：是指定通知类bean的Id。</li>
+</ul>
+</li>
+<li><p>在aop:aspect标签的内部使用对应标签来配置通知的类型</p>
+<ul>
+<li>aop:before：表示配置前置通知<br>  method属性：用于指定Logger类中哪个方法是前置通知<br>  pointcut属性：用于指定切入点表达式，该表达式的含义指的是对业务层中哪些方法增强</li>
+<li>aop:after-returning :后置通知，切入点方法执行后执行</li>
+<li>aop:after-throwing ：异常通知，切入点方法产生异常时通知</li>
+<li><p>aop:after :最终通知，无论是否切入点方法异常都会通知类似 finally<br>切入点表达式的写法：<br>关键字：execution(表达式)</p>
+<pre><code>表达式：
+    访问修饰符  返回值  包名.包名.包名...类名.方法名(参数列表)
+标准的表达式写法：
+    public void com.itheima.service.impl.AccountServiceImpl.saveAccount()
+访问修饰符可以省略
+    void com.itheima.service.impl.AccountServiceImpl.saveAccount()
+返回值可以使用通配符，表示任意返回值
+    * com.itheima.service.impl.AccountServiceImpl.saveAccount()
+包名可以使用通配符，表示任意包。但是有几级包，就需要写几个*.
+    * *.*.*.*.AccountServiceImpl.saveAccount())
+包名可以使用..表示当前包及其子包
+    * *..AccountServiceImpl.saveAccount()
+类名和方法名都可以使用*来实现通配
+    * *..*.*()
+参数列表：
+    可以直接写数据类型：
+        基本类型直接写名称           int
+        引用类型写包名.类名的方式   java.lang.String
+    可以使用通配符表示任意类型，但是必须有参数
+    可以使用..表示有无参数均可，有参数可以是任意类型
+全通配写法：
+    * *..*.*(..)
+
+实际开发中切入点表达式的通常写法：
+    切到业务层实现类下的所有方法
+        * com.service.impl.*.*(..)
+</code></pre><p>Maven导入aspectj包 切入表达式</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 切入点表达式配置 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>aspectj<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aspectjweaver<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.5.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<p>xml配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">   &lt;context:annotation-config/&gt;</span><br><span class="line">   &lt;!-- 配置srping的Ioc,把service对象配置进来--&gt;</span><br><span class="line">   &lt;bean id=&quot;accountService&quot; class=&quot;com.springAll.service.impl.AccountServiceImpl&quot;/&gt;</span><br><span class="line">   &lt;!-- 配置logger类 --&gt;</span><br><span class="line">   &lt;bean id=&quot;logger&quot; class=&quot;com.springAll.Logger&quot;/&gt;</span><br><span class="line">   &lt;!-- 配置AOP --&gt;</span><br><span class="line">   &lt;aop:config&gt;</span><br><span class="line">  &lt;!-- 配置切面 --&gt;</span><br><span class="line">  &lt;aop:aspect id=&quot;logAdvice&quot; ref=&quot;logger&quot;&gt;</span><br><span class="line">&lt;!-- 配置AOP --&gt;</span><br><span class="line">   &lt;aop:config&gt;</span><br><span class="line">       &lt;!-- 配置切面 --&gt;</span><br><span class="line">       &lt;aop:aspect id=&quot;logAdvice&quot; ref=&quot;logger&quot;&gt;</span><br><span class="line">           &lt;!-- 配置通知类型，简历通知方法和切入方法的关联 --&gt;</span><br><span class="line">           &lt;aop:before method=&quot;beforePrintLog&quot; pointcut=&quot;execution(* com.springAll.service.impl.*.*(..))&quot;&gt;&lt;/aop:before&gt;</span><br><span class="line">           &lt;!-- 后置通知 --&gt;</span><br><span class="line">           &lt;aop:after-returning method=&quot;afterPrintLog&quot; pointcut=&quot;execution(* com.springAll.service.impl.*.*(..))&quot;&gt;&lt;/aop:after-returning&gt;</span><br><span class="line">           &lt;!--异常通知--&gt;</span><br><span class="line">           &lt;aop:after-throwing method=&quot;errorPrintLog&quot; pointcut=&quot;execution(* com.springAll.service.impl.*.*(..))&quot;&gt;&lt;/aop:after-throwing&gt;</span><br><span class="line">           &lt;!-- 最终通知 --&gt;</span><br><span class="line">           &lt;aop:after method=&quot;finallyPrintLog&quot; pointcut=&quot;execution(* com.springAll.service.impl.*.*(..))&quot;&gt;&lt;/aop:after&gt;</span><br><span class="line">       &lt;/aop:aspect&gt;</span><br><span class="line">   &lt;/aop:config&gt;</span><br></pre></td></tr></table></figure></p>
+<p>测试代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(locations = <span class="string">"classpath:applicationContext.xml"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringAopTest</span> </span>&#123;</span><br><span class="line">     <span class="meta">@Resource</span></span><br><span class="line">     <span class="keyword">private</span> IAccountService accountService;</span><br><span class="line">     <span class="meta">@Test</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">xmlAopTest</span><span class="params">()</span></span>&#123;</span><br><span class="line">          accountService.saveAccount();</span><br><span class="line">          accountService.updateAccount();</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是每个切面中都需要有一个pointcut标签 配置切入点表达式，有些繁琐，所以这里可以将表达式提出来单独用标签来表示。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 配置切面 --&gt;</span><br><span class="line">&lt;aop:aspect id=<span class="string">"logAdvice"</span> ref=<span class="string">"logger"</span>&gt;</span><br><span class="line">    &lt;!-- 配置通知类型，简历通知方法和切入方法的关联 --&gt;</span><br><span class="line">    &lt;aop:before method="beforePrintLog" pointcut-ref="log"&gt;&lt;/aop:before&gt;</span><br><span class="line"> pointcut-ref="log"&gt;&lt;/aop:after&gt;</span><br><span class="line">    &lt;aop:pointcut id=<span class="string">"log"</span> expression=<span class="string">"execution(* com.springAll.service.impl.*.*(..))"</span>/&gt;</span><br><span class="line">&lt;/aop:aspect&gt;</span><br></pre></td></tr></table></figure></p>
+<p>将aop:pointcut标签写在aop:aspect内部时，只有当前的切面可以使用，此时可以将其放到aop:config标签下，让其他的切入点也可以使用。（<strong>注：一定要将配置放到引用文件之前，不然没法使用。</strong>）<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;aop:config&gt;</span><br><span class="line">    &lt;aop:pointcut id=<span class="string">"log"</span> expression=<span class="string">"execution(* com.springAll.service.impl.*.*(..))"</span>/&gt;</span><br><span class="line">    &lt;!-- 配置切面 --&gt;</span><br><span class="line">    &lt;aop:aspect id=<span class="string">"logAdvice"</span> ref=<span class="string">"logger"</span>&gt;</span><br><span class="line">        &lt;!-- 配置通知类型，简历通知方法和切入方法的关联 --&gt;</span><br><span class="line">        &lt;aop:before method="beforePrintLog" pointcut-ref="log"&gt;&lt;/aop:before&gt;</span><br><span class="line">        &lt;!-- 最终通知 --&gt;</span><br><span class="line">        &lt;aop:after method="finallyPrintLog" pointcut-ref="log"&gt;&lt;/aop:after&gt;</span><br><span class="line">    &lt;/aop:aspect&gt;</span><br><span class="line">&lt;/aop:config&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在上面讲了后置通知，前置通知，异常通知，和最终通知，最后再来看<strong>环绕通知</strong>。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">&lt;!-- 环绕通知 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:around</span> <span class="attr">method</span>=<span class="string">"aroundPrintLog"</span> <span class="attr">pointcut-ref</span>=<span class="string">"log"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Spring框架提供了一个接口ProceedingJoinPoint，此接口有一个方法proceed（）。相当于明确调用切入点方法。该接口可以作为环绕通知的方法参数，在程序执行时，Spring框架会提供该接口实现供我们使用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">aroundPrintLog</span><span class="params">(ProceedingJoinPoint pjp)</span></span>&#123;</span><br><span class="line">    Object returnVal = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Object obj[] = pjp.getArgs(); <span class="comment">//得到方法执行所需的参数</span></span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录开始日志================ 前置"</span>);</span><br><span class="line">        returnVal = pjp.proceed(); <span class="comment">//切入点方法</span></span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录开始日志================ 后置"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable throwable) &#123;</span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录开始日志================ 异常"</span>);</span><br><span class="line">        throwable.printStackTrace();</span><br><span class="line">    &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录开始日志================ 最终"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> returnVal;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>以上流程就叫做环绕通知，既可以定制化的决定使用何种通知，且可以在其中决定是否调用目标方法！！！在前置等其他通知中是不可以的，只是在方法调用前后执行通知而已。</li>
+<li>环绕通知也可以控制返回对象，既可以返回一个与目标对象方法完全不同的对象！</li>
+</ul>
+<h3 id="5-AOP基于注解"><a href="#5-AOP基于注解" class="headerlink" title="5.AOP基于注解"></a>5.AOP基于注解</h3><p>xml开启注解AOP的支持<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">aop:aspectj-autoproxy</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:aspectj-autoproxy</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>添加 @Aspect 表示当前类为切面类<br>使用 @Pointcut 来指定切入点表达式。（此注解需要引入jar包aspectjweaver 最好是1.8以后的，之前使用的1.5的使用注解时报错了，需注意）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span>(<span class="string">"logger"</span>)</span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="comment">//表示当前类是一个切面类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Logger</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Pointcut</span>(<span class="string">"execution(* com.springAll.service.impl.*.*(..))"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">pt1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *   用于打印日志切入点方法之前执行</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">   <span class="comment">// @Before("pt1()")</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">beforePrintLog</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录开始日志================"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@AfterReturning</span>(<span class="string">"pt1()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterPrintLog</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录结束日志================"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@AfterThrowing</span>(<span class="string">"pt1()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">errorPrintLog</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录异常日志================"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@After</span>(<span class="string">"pt1()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">finallyPrintLog</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"===============Logger类记录最终日志================"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//@Around("pt1()")</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">aroundPrintLog</span><span class="params">(ProceedingJoinPoint pjp)</span></span>&#123;</span><br><span class="line">        Object returnVal = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Object obj[] = pjp.getArgs(); <span class="comment">//得到方法执行所需的参数</span></span><br><span class="line">            System.out.println(<span class="string">"===============Logger类记录开始日志================ 前置"</span>);</span><br><span class="line">            returnVal = pjp.proceed(); <span class="comment">//切入点方法</span></span><br><span class="line">            System.out.println(<span class="string">"===============Logger类记录开始日志================ 后置"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable throwable) &#123;</span><br><span class="line">            System.out.println(<span class="string">"===============Logger类记录开始日志================ 异常"</span>);</span><br><span class="line">            throwable.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"===============Logger类记录开始日志================ 最终"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> returnVal;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">===============Logger类记录开始日志================</span><br><span class="line">执行保存</span><br><span class="line">===============Logger类记录最终日志================</span><br><span class="line">===============Logger类记录结束日志================</span><br></pre></td></tr></table></figure></p>
+<p>此时发现执行结果的顺序有些问题，最终日志竟然输出在了结束日志的前面，经查spring注解aop中存在调用顺序异常的问题，所以在实际开发中可以考虑使用xml配置的方式或者使用注解的环绕通知，因为具体调用顺序由程序决定，所以不会有此问题。</p>
+<p><a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/spring/day09_Aop" target="_blank" rel="noopener">练习资源</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/23/Spring学习八-之动态代理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     3k 字
+	</span>
+	<span title="阅读时长">
+     12 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/23/Spring学习八-之动态代理/" itemprop="url">Spring学习八-之动态代理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-23T22:39:21+08:00">
+                2019-06-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/06/23/Spring学习八-之动态代理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/23/Spring学习八-之动态代理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  12
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、问题来源"><a href="#一、问题来源" class="headerlink" title="一、问题来源"></a>一、问题来源</h2><p>在进行软件设计的时候往往会将一个大的系统按照业务模块拆分成一个个的低耦合、高内聚的模块，分而治之。<br>如图：<br><img src="http://ptavvqw3y.bkt.clouddn.com/%E5%AF%BC%E5%9B%BE4.jpeg" alt="软件系统模块划分"><br>拆分后发现一些问题，这些问题是通用的，跨模块的。比如：<br>1.日志：对执行某些操作分支判断时输出日志。<br>2.安全：在执行某些操作前进行权限检查。<br>3.事务：在方法开始前开始事务，方法结束时提交或者回滚事务。<br>4.性能统计：统计某些方法的执行时间。<br>以上这些属于非功能型需求，是多个业务模块都需要的，那么应该如何去写呢？</p>
+<h3 id="1-常规解决方法"><a href="#1-常规解决方法" class="headerlink" title="1.常规解决方法"></a>1.常规解决方法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Logger logger = Logger.getLogger(<span class="string">""</span>);</span><br><span class="line">        <span class="comment">//1.记录日志</span></span><br><span class="line">        logger.info(<span class="string">"XXXX"</span>);</span><br><span class="line">        <span class="comment">//2.性能统计</span></span><br><span class="line">        Long startTime = System.nanoTime();</span><br><span class="line">        <span class="comment">//3.权限检查</span></span><br><span class="line">        <span class="keyword">if</span>(!user.hasPreviledge())&#123;</span><br><span class="line">            <span class="comment">//抛出异常阻断流程</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//4.开始事务，进行增删改操作</span></span><br><span class="line">        ------业务代码-------</span><br><span class="line">        <span class="comment">//提交事务</span></span><br><span class="line">        commitTransaction();</span><br><span class="line">        Long endTime = System.nanoTime();</span><br><span class="line">        logger.info(<span class="string">"xxxxx"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码虽然解决了问题，但是使用起来十分不爽，日志、安全、性能、事务等代码都耦合到了业务代码中，使一个简单的业务逻辑模块代码都异常的复杂，且重复代码充斥在各个业务逻辑中。</p>
+<p><strong>那么如何解决解决痛点呢？</strong></p>
+<h3 id="1-设计模式：模版方法"><a href="#1-设计模式：模版方法" class="headerlink" title="1.设计模式：模版方法"></a>1.设计模式：模版方法</h3><p>首先先来回顾下模版方法：<br>模版模式是当不变的和可变的行为混在一起的时候通过把不变的行为提取到超类并且定义一个算法的骨架，去除子类中的重复代码，以此摆脱重复不变行为的纠缠。<br>一堆啰嗦的话，还是看下具体实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义超类模版公共部分</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Logger logger = Logger.getLogger(<span class="string">""</span>);</span><br><span class="line">        <span class="comment">//1.记录日志</span></span><br><span class="line">        logger.info(<span class="string">"XXXX"</span>);</span><br><span class="line">        <span class="comment">//2.性能统计</span></span><br><span class="line">        Long startTime = System.nanoTime();</span><br><span class="line">        <span class="comment">//3.权限检查</span></span><br><span class="line">        <span class="keyword">if</span>(!user.hasPreviledge())&#123;</span><br><span class="line">            <span class="comment">//抛出异常阻断流程</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//4.开始事务，进行增删改操作</span></span><br><span class="line">        <span class="comment">//5.业务代码操作交由具体子类独自实现</span></span><br><span class="line">        doBusiness();</span><br><span class="line">        <span class="comment">//提交事务</span></span><br><span class="line">        commitTransaction();</span><br><span class="line">        Long endTime = System.nanoTime();</span><br><span class="line">        logger.info(<span class="string">"xxxxx"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//具体业务实现，交给对应模块的子类</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doBusiness</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderCommand</span> <span class="keyword">extends</span> <span class="title">Command</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doBusiness</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//执行订单操作</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PaymentCommand</span> <span class="keyword">extends</span> <span class="title">Command</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doBusiness</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//执行支付操作</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>OK，这样一来，代码看起来清爽了好多，各种无关业务的代码在子类中也不复存在了。<br>调用也很简单，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Command cmd = <span class="keyword">new</span> PlaceOrderCommand();</span><br><span class="line">cmd.execute();</span><br></pre></td></tr></table></figure></p>
+<p><strong>总结：</strong><br>仔细观察可以发现，使用这个方法会导致超类会定义所有的操作，要执行哪些非功能性代码，以什么顺序，等等。子类只能默默接受，那么有没有什么方法可以让子类达到定制化的效果，比如只需要进行事务的支持，其他的不需要。</p>
+<h3 id="2-设计模式：装饰者模式"><a href="#2-设计模式：装饰者模式" class="headerlink" title="2.设计模式：装饰者模式"></a>2.设计模式：装饰者模式</h3><p>内容复习：<br>装饰者模式可以动态的给一个对象添加一些额外的职责，有效的区分类的核心职责就增加功能而言，装饰者模式比生成子类更加灵活。<br>废话不多说，上代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *   日志类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoggerDecorator</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    Command cmd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LoggerDecorator</span><span class="params">(Command cmd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Logger logger = Logger.getLogger(<span class="string">""</span>);</span><br><span class="line">        logger.info(<span class="string">"记录日志start"</span>);</span><br><span class="line">        <span class="keyword">this</span>.cmd.execute();</span><br><span class="line">        logger.info(<span class="string">"记录日志end"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 性能统计</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">PerformanceDecorator</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    Command cmd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PerformanceDecorator</span><span class="params">(Command cmd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        PerformanceUtil.startTimer();</span><br><span class="line">        <span class="keyword">this</span>.cmd.execute();</span><br><span class="line">        PerformanceUtil.endTimer();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行订单操作，具体业务代码</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderDecorator</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    Command cmd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PlaceOrderDecorator</span><span class="params">(Command cmd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//执行支付</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在就像递归一样层层调用，可以自由的决定让PlaceOrderDecorator可以选择打印日志或者性能统计等等。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Command cmd = <span class="keyword">new</span> LoggerDecorator(</span><br><span class="line"><span class="keyword">new</span> PerformanceDecorator(<span class="keyword">new</span> PlaceOrderDecorator()));</span><br><span class="line">cmd.execute();</span><br></pre></td></tr></table></figure></p>
+<p>如果只需要其中部分功能只需要实例化对应的模块即可，例如只需要订单操作时打印日志<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Command cmd = <span class="keyword">new</span> LoggerDecorator(</span><br><span class="line"><span class="keyword">new</span> PlaceOrderDecorator());</span><br><span class="line">cmd.execute();</span><br></pre></td></tr></table></figure></p>
+<p><strong>总结：</strong><br>装饰者模式虽然可以通过装饰器灵活的使用各种方法，但是由此也带出了两个问题：<br>1.一个处理日志/安全/事务/性能统计的类为什么要去实现业务接口呢？<br>2.如果其他模块没有实现业务接口，但是想使用日志/安全/事务/性能统计等功能，那该怎么办呢？</p>
+<h3 id="3-代理模式"><a href="#3-代理模式" class="headerlink" title="3.代理模式"></a>3.代理模式</h3><h4 id="Ⅰ-介绍："><a href="#Ⅰ-介绍：" class="headerlink" title="Ⅰ.介绍："></a>Ⅰ.介绍：</h4><p>为其他对象提供一种代理以此来控制这个对象的访问，使客户端不直接引用对象，很好的在客户端和目标对象之间起到中介的作用。</p>
+<h4 id="Ⅱ-适用场景："><a href="#Ⅱ-适用场景：" class="headerlink" title="Ⅱ.适用场景："></a>Ⅱ.适用场景：</h4><ol>
+<li><strong>远程代理</strong>，为一个对象在不同的地址空间提供局部代表。这样即使远程方法在服务器，但是本地调用其代理类，内部屏蔽了远程调用过程，对于客户端而言与本地方法无异。（如：webService）<br><img src="http://ptavvqw3y.bkt.clouddn.com/%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%90%86%E5%9B%BE%E8%A7%A3.jpg" alt="远程代理"></li>
+<li><strong>虚拟代理</strong>，占用系统资源较多或者加载时间较长的对象，可以给这些对象提供一个虚拟代理。在真实对象创建成功之前虚拟代理扮演真实对象的替身，而当真实对象创建之后，虚拟代理将用户的请求转发给真实对象。（比如：HTML加载时，有很多图片，为了及时的响应页面，可以先将图片位置展示代理对象，待缓存完成时，再展示出来；当一个对象加载耗费资源很大时，利用虚拟代理，将那些耗费资源的操作直到具体使用时再加载，在此之前使用虚拟代理对象来代替。可达到资源重用，节省内存，以时间换空间。；参考浏览器加载可在因io阻塞导致对象加载缓慢的时候，结合多线程技术先行一步创建加载较快的代理对象，另起线程加载真实对象，先行返回代理对象，当调用真实对象时，此时资源可能已经加载完毕，以此来加快相应时间。）</li>
+<li><strong>安全代理,</strong> 也叫保护代理，用来控制真实对象访问时的权限，如果有必要的话，可以给不同调用者提供不同的权限。</li>
+<li><strong>智能指引,</strong>是指当调用真实对象时，代理处理另外一些事，比如记录对此对象的调用次数等。</li>
+</ol>
+<p>了解了代理模式及使用场景后，此处我们使用其中的智能指引的这种场景，既在代理类中对被代理的类添加一些功能。</p>
+<p>代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderDecorator</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"执行支付"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 代理类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">CommandProxy</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    Command cmd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CommandProxy</span><span class="params">(Command cmd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"记录日志start"</span>);</span><br><span class="line">        <span class="keyword">this</span>.cmd.execute();</span><br><span class="line">        System.out.println(<span class="string">"记录日志end"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Command cmd = <span class="keyword">new</span> CommandProxy(<span class="keyword">new</span> PlaceOrderDecorator());</span><br><span class="line">        cmd.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>总结：</strong><br>　　1、代理模式可以在不修改初始类的前提下对其功能进行了增强。<br>　　2、接口中有多少方法，在proxy层就得实现多少方法，有多少方法就要开启和提交多少事务，代码繁琐复杂。<br>　　3、如果一个proxy实现了多个接口，如果其中的一个接口发生变化（添加了一个方法），那么proxy也要做改变。<br>    4、静态代理模式并没有做到日志的重用</p>
+<p>由此引出今天的主角，动态代理。</p>
+<h3 id="4-动态代理"><a href="#4-动态代理" class="headerlink" title="4.动态代理"></a>4.动态代理</h3><h4 id="Ⅰ、JDK动态代理"><a href="#Ⅰ、JDK动态代理" class="headerlink" title="Ⅰ、JDK动态代理"></a>Ⅰ、JDK动态代理</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Interceptor</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span></span>&#123;</span><br><span class="line">    Transaction transaction;</span><br><span class="line">    Object target;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Interceptor</span><span class="params">(Transaction transaction, Object target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.transaction = transaction;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> proxy 目标对象的代理类实例</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> method 对应于在代理实例上调用接口方法的Method实例</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args 传入到代理实例上方法参数值的对象数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 方法的返回值，没有返回值是null</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        String methodName = method.getName();</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">"execute"</span>.equals(methodName))&#123;</span><br><span class="line">            transaction.beginTransaction();</span><br><span class="line">            method.invoke(target);</span><br><span class="line">            transaction.commit();</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            method.invoke(target);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 事务类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Transaction</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">beginTransaction</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"******** 开启事务 **************"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">commit</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"********* 提交事务 ************"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 测试类</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testSave</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 1、创建一个目标对象</span></span><br><span class="line"><span class="comment">         * 2、创建一个事务</span></span><br><span class="line"><span class="comment">         * 3、创建一个拦截器</span></span><br><span class="line"><span class="comment">         * 4、动态产生一个代理对象</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        Object target = <span class="keyword">new</span> PlaceOrderDecorator();</span><br><span class="line">        Transaction transaction = <span class="keyword">new</span> Transaction();</span><br><span class="line">        Interceptor proxy = <span class="keyword">new</span> Interceptor(transaction,target);</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 参数一：设置代码使用的类加载器，一般采用跟目标类相同的类加载器</span></span><br><span class="line"><span class="comment">         * 参数二：设置代理类实现的接口，跟目标类使用相同的接口</span></span><br><span class="line"><span class="comment">         * 参数三：设置回调对象，当代理对象的方法被调用时，会调用该参数指定对象的invoke方法</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        Command com = (Command) Proxy.newProxyInstance(</span><br><span class="line">                target.getClass().getClassLoader(),</span><br><span class="line">                target.getClass().getInterfaces(),proxy);</span><br><span class="line">        com.execute();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>基于上述流程进行优化：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProxyFactory</span> </span>&#123;</span><br><span class="line">    Transaction transaction = <span class="keyword">new</span> Transaction();</span><br><span class="line">    Object target;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ProxyFactory</span><span class="params">(Object target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 生成代理类</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getProxyInstance</span> <span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(target.getClass().getClassLoader(),</span><br><span class="line">                target.getClass().getInterfaces(), <span class="keyword">new</span> InvocationHandler() &#123;</span><br><span class="line">                    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">                        String methodName = method.getName();</span><br><span class="line">                        <span class="keyword">if</span>(<span class="string">"execute"</span>.equals(methodName))&#123;</span><br><span class="line">                            transaction.beginTransaction();</span><br><span class="line">                            method.invoke(target,args);</span><br><span class="line">                            transaction.commit();</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            method.invoke(target);</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testProxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Object target = <span class="keyword">new</span> PlaceOrderDecorator();</span><br><span class="line">        Command com = (Command)<span class="keyword">new</span> ProxyFactory(target).getProxyInstance();</span><br><span class="line">        com.execute();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>总结：</strong><br>静态代理与动态代理的区别：</p>
+<ul>
+<li>静态代理在编译时就已经实现，编译完成后代理类是一个实际的class文件。</li>
+<li>动态代理是在运行时动态生成的，即编译完成后没有实际的class文件，而是在运行时动态生成类字节码，并加载到JVM中。</li>
+</ul>
+<p>特点：</p>
+<ol>
+<li>因为使用了JDKProxy生成的代理类实现了接口，所以目标类中所有的方法在代理类中会有。</li>
+<li>动态代理对象不需要实现接口，但是要求目标对象必须实现接口，否则不能使用动态代理。</li>
+<li>invoke方法中的三个参数可以访问目标类的被调用方法的API、被调用方法的参数、被调用方法的返回类型。</li>
+</ol>
+<p>缺点：<br>    1.在拦截器中除了能调用目标对象的目标方法之外功能比较单一。<br>    2.在使用拦截器中的invoke方法的if判断语句进行功能增强的时候具体实施时因为要支持日志/安全/事务/性能统计等功能，if语句需要写很多，这无疑是个灾难。</p>
+<h4 id="Ⅰ、CGLIB动态代理"><a href="#Ⅰ、CGLIB动态代理" class="headerlink" title="Ⅰ、CGLIB动态代理"></a>Ⅰ、CGLIB动态代理</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CglibProxyFactory</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line">    Transaction transaction;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CglibProxyFactory</span><span class="params">(Object target, Transaction transaction)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">        <span class="keyword">this</span>.transaction = transaction;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getProxyInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//工具类</span></span><br><span class="line">        Enhancer en = <span class="keyword">new</span> Enhancer();</span><br><span class="line">        <span class="comment">//设置父类</span></span><br><span class="line">        en.setSuperclass(target.getClass());</span><br><span class="line">        <span class="comment">//设置回调函数 拦截调用intercept函数</span></span><br><span class="line">        en.setCallback(<span class="keyword">this</span>);</span><br><span class="line">        <span class="comment">//创建子类对象代理</span></span><br><span class="line">        <span class="keyword">return</span> en.create();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] args, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        transaction.beginTransaction();</span><br><span class="line">         <span class="comment">// 执行目标对象的方法</span></span><br><span class="line">        Object returnValue = method.invoke(target, args);</span><br><span class="line">        transaction.commit();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCGlibProxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        PlaceOrderDecorator target = <span class="keyword">new</span> PlaceOrderDecorator();</span><br><span class="line">        System.out.println(target.getClass());</span><br><span class="line">        PlaceOrderDecorator proxy = (PlaceOrderDecorator)<span class="keyword">new</span> CglibProxyFactory(target,<span class="keyword">new</span> Transaction())</span><br><span class="line">                .getProxyInstance();</span><br><span class="line">        System.out.println(proxy.getClass());</span><br><span class="line">        proxy.execute();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderDecorator</span></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">PlaceOrderDecorator</span>$$<span class="title">EnhancerByCGLIB</span>$$640<span class="title">bbc4f</span></span></span><br><span class="line"><span class="class">******** 开启事务 **************</span></span><br><span class="line"><span class="class">执行支付</span></span><br><span class="line"><span class="class">********* 提交事务 ************</span></span><br></pre></td></tr></table></figure>
+<p><strong>总结：</strong><br>1.JDK动态代理需要目标对象和代理对象实现业务接口，拦截器需要实现InvocationHandler接口，其中invoke方法体中内容是具体代理对象方法体内容。<br>2.CGlib代理的目标类不需要实现接口，代理类是目标类的子类，拦截器需要实现MethodInterceptor接口，其中重写intercept方法时，进行具体功能增强操作。但是因为cglib是依靠继承目标对象重写其方法，所以目标对象不得是final类！！！</p>
+<p><a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/spring/day08_Aop" target="_blank" rel="noopener">练习资源</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/16/Spring学习七-Spring整合Junit的配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1795,625 +2531,6 @@ PostConstruct
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/05/26/SSO-单点登陆/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     918 字
-	</span>
-	<span title="阅读时长">
-     3 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/26/SSO-单点登陆/" itemprop="url">SSO 单点登陆</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-26T23:56:14+08:00">
-                2019-05-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web/" itemprop="url" rel="index">
-                    <span itemprop="name">web</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/26/SSO-单点登陆/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/26/SSO-单点登陆/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  918
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p>在一个企业发展的过程中，用到的系统会慢慢增多，使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不用登陆。</p>
-<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><p>在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过cookie发送给浏览器，下次再请求系统时cookie会跟着发送过去，此时就已经知道该账号已经登陆了。</p>
-<h3 id="那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？"><a href="#那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？" class="headerlink" title="那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？"></a>那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？</h3><p>首先要解决的是session共享问题，系统A认证登录过后在服务器中建立了一个session对应的当前会话，并把sessionId放到了cookie中返回给了浏览器，系统B显然是没有系统A的session的，此时可以使用Redis 把session缓存其中多个系统都共用。 <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f399vjwgj30gz07aaaa.jpg" alt="avatar"><br>session的问题解决了那么前端的cookie呢？浏览器请求系统A获得的cookie 是不能跨域请求到系统中B的。<br>cookie不能跨域，那么我们可以把这两个系统放到同一域名下，分为不同的二级域名。比如<a href="http://www.abc.OA.com" target="_blank" rel="noopener">www.abc.OA.com</a> 和<a href="http://www.abc.HR.com" target="_blank" rel="noopener">www.abc.HR.com</a>  它们的父级域名 <a href="http://www.abc.com。" target="_blank" rel="noopener">www.abc.com。</a></p>
-<h3 id="但是考虑到多个系统架构不同，语言也可能不同，共享session-有点麻烦，且如果是不同域呢？有没有更好的方式呢？"><a href="#但是考虑到多个系统架构不同，语言也可能不同，共享session-有点麻烦，且如果是不同域呢？有没有更好的方式呢？" class="headerlink" title="但是考虑到多个系统架构不同，语言也可能不同，共享session 有点麻烦，且如果是不同域呢？有没有更好的方式呢？"></a>但是考虑到多个系统架构不同，语言也可能不同，共享session 有点麻烦，且如果是不同域呢？有没有更好的方式呢？</h3><p>此时引入正题，就是由耶鲁大学提出的CAS（Central Authentication Service）一个著名的SSO解决方案。<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f3l64301j30cz09htat.jpg" alt="avatar"><br>流程如下：</p>
-<ol>
-<li>用户访问A系统，验证此用户未登陆。</li>
-<li>重定向至cas，cas中也没有登陆，返回登陆页面</li>
-<li>填写用户名、密码，cas进行认证后，产生一个Ticket（随机字符串认证用的）将登录状态写入cas的session，返回给浏览器cas下的Cookie，并将将Ticket放入URL中返回（如：<a href="http://www.a.com/pageA?ticket=123）" target="_blank" rel="noopener">www.a.com/pageA?ticket=123）</a></li>
-<li>浏览器被重定向请求系统A，系统A拿着ticket去cas验证是否是伪造的，cas认证通过，在cas中注册系统A创建全局会话，并通知系统A验证通过。</li>
-<li>系统A建立session，返回给浏览器系统A的cookie，并把浏览器请求的页面返回。</li>
-<li>再次访问A系统另一个受限页面时因为浏览器中已携带该域cookie，则直接返回资源给浏览器。<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f497tyzdj30jh0hm758.jpg" alt="avatar"></li>
-</ol>
-<p>验证后系统B登陆流程如下：<br> <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f4lplmitj30l80ipgmp.jpg" alt="avatar"></p>
-<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p> <strong>CAS的SSO实现方式可简化理解为：1个Cookie和N个Session。CAS Server创建cookie，在所有应用认证时使用，各应用通过创建各自的Session来标识用户是否已登录。</strong></p>
-<p> ST（Service Ticket）<br> 1、  ST只能使用一次<br>CAS协议规定，无论 Service Ticket验证是否成功， CAS Server都会清除服务端缓存中的该Ticket，从而可以确保一个Service Ticket不被使用两次。</p>
-<p>2、  ST在一段时间内失效<br>CAS规定ST只能存活一定的时间，然后CAS Server会让它失效。默认有效时间为5分钟。</p>
-<p>3、  ST是基于随机数生成的<br>ST必须足够随机，如果ST生成规则被猜出，Hacker就等于绕过CAS认证，直接访问对应的服务。</p>
-<p>码农翻身读后感</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/05/26/hexo搭建个人博客/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     1.2k 字
-	</span>
-	<span title="阅读时长">
-     5 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/26/hexo搭建个人博客/" itemprop="url">hexo搭建个人博客</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-26T11:15:15+08:00">
-                2019-05-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/git/" itemprop="url" rel="index">
-                    <span itemprop="name">git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/26/hexo搭建个人博客/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/26/hexo搭建个人博客/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.2k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  5
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="什么是Hexo"><a href="#什么是Hexo" class="headerlink" title="什么是Hexo ?"></a>什么是Hexo ?</h2><p>Hexo是一款基于Node.js的静态博客框架，依赖少易于安装使用，可以方便的生成静态网页托管在GitHub和Heroku上，是搭建博客的首选框架。</p>
-<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h3><p><a href="https://github.com/" target="_blank" rel="noopener">Github 官网</a><br><a href="https://pages.github.com/" target="_blank" rel="noopener">Github Pages</a><br><a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo 官网</a><br><a href="https://nodejs.org/en/" target="_blank" rel="noopener">Node.js 官网</a><br><a href="https://git-scm.com/" target="_blank" rel="noopener">Git 官网</a></p>
-<h3 id="相关教程"><a href="#相关教程" class="headerlink" title="相关教程"></a>相关教程</h3><p><a href="https://wsgzao.github.io/post/hexo-guide/" target="_blank" rel="noopener">使用 GitHub 和 Hexo 搭建免费静态 Blog</a><br><a href="https://www.jianshu.com/p/f4dce0e76886" target="_blank" rel="noopener">简书 搭建个人博客</a><br><a href="https://zhuanlan.zhihu.com/p/26625249" target="_blank" rel="noopener">知乎</a><br><a href="http://theme-next.iissnan.com/theme-settings.html" target="_blank" rel="noopener">主题配置</a></p>
-<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><p>依照上面的连接把准备工作做完了之后来使用下面命令开始博客之旅。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo -g #安装Hexo</span><br><span class="line">npm update hexo -g #升级 </span><br><span class="line">hexo init #初始化博客</span><br><span class="line">命令简写</span><br><span class="line">hexo n "我的博客" == hexo new "我的博客" #新建文章</span><br><span class="line">hexo g == hexo generate #生成</span><br><span class="line">hexo s == hexo server #启动服务预览</span><br><span class="line">hexo d == hexo deploy #部署</span><br><span class="line">hexo server #Hexo会监视文件变动并自动更新，无须重启服务器</span><br><span class="line">hexo server -s #静态模式</span><br><span class="line">hexo server -p 5000 #更改端口</span><br><span class="line">hexo server -i 192.168.1.1 #自定义 IP</span><br><span class="line">hexo clean #清除缓存，若是网页正常情况下可以忽略这条命令</span><br></pre></td></tr></table></figure>
-<h3 id="Markdown-格式"><a href="#Markdown-格式" class="headerlink" title="Markdown 格式"></a>Markdown 格式</h3><hr>
-<h4 id="添加标签"><a href="#添加标签" class="headerlink" title="添加标签"></a>添加标签</h4><p>title: jQuery对表单的操作及更多应用<br>date: 2017-05-26 12:12:57<br>categories: </p>
-<ul>
-<li>web前端<br>tags:</li>
-<li>jQuery</li>
-<li>表格</li>
-<li>表单验证<br>设置以后点击对应的标签均可连接到当前文章内。</li>
-</ul>
-<h4 id="添加文章分类"><a href="#添加文章分类" class="headerlink" title="添加文章分类"></a>添加文章分类</h4><p>title: jQuery对表单的操作及更多应用<br>date: 2017-05-26 12:12:57<br>categories: </p>
-<ul>
-<li>web前端<br>如果在 web前端下方添加-xx 不会产生两个分类，会产生层级的分类，嵌套在上一级分类下。<h4 id="个性化定制"><a href="#个性化定制" class="headerlink" title="个性化定制"></a>个性化定制</h4>添加网易云音乐<br>打开网页版的网易云音乐，选择喜欢的音乐，点击生成外链播放器 复制外链的代码<br>修改 blog\themes\next\layout_macro的sidebar.swig文件，添加刚刚复制的外链代码</li>
-</ul>
-<p>设置背景<br>把你挑选的背景图片命名为：background.jpg，放在blog\themes\next\source\images里，在blog\themes\next\source\css_custom文件的custom.styl首部添加：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>:<span class="built_in">url</span>(/images/background.jpg);</span><br><span class="line">  <span class="attribute">background-attachment</span>: fixed;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>background-attachment: fixed;是固定背景图片。</p>
-<p>###踩过的坑<br><strong>域名失效问题</strong><br>每次在执行命令hexo g -d （先生成文件再部署）时，都会使设置好的域名失效。<br>因此需要在生成静态资源的目录（blog/public）底下新建CNAME文件（无后缀名）在其中配置上域名即可。</p>
-<p><strong>添加评论，页面不显示</strong><br>关于评论，我选择的是来必力思密达的插件，在配置时Next主题文档提示只需要在主题配置gentie_productKey 配置上来必力的id即可。<br>但是在实际操作时发现页面并没有显示评论窗口，在查看配置文件时（next\layout_partials\comments.swig）发现，加载思密达的插件逻辑是如果没有多说，多言或等等等且gentie_productKey不为空则加载插件，考虑到可能中间可能有哪个评论的配置没有注释掉而没有加载，这里直接偷懒把判断加载思密达插件的逻辑放到了判断的前面，hexo clean、hexo g -d 至此评论区显示成功。<br>配置文件如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">if</span> page.comments %&#125;</span><br><span class="line"></span><br><span class="line">  &#123;% <span class="keyword">if</span> (theme.duoshuo and theme.duoshuo.shortname) or theme.duoshuo_shortname %&#125;</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"comments"</span> id=<span class="string">"comments"</span>&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"ds-thread"</span> data-thread-key=<span class="string">"&#123;&#123; page.path &#125;&#125;"</span></span><br><span class="line">           data-title=<span class="string">"&#123;&#123; page.title &#125;&#125;"</span> data-url=<span class="string">"&#123;&#123; page.permalink &#125;&#125;"</span>&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt;</span><br><span class="line">	</span><br><span class="line">  &#123;% elseif theme.livere_uid %&#125;</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"comments"</span> id=<span class="string">"comments"</span>&gt;</span><br><span class="line">      &lt;div id=<span class="string">"lv-container"</span> data-id=<span class="string">"city"</span> data-uid=<span class="string">"&#123;&#123; theme.livere_uid &#125;&#125;"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  &#123;% elseif theme.facebook_sdk.enable and theme.facebook_comments_plugin.enable %&#125;</span></span><br><span class="line"><span class="regexp">    &lt;div class="comments" id="comments"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;div class="fb-comments"</span></span><br><span class="line"><span class="regexp">           data-href="&#123;&#123; page.permalink &#125;&#125;"</span></span><br><span class="line"><span class="regexp">           data-numposts="&#123;&#123; theme.facebook_comments_plugin.num_of_posts &#125;&#125;"</span></span><br><span class="line"><span class="regexp">           data-width="&#123;&#123; theme.facebook_comments_plugin.width &#125;&#125;"</span></span><br><span class="line"><span class="regexp">           data-colorscheme="&#123;&#123; theme.facebook_comments_plugin.scheme &#125;&#125;"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  &#123;% elseif theme.vkontakte_api.enable and theme.vkontakte_api.comments %&#125;</span></span><br><span class="line"><span class="regexp">    &lt;div class="comments" id="comments"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;div id="vk_comments"&gt;&lt;/</span>div&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  &#123;% elseif theme.disqus.enable %&#125;</span></span><br><span class="line"><span class="regexp">    &lt;div class="comments" id="comments"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;div id="disqus_thread"&gt;</span></span><br><span class="line"><span class="regexp">        &lt;noscript&gt;</span></span><br><span class="line"><span class="regexp">          Please enable JavaScript to view the</span></span><br><span class="line"><span class="regexp">          &lt;a href="https:/</span><span class="regexp">/disqus.com/</span>?ref_noscript<span class="string">"&gt;comments powered by Disqus.&lt;/a&gt;</span></span><br><span class="line"><span class="string">        &lt;/noscript&gt;</span></span><br><span class="line"><span class="string">      &lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  &#123;% elseif theme.hypercomments_id %&#125;</span></span><br><span class="line"><span class="string">    &lt;div class="</span>comments<span class="string">" id="</span>comments<span class="string">"&gt;</span></span><br><span class="line"><span class="string">      &lt;div id="</span>hypercomments_widget<span class="string">"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  &#123;% elseif theme.youyan_uid %&#125;</span></span><br><span class="line"><span class="string">    &lt;div class="</span>comments<span class="string">" id="</span>comments<span class="string">"&gt;</span></span><br><span class="line"><span class="string">      &lt;div id="</span>uyan_frame<span class="string">"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">	</span></span><br><span class="line"><span class="string">  &#123;% elseif theme.changyan.appid and theme.changyan.appkey %&#125;</span></span><br><span class="line"><span class="string">    &lt;div class="</span>comments<span class="string">" id="</span>comments<span class="string">"&gt;</span></span><br><span class="line"><span class="string">      &lt;div id="</span>SOHUCS<span class="string">"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  &#123;% elseif theme.gitment.enable %&#125;</span></span><br><span class="line"><span class="string">    &lt;div class="</span>comments<span class="string">" id="</span>comments<span class="string">"&gt;</span></span><br><span class="line"><span class="string">      &#123;% if theme.gitment.lazy %&#125;</span></span><br><span class="line"><span class="string">        &lt;div onclick="</span>showGitment()<span class="string">" id="</span>gitment-display-button<span class="string">"&gt;&#123;&#123; __('gitmentbutton') &#125;&#125;&lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;div id="</span>gitment-container<span class="string">" style="</span>display:none<span class="string">"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">      &#123;% else %&#125;</span></span><br><span class="line"><span class="string">        &lt;div id="</span>gitment-container<span class="string">"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">      &#123;% endif %&#125;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  &#123;% elseif theme.valine.appid and theme.valine.appkey %&#125;</span></span><br><span class="line"><span class="string">    &lt;div class="</span>comments<span class="string">" id="</span>comments<span class="string">"&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">  &#123;% endif %&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;% endif %&#125;</span></span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/05/21/散列表（中）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     1.6k 字
-	</span>
-	<span title="阅读时长">
-     5 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/21/散列表（中）/" itemprop="url">散列表（中）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-21T23:26:28+08:00">
-                2019-05-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法与数据结构/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/21/散列表（中）/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/21/散列表（中）/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.6k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  5
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="如何设计一个工业级的散列函数？"><a href="#如何设计一个工业级的散列函数？" class="headerlink" title="如何设计一个工业级的散列函数？"></a>如何设计一个工业级的散列函数？</h1><h2 id="何为一个工业级的散列表？工业级的散列表应该具有哪些特性？"><a href="#何为一个工业级的散列表？工业级的散列表应该具有哪些特性？" class="headerlink" title="何为一个工业级的散列表？工业级的散列表应该具有哪些特性？"></a>何为一个工业级的散列表？工业级的散列表应该具有哪些特性？</h2><pre><code>1.支持快速的查询、插入、删除操作；
-2.内存占用合理，不能浪费过多空间；
-3.性能稳定，散列函数生成的值要尽可能的均匀分布，在极端情况下，散列表的性能也不会退化到无法接受的情况。
-</code></pre><p>方案：<br>如何设计这样一个散列表呢？根据前面的知识点，从3个方面来考虑设计思路：<br>   <strong>1.设计一个不复杂，散列值尽可能分布均匀的散列函数；<br>    2.定义装载因子阈值，并且设计高效动态扩容策略；<br>    3.选择合适的散列冲突解决方法。</strong></p>
-<p>步骤拆分：</p>
-<h2 id="一、如何设计散列函数？"><a href="#一、如何设计散列函数？" class="headerlink" title="一、如何设计散列函数？"></a>一、如何设计散列函数？</h2><p>1.要尽可能让散列后的值随机且均匀分布，这样会尽可能减少散列冲突，即便冲突之后，分配到每个槽内的数据也比较均匀。<br>2.除此之外，散列函数的设计也不能太复杂，太复杂就会太耗时间，也会影响到散列表的性能。<br>3.常见的散列函数设计方法：直接寻址法、平方取中法、折叠法、随机数法等。</p>
-<h2 id="二、如何根据装载因子动态扩容？"><a href="#二、如何根据装载因子动态扩容？" class="headerlink" title="二、如何根据装载因子动态扩容？"></a>二、如何根据装载因子动态扩容？</h2><h3 id="1-如何设置装载因子阈值？"><a href="#1-如何设置装载因子阈值？" class="headerlink" title="1.如何设置装载因子阈值？"></a>1.如何设置装载因子阈值？</h3><ul>
-<li>装载因子越大，说明散列表中的元素越多，空闲的位置就越少，冲突的概率就越大，对于动态的散列表，<strong>可以通过设置装载因子的阈值来控制是扩容还是缩容</strong>，支持动态扩容的散列表，创建一个更大的散列表将数据迁移到新散列表中,如果每次扩容都是原来大小的两倍，那么扩容后的负载因子就会降为原来的一半。（<strong>插入数据的时间复杂度使用摊还分析法，均摊复杂度O(1)</strong>）<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g33k21nm2lj30vq0l07a8.jpg" alt="avatar"></li>
-<li>装载因子的阈值设置需要权衡时间复杂度和空间复杂度。如果内存空间不紧张，对执行效率要求很高，可以降低装载因子的阈值；相反，如果内存空间紧张，对执行效率要求又不高，可以增加装载因子的阈值。</li>
-</ul>
-<h3 id="2-如何避免低效扩容？"><a href="#2-如何避免低效扩容？" class="headerlink" title="2.如何避免低效扩容？"></a>2.如何避免低效扩容？</h3><p>大部分情况下散列表插入一个数据都很快，但是当负载因子到达阀值，需要进行扩容，再插入数据，再扩容的过程中因为散列表大小进行了改变所以存储的位置也得到了改变，这个时候插入数据就会变得很慢。<br> <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g33kdeu374j30vq0ldgx4.jpg" alt="avatar"></p>
-<ul>
-<li>分批扩容的插入操作：当有新数据要插入时，我们将数据插入新的散列表，并且从老的散列表中拿出一个数据放入新散列表。每次插入都重复上面的过程。这样插入操作就变得很快了。</li>
-<li>分批扩容的查询操作：先查新散列表，再查老散列表。</li>
-<li>通过分批扩容的方式，任何情况下，插入一个数据的时间复杂度都是O(1)。</li>
-</ul>
-<h2 id="三、如何选择散列冲突解决方法？"><a href="#三、如何选择散列冲突解决方法？" class="headerlink" title="三、如何选择散列冲突解决方法？"></a>三、如何选择散列冲突解决方法？</h2><p><strong>常见的2中方法：开放寻址法和链表法。</strong><br>1.<strong>链表法对内存的空间利用率更高，链表节点可以在冲突时再创建，并不需要开放寻址法提前将空间申请好。其对大装载因子的容忍度更高。开放寻址适用于装载因子小于1的情景，接近1的时候，就会出现大量的散列冲突，导致大量探测，再散列，性能会下降很多。但是对于链表法来说只要散列函数值均匀，即使装载因子变成了10，也只是链表的长度拉长了，虽然查找效率变慢，但是比顺序查找还是要快很多。</strong>而且，我们还可以通过将链表法中的链表改造成其他动态查找数据结构，比如红黑树、跳表，来避免散列表时间复杂度退化成O(n)，抵御散列冲突攻击。<br> <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g33kxyy3zkj30vq0ghdix.jpg" alt="avatar"><br>2.<strong>开放寻址法可以利用CPU缓存加快查询速度但是删除数据比较麻烦，并不能直接删除，需要标记已经删除掉的数据，而且每个冲突的数据都在数组中，冲突的代价很高，装载因子也不能设置的过大，导致了此方法比较浪费内存空间。</strong>但是对于小规模数据、装载因子不高的散列表，比较适合用。</p>
-<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><p>基于链表的散列冲突方法比较适合存储大对象，大数据量的散列表，因为对于大对象而言散列表中存储的指针大小基本可以忽略了，对于比较小的对象存储，是比较消耗内存的。但是比起开放寻址法它更加的灵活，支持更多的优化策略，比如红黑树代替链表。</p>
-<h3 id="举例分析"><a href="#举例分析" class="headerlink" title="举例分析"></a>举例分析</h3><p><strong>1.初始大小</strong><br>Java中的HashMap的默认初始大小是16，可以在预先知道大小时修改默认配置，减少扩容次数。<br><strong>2.装载因子和动态扩容</strong><br>最大装载因子默认是0.75，当元素个数超过了 0.75 * size 的时候，就会启动扩容，每次扩容是原来的两倍。<br><strong>3.散列冲突解决方法</strong><br>HashMap底层使用链表法来解决冲突，负载因子和散列函数设计的再合理也会出现拉链过场的情况，严重影响HashMap的性能。<br>在JDK1.8版本中，引入了红黑树。当链表长度太长（默认为8）时，链表就转化为红黑树。利用红黑树快速增删改查的特点提高性能，在红黑树节点少于8个的时候又将红黑树转化为链表。（在数据量矫情的情况下，红黑树要维护平衡，和链表比起来性能上没什么优势）<br><strong>4.散列函数</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h = key.hashCode()；</span><br><span class="line">    <span class="keyword">return</span> (h ^ (h &gt;&gt;&gt; <span class="number">16</span>)) &amp; (capitity -<span class="number">1</span>); <span class="comment">//capicity 表示散列表的大小</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2467,7 +2584,7 @@ PostConstruct
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2478,7 +2595,7 @@ PostConstruct
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2489,7 +2606,7 @@ PostConstruct
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
