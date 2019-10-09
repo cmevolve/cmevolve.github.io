@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="spring,">
+  <meta name="keywords" content="SpringCloud,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Bean注入的三种方式1：使用默认的构造函数在spring的配置文件中使用bean标签，配以id和class属性之后，且没有其他属性和标签时采用的就是默认的构造函数常见bean对象，此时如果没有默认构造函数则对象无法创建。1&amp;lt;bean name=&quot;car&quot; class=&quot;impl.Car&quot;/&amp;gt; 2.使用普通工厂的方法创建对象（使用某个类中的方法创建对象，交给spring管理）比如jar">
-<meta name="keywords" content="spring">
+<meta name="description" content="前面讲了服务的注册和发现，在微服务架构中，业务会被拆分成一个个的微服务，服务与服务又是如何通讯的？SpringCloud中的通信协议是基于HTTP restful的，其中有两种服务调用方式，一种是ribbon+restTemplate,另一种是feign。 ribbonribbon是一个负载均衡客户端，可以很好的控制htt和tcp的一些行为。Feign默认集成了ribbon。 1.依赖123456">
+<meta name="keywords" content="SpringCloud">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spirng学习四-SpringBean的作用域">
-<meta property="og:url" content="http://iamlfc.top/2019/06/09/Spirng学习四-SpringBean的作用域/index.html">
+<meta property="og:title" content="SpringCloud学习四-服务消费者">
+<meta property="og:url" content="http://iamlfc.top/2019/10/09/SpringCloud学习四-服务消费者/index.html">
 <meta property="og:site_name" content="邪恶小代码">
-<meta property="og:description" content="Bean注入的三种方式1：使用默认的构造函数在spring的配置文件中使用bean标签，配以id和class属性之后，且没有其他属性和标签时采用的就是默认的构造函数常见bean对象，此时如果没有默认构造函数则对象无法创建。1&amp;lt;bean name=&quot;car&quot; class=&quot;impl.Car&quot;/&amp;gt; 2.使用普通工厂的方法创建对象（使用某个类中的方法创建对象，交给spring管理）比如jar">
+<meta property="og:description" content="前面讲了服务的注册和发现，在微服务架构中，业务会被拆分成一个个的微服务，服务与服务又是如何通讯的？SpringCloud中的通信协议是基于HTTP restful的，其中有两种服务调用方式，一种是ribbon+restTemplate,另一种是feign。 ribbonribbon是一个负载均衡客户端，可以很好的控制htt和tcp的一些行为。Feign默认集成了ribbon。 1.依赖123456">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-08T16:16:32.278Z">
+<meta property="og:updated_time" content="2019-10-09T15:13:25.074Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spirng学习四-SpringBean的作用域">
-<meta name="twitter:description" content="Bean注入的三种方式1：使用默认的构造函数在spring的配置文件中使用bean标签，配以id和class属性之后，且没有其他属性和标签时采用的就是默认的构造函数常见bean对象，此时如果没有默认构造函数则对象无法创建。1&amp;lt;bean name=&quot;car&quot; class=&quot;impl.Car&quot;/&amp;gt; 2.使用普通工厂的方法创建对象（使用某个类中的方法创建对象，交给spring管理）比如jar">
+<meta name="twitter:title" content="SpringCloud学习四-服务消费者">
+<meta name="twitter:description" content="前面讲了服务的注册和发现，在微服务架构中，业务会被拆分成一个个的微服务，服务与服务又是如何通讯的？SpringCloud中的通信协议是基于HTTP restful的，其中有两种服务调用方式，一种是ribbon+restTemplate,另一种是feign。 ribbonribbon是一个负载均衡客户端，可以很好的控制htt和tcp的一些行为。Feign默认集成了ribbon。 1.依赖123456">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://iamlfc.top/2019/06/09/Spirng学习四-SpringBean的作用域/">
+  <link rel="canonical" href="http://iamlfc.top/2019/10/09/SpringCloud学习四-服务消费者/">
 
 
 
 
 
-  <title>Spirng学习四-SpringBean的作用域 | 邪恶小代码</title>
+  <title>SpringCloud学习四-服务消费者 | 邪恶小代码</title>
   
 
 
@@ -285,7 +285,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/09/Spirng学习四-SpringBean的作用域/">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/09/SpringCloud学习四-服务消费者/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="李斯大炮">
@@ -297,7 +297,7 @@
       <meta itemprop="name" content="邪恶小代码">
     </span>
 	<span title="字数统计">
-     1.1k 字
+     827 字
 	</span>
 	<span title="阅读时长">
      4 分钟
@@ -307,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spirng学习四-SpringBean的作用域</h1>
+          <h1 class="post-title" itemprop="name headline">SpringCloud学习四-服务消费者</h1>
         
 
         <div class="post-meta">
@@ -319,8 +319,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-09T00:15:41+08:00">
-                2019-06-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-09T23:12:36+08:00">
+                2019-10-09
               </time>
             
 
@@ -360,6 +360,39 @@
 
                 
                 
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringCloud</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/Ribbon/" itemprop="url" rel="index">
+                    <span itemprop="name">Ribbon</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/Ribbon/Feign/" itemprop="url" rel="index">
+                    <span itemprop="name">Feign</span>
+                  </a>
+                </span>
+
+                
+                
               
             </span>
           
@@ -371,8 +404,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/06/09/Spirng学习四-SpringBean的作用域/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/09/Spirng学习四-SpringBean的作用域/" itemprop="commentCount"></span>
+                <a href="/2019/10/09/SpringCloud学习四-服务消费者/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/09/SpringCloud学习四-服务消费者/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -394,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.1k
+                  827
                 </span>
               
 
@@ -431,29 +464,23 @@
       
 
       
-        <h2 id="Bean注入的三种方式"><a href="#Bean注入的三种方式" class="headerlink" title="Bean注入的三种方式"></a>Bean注入的三种方式</h2><h3 id="1：使用默认的构造函数"><a href="#1：使用默认的构造函数" class="headerlink" title="1：使用默认的构造函数"></a>1：使用默认的构造函数</h3><p>在spring的配置文件中使用bean标签，配以id和class属性之后，且没有其他属性和标签时采用的就是默认的构造函数常见bean对象，<strong><em>此时如果没有默认构造函数则对象无法创建。</em></strong><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"car"</span> <span class="attr">class</span>=<span class="string">"impl.Car"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="2-使用普通工厂的方法创建对象（使用某个类中的方法创建对象，交给spring管理）"><a href="#2-使用普通工厂的方法创建对象（使用某个类中的方法创建对象，交给spring管理）" class="headerlink" title="2.使用普通工厂的方法创建对象（使用某个类中的方法创建对象，交给spring管理）"></a>2.使用普通工厂的方法创建对象（使用某个类中的方法创建对象，交给spring管理）</h3><p>比如jar包中的class中某个方法创建了一个对象现在希望通过它来获得对象交给spring管理<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanFactory2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Car <span class="title">getCar</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Car();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>首先将该类交给Spring管理，之后通过beanName指定该类通过factory-method指定通过该类中getCar方法获得对象。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"factory"</span> <span class="attr">class</span>=<span class="string">"com.factory.BeanFactory2"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"factoryCar"</span> <span class="attr">factory-bean</span>=<span class="string">"factory"</span> <span class="attr">factory-method</span>=<span class="string">"getCar"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="3-使用工厂中的静态方法创建对象"><a href="#3-使用工厂中的静态方法创建对象" class="headerlink" title="3.使用工厂中的静态方法创建对象"></a>3.使用工厂中的静态方法创建对象</h3><p>基于上面的工厂方法获得对象，在工厂类的方法是static修饰的静态方法的时候可以直接通过如下配置加载。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"factoryCar"</span> <span class="attr">class</span>=<span class="string">"com.factory.BeanFactory2"</span> <span class="attr">factory-method</span>=<span class="string">"getCar"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="Bean的作用域"><a href="#Bean的作用域" class="headerlink" title="Bean的作用域"></a>Bean的作用域</h2><p>在Spring容器中一共提供了五种作用域类型，在配置文件中通过属性scope来设置bean的作用域范围。</p>
-<h3 id="1-默认-singleton：单例"><a href="#1-默认-singleton：单例" class="headerlink" title="1.默认 singleton：单例"></a>1.默认 singleton：单例</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"car"</span> <span class="attr">class</span>=<span class="string">"impl.Car"</span> <span class="attr">scope</span>=<span class="string">"singleton"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在对scope没有设置的时候bean默认就是单例的，多次获取同一个id都是一个bean的实例。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//此时容器初始化完毕后可以取里面的bean了.</span></span><br><span class="line">   Car car1  = (Car)bf.getBean(<span class="string">"car"</span>);</span><br><span class="line">   Car car2 = (Car)bf.getBean(<span class="string">"car"</span>);</span><br><span class="line">   System.out.println(car1 == car2);</span><br></pre></td></tr></table></figure>
-<p>执行结果：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">小汽车被加载了</span><br><span class="line"><span class="keyword">true</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="2-prototype：多例"><a href="#2-prototype：多例" class="headerlink" title="2. prototype：多例"></a>2. prototype：多例</h3><figure class="highlight xml"><figcaption><span><bean name< span></bean></span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">每次通过id获取bean的时候IOC都会创建一个新的作用域。</span><br><span class="line">同样执行执行上面的代码</span><br><span class="line">执行结果：</span><br><span class="line">```java</span><br><span class="line">小汽车被加载了</span><br><span class="line">小汽车被加载了</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
-<p>###以下三种针对web项目<br>在使用Spring的WebApplicationContext时，可以使用的作用域。</p>
-<p>###3.request：HTTP请求<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"car"</span> <span class="attr">class</span>=<span class="string">"impl.Car"</span> <span class="attr">scope</span>=<span class="string">"request"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>request针对每次Http请求，Spring都会针对相关的bean来创建一个新的实例。而bean只在当前request请求中有效</p>
-<h3 id="4-session"><a href="#4-session" class="headerlink" title="4.session"></a>4.session</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"car"</span> <span class="attr">class</span>=<span class="string">"impl.Car"</span> <span class="attr">scope</span>=<span class="string">"session "</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-<p>针对http session起作用，Spring容器会根据该Bean的定义来创建一个全新的Bean的实例。而且该Bean只在当前http session内是有效的。<br>Session中所有http请求共享同一个请求的bean实例。Session结束后就销毁bean。</p>
-<h3 id="5-global-session"><a href="#5-global-session" class="headerlink" title="5.global session:"></a>5.global session:</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"car"</span> <span class="attr">class</span>=<span class="string">"impl.Car"</span> <span class="attr">scope</span>=<span class="string">"globalSession"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-<p>类似标准的http session作用域，不过仅仅在基于portlet的web应用当中才有意义。Portlet规范定义了全局的Session的概念。他被所有构成某个portlet外部应用中的各种不同的portlet所共享。在global session作用域中所定义的bean被限定于全局的portlet session的生命周期范围之内。</p>
-<h2 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="Bean的生命周期"></a>Bean的生命周期</h2><p>bean对象的生命周期分为<strong>创建、生存、死亡</strong><br>单例：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span>  <span class="attr">name</span>=<span class="string">"car"</span> <span class="attr">class</span>=<span class="string">"com.pojo.Car"</span> <span class="attr">init-method</span>=<span class="string">"init"</span> <span class="attr">destroy-method</span>=<span class="string">"destroy"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>为bean配置加入init-method 属性和destroy-method属性，分别在对象加载和容器销毁时执行该类中的init方法和destroy方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> ClassPathXmlApplicationContext ap = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"applicationContext.xml"</span>);</span><br><span class="line">ap.getBean(<span class="string">"car"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//手动关闭容器</span></span><br><span class="line">ap.close();</span><br></pre></td></tr></table></figure></p>
-<p>执行结果：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">加载小汽车</span><br><span class="line">执行对象初始化方法</span><br><span class="line">六月 <span class="number">08</span>, <span class="number">2019</span> <span class="number">10</span>:<span class="number">41</span>:<span class="number">25</span> 下午 org.springframework.context.support.ClassPathXmlApplicationContext doClose</span><br><span class="line">执行对象销毁方法</span><br></pre></td></tr></table></figure></p>
-<p>多例：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span>  <span class="attr">name</span>=<span class="string">"car"</span> <span class="attr">class</span>=<span class="string">"com.pojo.Car"</span> <span class="attr">init-method</span>=<span class="string">"init"</span> <span class="attr">destroy-method</span>=<span class="string">"destroy"</span> <span class="attr">scope</span>=<span class="string">"prototype"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>执行结果：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">加载小汽车</span><br><span class="line">执行对象初始化方法</span><br></pre></td></tr></table></figure></p>
-<p>可见调用close并没有调用destroy方法，这就是与单例模式的区别，多例模式bean的生命周期交给了JVM管理。<br>总结：<br>单例对象<br>    出生：容器创建时对象加载<br>    存活：容器还在对象就一直存在<br>    死亡：对象的声明周期和容器相同<br>多例对象<br>    出生：当使用对象时由bean工厂创建<br>    存活：对象在使用过程中就一直存活<br>    死亡：交给JVM管理对象生命周期</p>
+        <p>前面讲了服务的注册和发现，在微服务架构中，业务会被拆分成一个个的微服务，服务与服务又是如何通讯的？<br>SpringCloud中的通信协议是基于HTTP restful的，其中有两种服务调用方式，一种是ribbon+restTemplate,另一种是feign。</p>
+<h2 id="ribbon"><a href="#ribbon" class="headerlink" title="ribbon"></a>ribbon</h2><p>ribbon是一个负载均衡客户端，可以很好的控制htt和tcp的一些行为。Feign默认集成了ribbon。</p>
+<h3 id="1-依赖"><a href="#1-依赖" class="headerlink" title="1.依赖"></a>1.依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependencies&gt;</span><br><span class="line">       &lt;dependency&gt;</span><br><span class="line">           &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">           &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;</span><br><span class="line">       &lt;/dependency&gt;</span><br><span class="line">       &lt;dependency&gt;</span><br><span class="line">           &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">           &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line">       &lt;/dependency&gt;</span><br><span class="line">       &lt;dependency&gt;</span><br><span class="line">           &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">           &lt;artifactId&gt;spring-cloud-starter-netflix-ribbon&lt;/artifactId&gt;</span><br><span class="line">       &lt;/dependency&gt;</span><br><span class="line">   &lt;/dependencies&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="2-配置"><a href="#2-配置" class="headerlink" title="2.配置"></a>2.配置</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    serviceUrl:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://localhost:8761/eureka/</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8763</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">service-ribbon</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-代码"><a href="#3-代码" class="headerlink" title="3.代码"></a>3.代码</h3><h4 id="3-1-在工程的启动类中-通过-EnableDiscoveryClient向服务中心注册；"><a href="#3-1-在工程的启动类中-通过-EnableDiscoveryClient向服务中心注册；" class="headerlink" title="3.1 在工程的启动类中,通过@EnableDiscoveryClient向服务中心注册；"></a>3.1 在工程的启动类中,通过@EnableDiscoveryClient向服务中心注册；</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableEurekaClient</span></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceRibbonApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run( ServiceRibbonApplication.class, args );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-Bean向程序的ioc注入一个bean-restTemplate-并通过-LoadBalanced注解表明这个restRemplate开启负载均衡的功能。"><a href="#3-2-Bean向程序的ioc注入一个bean-restTemplate-并通过-LoadBalanced注解表明这个restRemplate开启负载均衡的功能。" class="headerlink" title="3.2 @Bean向程序的ioc注入一个bean: restTemplate;并通过@LoadBalanced注解表明这个restRemplate开启负载均衡的功能。"></a>3.2 @Bean向程序的ioc注入一个bean: restTemplate;并通过@LoadBalanced注解表明这个restRemplate开启负载均衡的功能。</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@LoadBalanced</span></span><br><span class="line"><span class="function">RestTemplate <span class="title">restTemplate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> RestTemplate();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-3-在SERVICE-HI服务中提供远程方法"><a href="#3-3-在SERVICE-HI服务中提供远程方法" class="headerlink" title="3.3 在SERVICE-HI服务中提供远程方法"></a>3.3 在SERVICE-HI服务中提供远程方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class HelloControler &#123;</span><br><span class="line">    @GetMapping(value = &quot;/hi&quot;)</span><br><span class="line">    public String hi(@RequestParam String name) &#123;</span><br><span class="line">        return helloService.hiService( name );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-4-注入RestTemplate模版，在service中编写逻辑（远程方法调用）调用SERVICE-HI的Controller中hi方法。"><a href="#3-4-注入RestTemplate模版，在service中编写逻辑（远程方法调用）调用SERVICE-HI的Controller中hi方法。" class="headerlink" title="3.4 注入RestTemplate模版，在service中编写逻辑（远程方法调用）调用SERVICE-HI的Controller中hi方法。"></a>3.4 注入RestTemplate模版，在service中编写逻辑（远程方法调用）调用SERVICE-HI的Controller中hi方法。</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hiService</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> restTemplate.getForObject(<span class="string">"http://SERVICE-HI/hi?name="</span>+name,String.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-5-在service-ribbon服务中提供hello接口测试远程调用SERVICE-HI服务方法。"><a href="#3-5-在service-ribbon服务中提供hello接口测试远程调用SERVICE-HI服务方法。" class="headerlink" title="3.5 在service-ribbon服务中提供hello接口测试远程调用SERVICE-HI服务方法。"></a>3.5 在service-ribbon服务中提供hello接口测试远程调用SERVICE-HI服务方法。</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloControler</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    HelloService helloService;</span><br><span class="line">    <span class="meta">@GetMapping</span>(value = <span class="string">"/hello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">(@RequestParam String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> helloService.hiService( name );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果SERVICE-HI服务，在注册中心上注册了多个实例，则多次调用时会交替调用服务实例，实现负载。</p>
+<h2 id="Feign"><a href="#Feign" class="headerlink" title="Feign"></a>Feign</h2><p>Feign是一个声明式的伪Http客户端，它使得写Http客户端变得更简单。使用Feign，只需要创建一个接口并注解。Feign默认集成了Ribbon,和Eureka结合默认实现负载效果。</p>
+<h3 id="1-依赖-1"><a href="#1-依赖-1" class="headerlink" title="1.依赖"></a>1.依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-cloud-starter-feign&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</span><br><span class="line">	&lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="2-配置文件"><a href="#2-配置文件" class="headerlink" title="2.配置文件"></a>2.配置文件</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    serviceUrl:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://localhost:8761/eureka/</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8765</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">service-feign</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-代码-1"><a href="#3-代码-1" class="headerlink" title="3.代码"></a>3.代码</h3><h4 id="3-1-在程序的启动类ServiceFeignApplication，加上-EnableFeignClients注解开启Feign的功能"><a href="#3-1-在程序的启动类ServiceFeignApplication，加上-EnableFeignClients注解开启Feign的功能" class="headerlink" title="3.1 在程序的启动类ServiceFeignApplication，加上@EnableFeignClients注解开启Feign的功能"></a>3.1 在程序的启动类ServiceFeignApplication，加上@EnableFeignClients注解开启Feign的功能</h4><p><em>如果需要将所有feignAPI接口写到maven的一个子工程里，@EnableFeignClients注解需要指明路径@EnableFeignClients（”com.api.feign”）</em><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span></span><br><span class="line"><span class="meta">@EnableFeignClients</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceFeignApplication</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		SpringApplication.run(ServiceFeignApplication.class, args);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-2-编写一个controller提供hello接口供外部调用"><a href="#3-2-编写一个controller提供hello接口供外部调用" class="headerlink" title="3.2 编写一个controller提供hello接口供外部调用"></a>3.2 编写一个controller提供hello接口供外部调用</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HiController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    SchedualServiceHi schedualServiceHi;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/hello"</span>,method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">sayHi</span><span class="params">(@RequestParam String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> schedualServiceHi.sayHiFromClientOne(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同ribbon，如果服务提供方开启多个实例，会使用负载依次调用其服务。</p>
+<p>本文参考文章：<a href="https://blog.csdn.net/forezp/article/details/81040946" target="_blank" rel="noopener">方志鹏-深入理解SpringCloud与微服务构建</a></p>
 
       
     </div>
@@ -471,7 +498,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/spring/" rel="tag"># spring</a>
+            <a href="/tags/SpringCloud/" rel="tag"># SpringCloud</a>
           
         </div>
       
@@ -484,8 +511,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/05/Spring学习三-ApplicationContext/" rel="next" title="Spring学习三-ApplicationContext">
-                <i class="fa fa-chevron-left"></i> Spring学习三-ApplicationContext
+              <a href="/2019/10/08/SpringCloud学习三-zuul网关搭建/" rel="next" title="SpringCloud学习三-zuul网关搭建">
+                <i class="fa fa-chevron-left"></i> SpringCloud学习三-zuul网关搭建
               </a>
             
           </div>
@@ -493,10 +520,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/10/Spirng学习五-依赖注入的几种方式/" rel="prev" title="Spirng学习五-依赖注入的几种方式">
-                Spirng学习五-依赖注入的几种方式 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -673,7 +696,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean注入的三种方式"><span class="nav-number">1.</span> <span class="nav-text">Bean注入的三种方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1：使用默认的构造函数"><span class="nav-number">1.1.</span> <span class="nav-text">1：使用默认的构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-使用普通工厂的方法创建对象（使用某个类中的方法创建对象，交给spring管理）"><span class="nav-number">1.2.</span> <span class="nav-text">2.使用普通工厂的方法创建对象（使用某个类中的方法创建对象，交给spring管理）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-使用工厂中的静态方法创建对象"><span class="nav-number">1.3.</span> <span class="nav-text">3.使用工厂中的静态方法创建对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean的作用域"><span class="nav-number">2.</span> <span class="nav-text">Bean的作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-默认-singleton：单例"><span class="nav-number">2.1.</span> <span class="nav-text">1.默认 singleton：单例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-prototype：多例"><span class="nav-number">2.2.</span> <span class="nav-text">2. prototype：多例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-session"><span class="nav-number">2.3.</span> <span class="nav-text">4.session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-global-session"><span class="nav-number">2.4.</span> <span class="nav-text">5.global session:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean的生命周期"><span class="nav-number">3.</span> <span class="nav-text">Bean的生命周期</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ribbon"><span class="nav-number">1.</span> <span class="nav-text">ribbon</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-依赖"><span class="nav-number">1.1.</span> <span class="nav-text">1.依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-配置"><span class="nav-number">1.2.</span> <span class="nav-text">2.配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-代码"><span class="nav-number">1.3.</span> <span class="nav-text">3.代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-在工程的启动类中-通过-EnableDiscoveryClient向服务中心注册；"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 在工程的启动类中,通过@EnableDiscoveryClient向服务中心注册；</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-Bean向程序的ioc注入一个bean-restTemplate-并通过-LoadBalanced注解表明这个restRemplate开启负载均衡的功能。"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 @Bean向程序的ioc注入一个bean: restTemplate;并通过@LoadBalanced注解表明这个restRemplate开启负载均衡的功能。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-在SERVICE-HI服务中提供远程方法"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 在SERVICE-HI服务中提供远程方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-注入RestTemplate模版，在service中编写逻辑（远程方法调用）调用SERVICE-HI的Controller中hi方法。"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 注入RestTemplate模版，在service中编写逻辑（远程方法调用）调用SERVICE-HI的Controller中hi方法。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-在service-ribbon服务中提供hello接口测试远程调用SERVICE-HI服务方法。"><span class="nav-number">1.3.5.</span> <span class="nav-text">3.5 在service-ribbon服务中提供hello接口测试远程调用SERVICE-HI服务方法。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Feign"><span class="nav-number">2.</span> <span class="nav-text">Feign</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-依赖-1"><span class="nav-number">2.1.</span> <span class="nav-text">1.依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-配置文件"><span class="nav-number">2.2.</span> <span class="nav-text">2.配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-代码-1"><span class="nav-number">2.3.</span> <span class="nav-text">3.代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-在程序的启动类ServiceFeignApplication，加上-EnableFeignClients注解开启Feign的功能"><span class="nav-number">2.3.1.</span> <span class="nav-text">3.1 在程序的启动类ServiceFeignApplication，加上@EnableFeignClients注解开启Feign的功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-编写一个controller提供hello接口供外部调用"><span class="nav-number">2.3.2.</span> <span class="nav-text">3.2 编写一个controller提供hello接口供外部调用</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -839,9 +862,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://iamlfc.top/2019/06/09/Spirng学习四-SpringBean的作用域/';
-          this.page.identifier = '2019/06/09/Spirng学习四-SpringBean的作用域/';
-          this.page.title = 'Spirng学习四-SpringBean的作用域';
+          this.page.url = 'http://iamlfc.top/2019/10/09/SpringCloud学习四-服务消费者/';
+          this.page.identifier = '2019/10/09/SpringCloud学习四-服务消费者/';
+          this.page.title = 'SpringCloud学习四-服务消费者';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://.disqus.com/embed.js';
