@@ -284,6 +284,245 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/10/日志输出使用姿势/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     3.4k 字
+	</span>
+	<span title="阅读时长">
+     15 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/10/日志输出使用姿势/" itemprop="url">日志输出使用姿势</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-10T23:51:40+08:00">
+                2019-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/SpringBoot/Logback/" itemprop="url" rel="index">
+                    <span itemprop="name">Logback</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/10/日志输出使用姿势/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/10/日志输出使用姿势/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  15
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-什么是日志？"><a href="#1-什么是日志？" class="headerlink" title="1.什么是日志？"></a>1.什么是日志？</h1><p>日志是记录程序运行的轨迹，方便查找信息，快速定位问题。日志应用主要有下面三个原因：<strong>记录操作轨迹、监控系统运行状况、回溯系统故障</strong>。在开发时可以使用debug来跟踪代码，真正代码发布到了DAT 生产环境是没办法随便使用远程调试的。因此如果日志打的好，线上的问题很快便能定位，反之用不好则影响系统性能。</p>
+<h1 id="2-如何引入日志？"><a href="#2-如何引入日志？" class="headerlink" title="2.如何引入日志？"></a>2.如何引入日志？</h1><h2 id="常用日志框架及区别"><a href="#常用日志框架及区别" class="headerlink" title="常用日志框架及区别"></a>常用日志框架及区别</h2><p>在使用日志前先来认识下常用的日志框架：<br><a href="https://logging.apache.org/log4j/2.x/" target="_blank" rel="noopener">log4j</a>、<a href="https://logging.apache.org/log4j/2.x/" target="_blank" rel="noopener">log4j2</a>、<a href="https://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html" target="_blank" rel="noopener">Logging</a>、<a href="http://commons.apache.org/proper/commons-logging/" target="_blank" rel="noopener">commons-logging</a>、<a href="https://www.slf4j.orer/commons-logging/" target="_blank" rel="noopener">slf4j</a>、<a href="https://logback.qos.ch/commons-logging/" target="_blank" rel="noopener">logback</a>等，那么它们之间有什么关系，又该如何选择呢？<br><strong>日志框架分为三大部分：日志门面、日志适配器、日志库。</strong></p>
+<ol>
+<li><strong>门面设计模式</strong>是面向对象设计模式中的一种，日志框架采用的就是这种模式，类似jdbc的概念，既它只是一套设计规范，并不提供具体的实现。目的使使用者无论使用什么日志框架都无需关心其具体具体是哪个库负责打印。目前主流使用的框架有两种<strong>：slf4j、commons-logging。</strong></li>
+<li><strong>日志库</strong>具体实现了日志的相关功能，主流日志库有：log4j、log4j2、log-jdk、logback。</li>
+<li><strong>日志适配器</strong>是针对没有实现门面模式接口的日志框架想使用类似于self4j这种门面模式框架时，需要单独引入一个适配器来解决接口不兼容的问题。或者在老的工程中，使用了多种日志框架，随着时间的推移，想将原来直接调用日志库的模式改成门面模式，此时可使用适配器来完成旧API到slf4j的路由。</li>
+</ol>
+<h2 id="日志级别详解"><a href="#日志级别详解" class="headerlink" title="日志级别详解"></a>日志级别详解</h2><p><img src="https://i.loli.net/2019/10/28/ZwWKcU7hvtxRGg2.png" alt="loglevel.png"><br>所以，日志优先级别标准顺序为：</p>
+<p>ALL &lt; TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL &lt; OFF</p>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>以springboot中的slf4j+logback为例<br>Spring boot默认支持的就是slf4j+logback的日志框架,想要定制日志策略只需要添加配置文件即可。spring推荐配置文件以-spring命名。此处命名为logback-spring.xml。</p>
+<p>基本配置：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 日志存放路径 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"log.path"</span> <span class="attr">value</span>=<span class="string">"./logs"</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 日志输出格式 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"log.pattern"</span> <span class="attr">value</span>=<span class="string">" %contextName  %d&#123;HH:mm:ss.SSS&#125;  [logid=%logid] [ip=%ip]  [%thread] %-5level %logger&#123;20&#125; - [%method,%line] - %msg%n"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="tag">&lt;<span class="name">conversionRule</span> <span class="attr">conversionWord</span>=<span class="string">"ip"</span> <span class="attr">converterClass</span>=<span class="string">"io.renren.IPLogConfig"</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">conversionRule</span> <span class="attr">conversionWord</span>=<span class="string">"logid"</span> <span class="attr">converterClass</span>=<span class="string">"io.renren.LogIdConfig"</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">contextName</span>&gt;</span>myLogBack<span class="tag">&lt;/<span class="name">contextName</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 控制台输出 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"console"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">pattern</span>&gt;</span>$&#123;log.pattern&#125;<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- 系统日志输出 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"file_info"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">file</span>&gt;</span>$&#123;log.path&#125;/sys-info.log<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 循环政策：基于时间创建日志文件 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日志文件名格式 --&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>$&#123;log.path&#125;/sys-info.%d&#123;yyyy-MM-dd&#125;.log<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">			<span class="comment">&lt;!-- 日志最大的历史 60天 --&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>60<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">pattern</span>&gt;</span>$&#123;log.pattern&#125;<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.classic.filter.LevelFilter"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 过滤的级别 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">level</span>&gt;</span>INFO<span class="tag">&lt;/<span class="name">level</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 匹配时的操作：接收（记录） --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMatch</span>&gt;</span>ACCEPT<span class="tag">&lt;/<span class="name">onMatch</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 不匹配时的操作：拒绝（不记录） --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMismatch</span>&gt;</span>DENY<span class="tag">&lt;/<span class="name">onMismatch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"file_error"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">file</span>&gt;</span>$&#123;log.path&#125;/sys-error.log<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 循环政策：基于时间创建日志文件 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日志文件名格式 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>$&#123;log.path&#125;/sys-error.%d&#123;yyyy-MM-dd&#125;.log<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">			<span class="comment">&lt;!-- 日志最大的历史 60天 --&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>60<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>$&#123;log.pattern&#125;<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.classic.filter.LevelFilter"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 过滤的级别 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">level</span>&gt;</span>ERROR<span class="tag">&lt;/<span class="name">level</span>&gt;</span></span><br><span class="line">			<span class="comment">&lt;!-- 匹配时的操作：接收（记录） --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMatch</span>&gt;</span>ACCEPT<span class="tag">&lt;/<span class="name">onMatch</span>&gt;</span></span><br><span class="line">			<span class="comment">&lt;!-- 不匹配时的操作：拒绝（不记录） --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMismatch</span>&gt;</span>DENY<span class="tag">&lt;/<span class="name">onMismatch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- 用户访问日志输出  --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"sys-user"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">file</span>&gt;</span>$&#123;log.path&#125;/sys-user.log<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 按天回滚 daily --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>$&#123;log.path&#125;/sys-user.%d&#123;yyyy-MM-dd&#125;.log<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日志最大的历史 60天 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>60<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>$&#123;log.pattern&#125;<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- sql 输出配置 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"log.dao"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">file</span>&gt;</span>$&#123;log.path&#125;/log-dao.log<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 按天回滚 daily --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>$&#123;log.path&#125;/log-dao.%d&#123;yyyy-MM-dd&#125;.log<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日志最大的历史 2天 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>2<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日志最大文件大小10m --&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>$&#123;log.pattern&#125;<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 系统模块日志级别控制  --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">logger</span> <span class="attr">name</span>=<span class="string">"io.renren.config"</span> <span class="attr">level</span>=<span class="string">"info"</span> /&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- Spring日志级别控制  --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">logger</span> <span class="attr">name</span>=<span class="string">"org.springframework"</span> <span class="attr">level</span>=<span class="string">"warn"</span> /&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--系统操作日志--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"info"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"console"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--系统用户操作日志--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">logger</span> <span class="attr">name</span>=<span class="string">"sys-user"</span> <span class="attr">level</span>=<span class="string">"info"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"sys-user"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">logger</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--sql日志--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">logger</span> <span class="attr">name</span>=<span class="string">"io.renren.dao"</span> <span class="attr">level</span>=<span class="string">"DEBUG"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"log.dao"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">logger</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>contextName：设置上下文名称，用来区分不同进程</li>
+<li>property 两个属性name 和value,name是变量名称，定义后可使用${}来使用。</li>
+<li>appender格式化日志输出节点，有俩个属性name和class，class用来指定哪种输出策略，常用就是控制台输出策略和文件输出策略。（控制台输出ConsoleAppender、输出到文件RollingFileAppender）设置文件大小限制和保留天数时冲突解决方案：<a href="https://blog.csdn.net/wujianmin577/article/details/68922545" target="_blank" rel="noopener">https://blog.csdn.net/wujianmin577/article/details/68922545</a></li>
+<li>encoder 表示日志编码：%d{HH: mm:ss.SSS}输出时间、%thread——输出日志的进程名字、%-5level——日志级别，并且使用5个字符靠左对齐、%msg——日志消息、%n——平台的换行符</li>
+<li>logger 设置某一个包或者具体的某一个类的日志打印级别、以及指定<appender>。<logger>仅有一个name属性，一个可选的level和一个可选的addtivity属性。addtivity ：是否向上级logger传递打印信息。默认是true</logger></appender></li>
+<li>conversionRule  可配置自定义class来输出到日志中.</li>
+</ul>
+<h1 id="3-使用时需要注意什么？"><a href="#3-使用时需要注意什么？" class="headerlink" title="3.使用时需要注意什么？"></a>3.使用时需要注意什么？</h1><h2 id="1-日志命名的规范"><a href="#1-日志命名的规范" class="headerlink" title="1.日志命名的规范"></a>1.日志命名的规范</h2><p>推荐日志的命名方式为：appName_logType_logName.log,logType是日志类型，推荐分类有stats、monitor、visit等；logName为日志描述。这种命名方式的好处是通过文件名就可以知道日志文件属于什么应用，什么类型。</p>
+<h2 id="2-日志的存储周期"><a href="#2-日志的存储周期" class="headerlink" title="2.日志的存储周期"></a>2.日志的存储周期</h2><p>在EasyCoding中推荐将日志文件至少保存15天，防止以周为频率发生的异常无法被发现。然后根据日志文件的重要程度，文件大小，磁盘空间来自行延长保存时间。</p>
+<h2 id="3-使用时注意"><a href="#3-使用时注意" class="headerlink" title="3.使用时注意"></a>3.使用时注意</h2><p>在使用时为了防止产生无用的字符串对象，建议使用条件判断 + 占位符形式来输出日志。例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用条件判断形式</span></span><br><span class="line"><span class="keyword">if</span>(myLogger.isInfoEnabled())&#123;</span><br><span class="line"><span class="comment">//使用占位符形式</span></span><br><span class="line">	myLogger.info(<span class="string">"This logInfo id:&#123;&#125;,and value:&#123;&#125;"</span>,<span class="string">"木大木大木大"</span>,<span class="string">"阿嘟嘟嘟嘟"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-避免无效的日志输出"><a href="#4-避免无效的日志输出" class="headerlink" title="4.避免无效的日志输出"></a>4.避免无效的日志输出</h2><p>因为日志打印的顺序是由低到高先子级再父级，包名级别越高则logger的级别越高。在执行完子级日志后执行父级日志会重复输出，此时应在子级配置中设置additivity=”false”，例：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 系统模块日志级别控制  --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">logger</span> <span class="attr">name</span>=<span class="string">"io.renren.config"</span> <span class="attr">level</span>=<span class="string">"info"</span> <span class="attr">additivity</span>=<span class="string">"false"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="5-使用异步写入日志AsyncAppender"><a href="#5-使用异步写入日志AsyncAppender" class="headerlink" title="5.使用异步写入日志AsyncAppender"></a>5.使用异步写入日志AsyncAppender</h2><p>一般程序使用串行状态，要记录日志时必然会阻塞到程序的运行，这是一种损耗效率的方式，所以实际使用日志时使用异步的方式来记录，这样日志同主程序就会形成并行状态，不会影响程序运行。</p>
+<blockquote>
+<p>AsyncAppender并不处理日志，只是将日志缓冲到一个BlockingQueue里面去，并在内部创建一个工作线程从队列头部获取日志，之后将获取的日志循环记录到附加的其他appender上去，从而达到不阻塞主线程的效果。因此AsynAppender仅仅充当事件转发器，必须引用另一个appender来写日志。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span> =<span class="string">"ASYNC"</span> <span class="attr">class</span>= <span class="string">"ch.qos.logback.classic.AsyncAppender"</span>&gt;</span>  </span><br><span class="line">    <span class="comment">&lt;!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 --&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">discardingThreshold</span> &gt;</span>0<span class="tag">&lt;/<span class="name">discardingThreshold</span>&gt;</span>  </span><br><span class="line">    <span class="comment">&lt;!-- 更改默认的队列的深度,该值会影响性能.默认值为256 --&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">queueSize</span>&gt;</span>512<span class="tag">&lt;/<span class="name">queueSize</span>&gt;</span>  </span><br><span class="line">    <span class="comment">&lt;!-- 添加附加的appender,最多只能添加一个 --&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span> =<span class="string">"FILE_LOG"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="6-根据环境不同使用不同的日志策略"><a href="#6-根据环境不同使用不同的日志策略" class="headerlink" title="6.根据环境不同使用不同的日志策略"></a>6.根据环境不同使用不同的日志策略</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 开发环境输出到控制台 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">springProfile</span>  <span class="attr">name</span>=<span class="string">"dev"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"INFO"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"STDOUT"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">springProfile</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 生产环境输出到文件 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">springProfile</span>  <span class="attr">name</span>=<span class="string">"prod"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"INFO"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"FILE_LOG"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">springProfile</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>在root节点外面套了一层springProfile ，指定了name属性的值，此时启用时有两种方式.</strong><br>方式1：执行jar包时添加参数：<br><figure class="highlight"><figcaption><span>-jar xxx.jar --spring.profiles.active</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">方式<span class="number">2</span>：在项目的application.properties配置文件中添加：</span><br><span class="line">spring.profiles.active=prod</span><br><span class="line"></span><br><span class="line"># 4.整合</span><br><span class="line">```xml</span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;configuration&gt;    </span><br><span class="line">    &lt;!--定义一个将日志输出到控制台的appender，名称为STDOUT --&gt;</span><br><span class="line">    &lt;appender name=<span class="string">"STDOUT"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</span><br><span class="line">        &lt;encoder&gt;</span><br><span class="line">            &lt;pattern&gt;[%contextName]%date [%thread %line] %level &gt;&gt; %msg &gt;&gt; %logger&#123;10&#125;%n&lt;/pattern&gt;</span><br><span class="line">        &lt;/encoder&gt;</span><br><span class="line">    &lt;/appender&gt; </span><br><span class="line">    </span><br><span class="line">    &lt;!--定义一个将日志输出到文件的appender，名称为FILE_LOG --&gt;</span><br><span class="line">    &lt;appender name=<span class="string">"FILE_LOG"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.FileAppender"</span>&gt;  </span><br><span class="line">        &lt;file&gt;D:/test.log&lt;/file&gt;</span><br><span class="line">        &lt;append&gt;true&lt;/append&gt;  </span><br><span class="line">        &lt;encoder&gt;  </span><br><span class="line">            &lt;pattern&gt;[Eran]%date [%thread %line] %level &gt;&gt; %msg &gt;&gt; %logger&#123;10&#125;%n&lt;/pattern&gt;</span><br><span class="line">        &lt;/encoder&gt;</span><br><span class="line">    &lt;/appender&gt;  </span><br><span class="line">    </span><br><span class="line">    &lt;!--  按时间滚动产生日志文件 --&gt;</span><br><span class="line">    &lt;appender name=<span class="string">"ROL-FILE-LOG"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt; </span><br><span class="line">      &lt;!--滚动策略，按照时间滚动 TimeBasedRollingPolicy--&gt;</span><br><span class="line">      &lt;rollingPolicy <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span><br><span class="line">      	&lt;fileNamePattern&gt;D:/logs/test.%d&#123;yyyy-MM-dd&#125;.log&lt;/fileNamePattern&gt;</span><br><span class="line">      	&lt;!-- 只保留近七天的日志 --&gt;</span><br><span class="line">      	&lt;maxHistory&gt;7&lt;/maxHistory&gt;</span><br><span class="line">      	&lt;!-- 用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志 --&gt;</span><br><span class="line">      	&lt;totalSizeCap&gt;1GB&lt;/totalSizeCap&gt;</span><br><span class="line">      &lt;/rollingPolicy&gt; </span><br><span class="line">      </span><br><span class="line">      &lt;encoder&gt;</span><br><span class="line">    	&lt;pattern&gt;[Eran]%date [%thread %line] %level &gt;&gt; %msg &gt;&gt; %logger&#123;10&#125;%n&lt;/pattern&gt;</span><br><span class="line">      &lt;/encoder&gt;</span><br><span class="line">    &lt;/appender&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 按时间和文件大小滚动产生日志文件 --&gt;</span><br><span class="line">    &lt;appender name=<span class="string">"ROL-SIZE-FILE-LOG"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span><br><span class="line">        &lt;rollingPolicy <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy"</span>&gt;</span><br><span class="line">            &lt;fileNamePattern&gt;D:/logs/test.%d&#123;yyyy-MM-dd&#125;.%i.log&lt;/fileNamePattern&gt;</span><br><span class="line">            &lt;!-- 单个文件的最大内存 --&gt;</span><br><span class="line">            &lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;</span><br><span class="line">            &lt;!-- 只保留近七天的日志 --&gt;</span><br><span class="line">            &lt;maxHistory&gt;7&lt;/maxHistory&gt;</span><br><span class="line">            &lt;!-- 用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志 --&gt;</span><br><span class="line">            &lt;totalSizeCap&gt;1GB&lt;/totalSizeCap&gt;</span><br><span class="line">        &lt;/rollingPolicy&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;encoder&gt;</span><br><span class="line">            &lt;pattern&gt;[Eran]%date [%thread %line] %level &gt;&gt; %msg &gt;&gt; %logger&#123;10&#125;%n&lt;/pattern&gt;</span><br><span class="line">        &lt;/encoder&gt;</span><br><span class="line">        &lt;!-- 只处理INFO级别以及之上的日志 --&gt;</span><br><span class="line">        &lt;filter <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.classic.filter.ThresholdFilter"</span>&gt;   </span><br><span class="line">            &lt;level&gt;INFO&lt;/level&gt;   </span><br><span class="line">        &lt;/filter&gt;</span><br><span class="line">        &lt;!-- 只处理INFO级别的日志 --&gt;</span><br><span class="line">        &lt;filter <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.classic.filter.LevelFilter"</span>&gt;   </span><br><span class="line">            &lt;level&gt;INFO&lt;/level&gt;   </span><br><span class="line">            &lt;onMatch&gt;ACCEPT&lt;/onMatch&gt;   </span><br><span class="line">            &lt;onMismatch&gt;DENY&lt;/onMismatch&gt;   </span><br><span class="line">        &lt;/filter&gt;</span><br><span class="line">    &lt;/appender&gt;</span><br><span class="line">    &lt;!-- 异步写入日志 --&gt;</span><br><span class="line">    &lt;appender name =<span class="string">"ASYNC"</span> <span class="class"><span class="keyword">class</span></span>= <span class="string">"ch.qos.logback.classic.AsyncAppender"</span>&gt;  </span><br><span class="line">        &lt;!-- 不丢失日志.默认的,如果队列的<span class="number">80</span>%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 --&gt;  </span><br><span class="line">        &lt;discardingThreshold &gt;0&lt;/discardingThreshold&gt;  </span><br><span class="line">        &lt;!-- 更改默认的队列的深度,该值会影响性能.默认值为<span class="number">256</span> --&gt;  </span><br><span class="line">        &lt;queueSize&gt;512&lt;/queueSize&gt;  </span><br><span class="line">        &lt;!-- 添加附加的appender,最多只能添加一个 --&gt;  </span><br><span class="line">        &lt;appender-ref ref =<span class="string">"FILE_LOG"</span>/&gt;</span><br><span class="line">    &lt;/appender&gt;</span><br><span class="line">    &lt;!-- 指定com.demo包下的日志打印级别为DEBUG，但是由于没有引用appender，所以该logger不会打印日志信息，日志信息向上传递 --&gt;</span><br><span class="line">    &lt;logger name="com.example" level="DEBUG"&gt;&lt;/logger&gt;</span><br><span class="line">    &lt;!-- 指定开发环境基础的日志输出级别为DEBUG，并且绑定了名为STDOUT的appender，表示将日志信息输出到控制台 --&gt;</span><br><span class="line">    &lt;springProfile  name=<span class="string">"dev"</span>&gt;</span><br><span class="line">        &lt;root level=<span class="string">"DEBUG"</span>&gt;</span><br><span class="line">            &lt;appender-ref ref=<span class="string">"STDOUT"</span> /&gt;</span><br><span class="line">        &lt;/root&gt;</span><br><span class="line">    &lt;/springProfile&gt;</span><br><span class="line">    &lt;!-- 指定生产环境基础的日志输出级别为INFO，并且绑定了名为ASYNC的appender，表示将日志信息异步输出到文件 --&gt;</span><br><span class="line">    &lt;springProfile  name=<span class="string">"prod"</span>&gt;</span><br><span class="line">        &lt;root level=<span class="string">"INFO"</span>&gt;</span><br><span class="line">            &lt;appender-ref ref=<span class="string">"ASYNC"</span> /&gt;</span><br><span class="line">        &lt;/root&gt;</span><br><span class="line">    &lt;/springProfile&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
+<p>参考资源：<br><a href="https://juejin.im/post/5c7e2445f265da2de71370f2" target="_blank" rel="noopener">https://juejin.im/post/5c7e2445f265da2de71370f2</a><br><a href="http://tengj.top/2017/04/05/springboot7/#%E5%A4%9A%E7%8E%AF%E5%A2%83%E6%97%A5%E5%BF%97%E8%BE%93%E5%87%BA" target="_blank" rel="noopener">http://tengj.top/2017/04/05/springboot7/#%E5%A4%9A%E7%8E%AF%E5%A2%83%E6%97%A5%E5%BF%97%E8%BE%93%E5%87%BA</a><br><a href="https://blog.csdn.net/wujianmin577/article/details/68922545" target="_blank" rel="noopener">https://blog.csdn.net/wujianmin577/article/details/68922545</a><br><a href="http://tengj.top/2017/02/28/springboot2/" target="_blank" rel="noopener">http://tengj.top/2017/02/28/springboot2/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/10/SpringCloud学习五-GateWay网关/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2426,224 +2665,6 @@ User　        #　用户名
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/08/04/HashMap多线程环境下死循环问题（记一次生产问题）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     2.1k 字
-	</span>
-	<span title="阅读时长">
-     9 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/04/HashMap多线程环境下死循环问题（记一次生产问题）/" itemprop="url">HashMap多线程环境下死循环问题（记一次生产问题）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-04T23:34:45+08:00">
-                2019-08-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/避坑指南/" itemprop="url" rel="index">
-                    <span itemprop="name">避坑指南</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/避坑指南/算法与数据结构/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/04/HashMap多线程环境下死循环问题（记一次生产问题）/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/04/HashMap多线程环境下死循环问题（记一次生产问题）/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.1k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  9
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>算法与数据结构</p>
-<h2 id="一-问题"><a href="#一-问题" class="headerlink" title="一.问题"></a>一.问题</h2><p>今天在工作的时候项目组的同事说他们系统生产环境有线程stuck了，我抱着学习生产问题定位的心态凑合过去。了解到出现此问题时，操作员有多人使用同一帐号在系统中进行操作，且此种情况之前因为大批量的人员登录系统出现过。在拿到了报错日志时，在其中一段日志细节中突然发现了些许端倪。</p>
-<p><img src="https://img.vim-cn.com/06/3a829bd16d0b00dab9bc05e1080bbfe85e6040.png" alt="日志报错"><br><em>下面连接防止图片连接失效备份图库（忽略）</em><br><a href="https://ws3.sinaimg.cn/large/006Xmmmgly1g5ke0d338mj31fl0gdwg3.jpg" target="_blank" rel="noopener">https://ws3.sinaimg.cn/large/006Xmmmgly1g5ke0d338mj31fl0gdwg3.jpg</a><br><a href="https://img04.sogoucdn.com/app/a/100520146/0265cf53f113ead98c352ee1c3bec72a" target="_blank" rel="noopener">https://img04.sogoucdn.com/app/a/100520146/0265cf53f113ead98c352ee1c3bec72a</a></p>
-<p>来整理一下线索，由于多人使用同一帐号进行操作出现，且有大量人员登录进行操作时出现，联想到之前看耗子叔的一篇文章讲述关于多线程环境下操作map导致死循环问题，是否是因为HashMap在执行put的方法时线程阻塞了呢？</p>
-<h2 id="二-定位"><a href="#二-定位" class="headerlink" title="二.定位"></a>二.定位</h2><p>在查看调用处的代码时发现，此处是cas-client的一个jar包。<br>点开了jar包中SingleSignOutFilter这个类找到了其中doFilter方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span> <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">    HttpServletRequest request = (HttpServletRequest)servletRequest;</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">"POST"</span>.equals(request.getMethod())) &#123;</span><br><span class="line">      String logoutRequest = request.getParameter(<span class="string">"logoutRequest"</span>);</span><br><span class="line">      <span class="keyword">if</span> (CommonUtils.isNotBlank(logoutRequest))&#123;</span><br><span class="line">        <span class="keyword">if</span> (log.isTraceEnabled()) &#123;</span><br><span class="line">          log.trace(<span class="string">"Logout request=["</span> + logoutRequest + <span class="string">"]"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        String sessionIdentifier = XmlUtils.getTextForElement(logoutRequest, <span class="string">"SessionIndex"</span>);</span><br><span class="line">        <span class="keyword">if</span> (CommonUtils.isNotBlank(sessionIdentifier)) &#123;</span><br><span class="line">          HttpSession session = SESSION_MAPPING_STORAGE.removeSessionByMappingId(sessionIdentifier);</span><br><span class="line">          <span class="keyword">if</span> (session != <span class="keyword">null</span>) &#123;</span><br><span class="line">            String sessionID = session.getId();</span><br><span class="line">            <span class="keyword">if</span> (log.isDebugEnabled()) &#123;</span><br><span class="line">              log.debug(<span class="string">"Invalidating session ["</span> + sessionID + <span class="string">"] for ST ["</span> + sessionIdentifier + <span class="string">"]"</span>);</span><br><span class="line">            &#125;<span class="keyword">try</span>&#123;</span><br><span class="line">              session.invalidate();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalStateException e) &#123;</span><br><span class="line">              log.debug(e, e);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      String artifact = request.getParameter(<span class="keyword">this</span>.artifactParameterName);</span><br><span class="line">      HttpSession session = request.getSession();</span><br><span class="line">      <span class="keyword">if</span> ((log.isDebugEnabled()) &amp;&amp; (session != <span class="keyword">null</span>)) &#123;</span><br><span class="line">        log.debug(<span class="string">"Storing session identifier for "</span> + session.getId());</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (CommonUtils.isNotBlank(artifact)) &#123;</span><br><span class="line">        SESSION_MAPPING_STORAGE.addSessionById(artifact, session);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    filterChain.doFilter(servletRequest, servletResponse);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p><em>此代码反编译而成，语法稍有变化</em><br>代码中的32行是引发报错的地方，根据SESSION_MAPPING_STORAGE 查看其代码定义处。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> SessionMappingStorage SESSION_MAPPING_STORAGE = <span class="keyword">new</span> HashMapBackedSessionMappingStorage();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SingleSignOutFilter</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.artifactParameterName = <span class="string">"ticket"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>SESSION_MAPPING_STORAGE 的key值是获取的请求中的ticket，而value则是当前session，下面来看SESSION_MAPPING_STORAGE到底是个啥。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMapBackedSessionMappingStorage</span></span></span><br><span class="line"><span class="class">  <span class="keyword">implements</span> <span class="title">SessionMappingStorage</span></span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Map MANAGED_SESSIONS;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Map ID_TO_SESSION_KEY_MAPPING;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">HashMapBackedSessionMappingStorage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.MANAGED_SESSIONS = <span class="keyword">new</span> HashMap();</span><br><span class="line">    <span class="keyword">this</span>.ID_TO_SESSION_KEY_MAPPING = <span class="keyword">new</span> HashMap(); </span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addSessionById</span><span class="params">(String mappingId, HttpSession session)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.ID_TO_SESSION_KEY_MAPPING.put(session.getId(), mappingId);</span><br><span class="line">    <span class="keyword">this</span>.MANAGED_SESSIONS.put(mappingId, session);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeBySessionById</span><span class="params">(String sessionId)</span></span>&#123;</span><br><span class="line">    String key = (String)<span class="keyword">this</span>.ID_TO_SESSION_KEY_MAPPING.get(sessionId);</span><br><span class="line">    <span class="keyword">this</span>.MANAGED_SESSIONS.remove(key);</span><br><span class="line">    <span class="keyword">this</span>.ID_TO_SESSION_KEY_MAPPING.remove(sessionId);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> HttpSession <span class="title">removeSessionByMappingId</span><span class="params">(String mappingId)</span> </span>&#123;</span><br><span class="line">    HttpSession session = (HttpSession)<span class="keyword">this</span>.MANAGED_SESSIONS.get(mappingId);</span><br><span class="line">    <span class="keyword">if</span> (session != <span class="keyword">null</span>) &#123;</span><br><span class="line">      removeBySessionById(session.getId());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> session;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>SessionMappingStorage 是一个接口而HashMapBackedSessionMappingStorage 是它的实现类，其中11行addSessionById方法中的MANAGED_SESSIONS、ID_TO_SESSION_KEY_MAPPING都是使用的HashMap！且用final修饰，联想到此类在SingleSignOutFilter中使用时定义为static，自此找到问题所在。<br>考虑到可能是由于jar包太过久远，查看了后续发布的jar包，其中对map操作时进行了加锁。<br><img src="https://img.vim-cn.com/15/fb751f594328b59f8e82899feb1130d6e76551.png" alt="新版jar包修改内容"><br><em>下面连接防止图片连接失效备份图库（忽略）</em><br><a href="https://ws1.sinaimg.cn/large/006Xmmmggy1g5kdyihqz8j30uy0adt9q.jpg" target="_blank" rel="noopener">https://ws1.sinaimg.cn/large/006Xmmmggy1g5kdyihqz8j30uy0adt9q.jpg</a><br><a href="https://i.loli.net/2019/08/01/5d42c85b65f4599497.jpg" target="_blank" rel="noopener">https://i.loli.net/2019/08/01/5d42c85b65f4599497.jpg</a></p>
-<h2 id="三-分析"><a href="#三-分析" class="headerlink" title="三.分析"></a>三.分析</h2><p>为何HashMap在多线程环境下使用会有死循环问题呢？在此来回顾下其具体原理。</p>
-<h3 id="1-HashMap-是什么？"><a href="#1-HashMap-是什么？" class="headerlink" title="1.HashMap 是什么？"></a>1.HashMap 是什么？</h3><p>hashMap是一个散列表，来源于数组，借助散列函数对数组进行了扩展，利用数组支持下标随机访问元素的特性进行存储。当key被加入的时候会通过散列函数计算出这个数组的下标i然后将这个&lt; key，value &gt;插入到array[i]中，如果有两个不同的key被计算到了同一个i的位置，叫做hash冲突，这时在数组i的位置会横向扩展成一个链表。（JDK1.8之前）</p>
-<h3 id="2-源码实现"><a href="#2-源码实现" class="headerlink" title="2.源码实现"></a>2.源码实现</h3><p>源码：<br>put方法实现<br>1、判断key是否已经存在<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> putForNullKey(value);</span><br><span class="line">    <span class="keyword">int</span> hash = hash(key);</span><br><span class="line">    <span class="keyword">int</span> i = indexFor(hash, table.length);</span><br><span class="line">    <span class="comment">// 如果key已经存在，则替换value，并返回旧值</span></span><br><span class="line">    <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[i]; e != <span class="keyword">null</span>; e = e.next) &#123;</span><br><span class="line">        Object k;</span><br><span class="line">        <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) &#123;</span><br><span class="line">            V oldValue = e.value;</span><br><span class="line">            e.value = value;</span><br><span class="line">            e.recordAccess(<span class="keyword">this</span>);</span><br><span class="line">            <span class="keyword">return</span> oldValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    modCount++;</span><br><span class="line">    <span class="comment">// key不存在，则插入新的元素</span></span><br><span class="line">    addEntry(hash, key, value, i);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>2、检查容量是否达到阈值threshold<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addEntry</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">int</span> bucketIndex)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ((size &gt;= threshold) &amp;&amp; (<span class="keyword">null</span> != table[bucketIndex])) &#123;</span><br><span class="line">        resize(<span class="number">2</span> * table.length);</span><br><span class="line">        hash = (<span class="keyword">null</span> != key) ? hash(key) : <span class="number">0</span>;</span><br><span class="line">        bucketIndex = indexFor(hash, table.length);</span><br><span class="line">    &#125;</span><br><span class="line">    createEntry(hash, key, value, bucketIndex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>如果元素个数已经达到阈值，则扩容，并把原来的元素移动过去。<br>3、扩容实现<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> newCapacity)</span></span>&#123;</span><br><span class="line">    Entry[] oldTable = table;</span><br><span class="line">    <span class="keyword">int</span> oldCapacity = oldTable.length;</span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">//创建一个新的Hash Table</span></span><br><span class="line">    Entry[] newTable = <span class="keyword">new</span> Entry[newCapacity];</span><br><span class="line">    <span class="comment">//将Old Hash Table上的数据迁移到New Hash Table上</span></span><br><span class="line">    transfer(newTable);</span><br><span class="line">    table = newTable;</span><br><span class="line">    threshold = (<span class="keyword">int</span>)(newCapacity * loadFactor);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>4、通过方法将数据迁移到扩容后的数组<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">transfer</span><span class="params">(Entry[] newTable)</span></span>&#123;</span><br><span class="line">    Entry[] src = table;</span><br><span class="line">    <span class="keyword">int</span> newCapacity = newTable.length;</span><br><span class="line">    <span class="comment">//下面这段代码的意思是：</span></span><br><span class="line">    <span class="comment">//  从OldTable里摘一个元素出来，然后放到NewTable中</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; src.length; j++) &#123;</span><br><span class="line">        Entry&lt;K,V&gt; e = src[j];</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</span><br><span class="line">            src[j] = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                <span class="comment">//获得下一节点</span></span><br><span class="line">                Entry&lt;K,V&gt; next = e.next;</span><br><span class="line">                <span class="comment">//计算得到新数组下标位置</span></span><br><span class="line">                <span class="keyword">int</span> i = indexFor(e.hash, newCapacity);</span><br><span class="line">                <span class="comment">//头插法，将当前节点next指向新数组，如果为空则为null，如果有值则获得其值 </span></span><br><span class="line">                e.next = newTable[i];</span><br><span class="line">                <span class="comment">//将数组赋值为新插入的链表头</span></span><br><span class="line">                newTable[i] = e;</span><br><span class="line">                e = next;</span><br><span class="line">            &#125; <span class="keyword">while</span> (e != <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>原链表值a-b-c-null ，使用头插法链表反转后循环结果依次为 a-null, b-a-null, c-b-a-null<br>ok上述流程在单线程环境下是没有问题的，来看一下多线程场景。</p>
-<h3 id="3-多线程场景"><a href="#3-多线程场景" class="headerlink" title="3.多线程场景"></a>3.多线程场景</h3><p>假设HashMap初始化大小为2，插入了三个节点，且三个都在同一hash槽内，此处设置其负载因子为1，元素数量达到3，此时触发了扩容。<br><img src="https://i.loli.net/2019/08/02/5d43cd39b552a60748.jpg" alt="原始数组"><br><em>下面连接防止图片连接失效备份图库（忽略）</em><br><a href="https://ws2.sinaimg.cn/large/006Xmmmggy1g5la5c7yg3j30cw04zwea.jpg" target="_blank" rel="noopener">https://ws2.sinaimg.cn/large/006Xmmmggy1g5la5c7yg3j30cw04zwea.jpg</a></p>
-<p>插入第4个节点时，发生rehash，假设现在有两个线程同时进行，线程1和线程2，两个线程都会新建新的数组。<br><img src="https://i.loli.net/2019/08/02/5d43ce31ce00c24734.jpg" alt="触发rehash"><br><a href="https://ws1.sinaimg.cn/large/006Xmmmgly1g5la9qndm9j30ja08ddfp.jpg" target="_blank" rel="noopener">https://ws1.sinaimg.cn/large/006Xmmmgly1g5la9qndm9j30ja08ddfp.jpg</a><br>如果线程2 在执行到 Entry&lt;K,V&gt; next = e.next;之后，cpu时间片用完了，这时变量e指向节点a，变量next指向节点b。<br>线程2继续执行，此时<figure class="highlight plain"><figcaption><span>i </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">第一次循环移动节点a</span><br><span class="line">![第一次循环][5]</span><br><span class="line">https://ws2.sinaimg.cn/large/006Xmmmgly1g5las8g1pbj308p08pjr7.jpg</span><br><span class="line"></span><br><span class="line">第二次循环移动节点b</span><br><span class="line">![第二次循环][6]</span><br><span class="line">https://ws3.sinaimg.cn/large/006Xmmmgly1g5lav75hmej309d07y0sk.jpg</span><br><span class="line">使用的头插法，这里的顺序是反过来的继续移动节点c</span><br><span class="line">![第三次循环][7]</span><br><span class="line">https://ws2.sinaimg.cn/large/006Xmmmggy1g5laxk0dkrj30bj07ojr8.jpg</span><br><span class="line">在这个时候线程1的时间片用完，内部的oldTable还没有设置成新的数组， 线程2 开始执行。</span><br><span class="line">此时回顾下线程2时间片到了的时候</span><br><span class="line">变量e指向节点a，变量next指向节点b。**（注意此时因为线程1的干扰，这里的节点b.next已经不在指向c而是指向了a）**</span><br></pre></td></tr></table></figure></p>
-<p>1.首先插入节点a，e=next循环。Entry&lt; K,V &gt; next = e.next 此时next为a，e为b。再次插入节点b，e=next循环。<br>2.第三次循环进来的时候执行完Entry&lt; K,V &gt; next = e.next; e为a节点，a的next指向null，next为null(循环退出条件)。<br>3.e.next = newTable[i]; 此时newTable[i]指向节点b，链表节点依次为b-a-null。而e.next =b,就等于把a的next指向了b，这样a和b就互相引用了，形成了一个环。<br>4.newTable[i] = e 把节点a放到了数组i位置此时链表节点依次为a-b-a（环）<br>5.e=next 变量e=null 此时满足 while (e != null)条件，退出循环。<br><code>`</code><br>最终引用关系：<br><img src="https://i.loli.net/2019/08/02/5d43d523b32e674511.jpg" alt="首先插入节点a"><br><a href="https://ws1.sinaimg.cn/large/006Xmmmggy1g5lb4k5z52j30o609mq2x.jpg" target="_blank" rel="noopener">https://ws1.sinaimg.cn/large/006Xmmmggy1g5lb4k5z52j30o609mq2x.jpg</a><br>节点a和节点b的互相引用形成了一个环，当把当前newTable[i]赋值到原来的oldTable中时。数组在使用对应的get时就会发生死循环。并且因为a、b节点的互相引用也会导致c节点的丢失。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>并发场景下，发生扩容时，可能会产生链表循环，在执行get时触发死循环，引起cpu100%，所以并发环境下一定要慎用HashMap。要并发可以使用线程安全的ConcurrentHashmap或者对map操作时加锁。</p>
-<p>参考资料：<a href="https://coolshell.cn/articles/9606.html" target="_blank" rel="noopener">coolshell</a>   <a href="https://juejin.im/post/5a66a08d5188253dc3321da0" target="_blank" rel="noopener">占小狼</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2697,7 +2718,7 @@ User　        #　用户名
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2708,7 +2729,7 @@ User　        #　用户名
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2719,7 +2740,7 @@ User　        #　用户名
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SpringBoot,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.什么是日志？日志是记录程序运行的轨迹，方便查找信息，快速定位问题。日志应用主要有下面三个原因：记录操作轨迹、监控系统运行状况、回溯系统故障。在开发时可以使用debug来跟踪代码，真正代码发布到了DAT 生产环境是没办法随便使用远程调试的。因此如果日志打的好，线上的问题很快便能定位，反之用不好则影响系统性能。 2.如何引入日志？常用日志框架及区别在使用日志前先来认识下常用的日志框架：log4j、">
+<meta name="keywords" content="SpringBoot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="日志输出使用姿势">
+<meta property="og:url" content="http://iamlfc.top/2019/10/10/日志输出使用姿势/index.html">
+<meta property="og:site_name" content="邪恶小代码">
+<meta property="og:description" content="1.什么是日志？日志是记录程序运行的轨迹，方便查找信息，快速定位问题。日志应用主要有下面三个原因：记录操作轨迹、监控系统运行状况、回溯系统故障。在开发时可以使用debug来跟踪代码，真正代码发布到了DAT 生产环境是没办法随便使用远程调试的。因此如果日志打的好，线上的问题很快便能定位，反之用不好则影响系统性能。 2.如何引入日志？常用日志框架及区别在使用日志前先来认识下常用的日志框架：log4j、">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2019/10/28/ZwWKcU7hvtxRGg2.png">
+<meta property="og:updated_time" content="2019-11-02T13:59:08.123Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="日志输出使用姿势">
+<meta name="twitter:description" content="1.什么是日志？日志是记录程序运行的轨迹，方便查找信息，快速定位问题。日志应用主要有下面三个原因：记录操作轨迹、监控系统运行状况、回溯系统故障。在开发时可以使用debug来跟踪代码，真正代码发布到了DAT 生产环境是没办法随便使用远程调试的。因此如果日志打的好，线上的问题很快便能定位，反之用不好则影响系统性能。 2.如何引入日志？常用日志框架及区别在使用日志前先来认识下常用的日志框架：log4j、">
+<meta name="twitter:image" content="https://i.loli.net/2019/10/28/ZwWKcU7hvtxRGg2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://iamlfc.top/2019/10/10/日志输出使用姿势/">
+
+
+
+
+
+  <title>日志输出使用姿势 | 邪恶小代码</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">邪恶小代码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/10/日志输出使用姿势/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     3.4k 字
+	</span>
+	<span title="阅读时长">
+     15 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">日志输出使用姿势</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-10T23:51:40+08:00">
+                2019-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/SpringBoot/Logback/" itemprop="url" rel="index">
+                    <span itemprop="name">Logback</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/10/日志输出使用姿势/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/10/日志输出使用姿势/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  15
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-什么是日志？"><a href="#1-什么是日志？" class="headerlink" title="1.什么是日志？"></a>1.什么是日志？</h1><p>日志是记录程序运行的轨迹，方便查找信息，快速定位问题。日志应用主要有下面三个原因：<strong>记录操作轨迹、监控系统运行状况、回溯系统故障</strong>。在开发时可以使用debug来跟踪代码，真正代码发布到了DAT 生产环境是没办法随便使用远程调试的。因此如果日志打的好，线上的问题很快便能定位，反之用不好则影响系统性能。</p>
+<h1 id="2-如何引入日志？"><a href="#2-如何引入日志？" class="headerlink" title="2.如何引入日志？"></a>2.如何引入日志？</h1><h2 id="常用日志框架及区别"><a href="#常用日志框架及区别" class="headerlink" title="常用日志框架及区别"></a>常用日志框架及区别</h2><p>在使用日志前先来认识下常用的日志框架：<br><a href="https://logging.apache.org/log4j/2.x/" target="_blank" rel="noopener">log4j</a>、<a href="https://logging.apache.org/log4j/2.x/" target="_blank" rel="noopener">log4j2</a>、<a href="https://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html" target="_blank" rel="noopener">Logging</a>、<a href="http://commons.apache.org/proper/commons-logging/" target="_blank" rel="noopener">commons-logging</a>、<a href="https://www.slf4j.orer/commons-logging/" target="_blank" rel="noopener">slf4j</a>、<a href="https://logback.qos.ch/commons-logging/" target="_blank" rel="noopener">logback</a>等，那么它们之间有什么关系，又该如何选择呢？<br><strong>日志框架分为三大部分：日志门面、日志适配器、日志库。</strong></p>
+<ol>
+<li><strong>门面设计模式</strong>是面向对象设计模式中的一种，日志框架采用的就是这种模式，类似jdbc的概念，既它只是一套设计规范，并不提供具体的实现。目的使使用者无论使用什么日志框架都无需关心其具体具体是哪个库负责打印。目前主流使用的框架有两种<strong>：slf4j、commons-logging。</strong></li>
+<li><strong>日志库</strong>具体实现了日志的相关功能，主流日志库有：log4j、log4j2、log-jdk、logback。</li>
+<li><strong>日志适配器</strong>是针对没有实现门面模式接口的日志框架想使用类似于self4j这种门面模式框架时，需要单独引入一个适配器来解决接口不兼容的问题。或者在老的工程中，使用了多种日志框架，随着时间的推移，想将原来直接调用日志库的模式改成门面模式，此时可使用适配器来完成旧API到slf4j的路由。</li>
+</ol>
+<h2 id="日志级别详解"><a href="#日志级别详解" class="headerlink" title="日志级别详解"></a>日志级别详解</h2><p><img src="https://i.loli.net/2019/10/28/ZwWKcU7hvtxRGg2.png" alt="loglevel.png"><br>所以，日志优先级别标准顺序为：</p>
+<p>ALL &lt; TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL &lt; OFF</p>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>以springboot中的slf4j+logback为例<br>Spring boot默认支持的就是slf4j+logback的日志框架,想要定制日志策略只需要添加配置文件即可。spring推荐配置文件以-spring命名。此处命名为logback-spring.xml。</p>
+<p>基本配置：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 日志存放路径 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"log.path"</span> <span class="attr">value</span>=<span class="string">"./logs"</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 日志输出格式 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"log.pattern"</span> <span class="attr">value</span>=<span class="string">" %contextName  %d&#123;HH:mm:ss.SSS&#125;  [logid=%logid] [ip=%ip]  [%thread] %-5level %logger&#123;20&#125; - [%method,%line] - %msg%n"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="tag">&lt;<span class="name">conversionRule</span> <span class="attr">conversionWord</span>=<span class="string">"ip"</span> <span class="attr">converterClass</span>=<span class="string">"io.renren.IPLogConfig"</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">conversionRule</span> <span class="attr">conversionWord</span>=<span class="string">"logid"</span> <span class="attr">converterClass</span>=<span class="string">"io.renren.LogIdConfig"</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">contextName</span>&gt;</span>myLogBack<span class="tag">&lt;/<span class="name">contextName</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 控制台输出 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"console"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">pattern</span>&gt;</span>$&#123;log.pattern&#125;<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- 系统日志输出 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"file_info"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">file</span>&gt;</span>$&#123;log.path&#125;/sys-info.log<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 循环政策：基于时间创建日志文件 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日志文件名格式 --&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>$&#123;log.path&#125;/sys-info.%d&#123;yyyy-MM-dd&#125;.log<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">			<span class="comment">&lt;!-- 日志最大的历史 60天 --&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>60<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">pattern</span>&gt;</span>$&#123;log.pattern&#125;<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.classic.filter.LevelFilter"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 过滤的级别 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">level</span>&gt;</span>INFO<span class="tag">&lt;/<span class="name">level</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 匹配时的操作：接收（记录） --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMatch</span>&gt;</span>ACCEPT<span class="tag">&lt;/<span class="name">onMatch</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 不匹配时的操作：拒绝（不记录） --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMismatch</span>&gt;</span>DENY<span class="tag">&lt;/<span class="name">onMismatch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"file_error"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">file</span>&gt;</span>$&#123;log.path&#125;/sys-error.log<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 循环政策：基于时间创建日志文件 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日志文件名格式 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>$&#123;log.path&#125;/sys-error.%d&#123;yyyy-MM-dd&#125;.log<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">			<span class="comment">&lt;!-- 日志最大的历史 60天 --&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>60<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>$&#123;log.pattern&#125;<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.classic.filter.LevelFilter"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 过滤的级别 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">level</span>&gt;</span>ERROR<span class="tag">&lt;/<span class="name">level</span>&gt;</span></span><br><span class="line">			<span class="comment">&lt;!-- 匹配时的操作：接收（记录） --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMatch</span>&gt;</span>ACCEPT<span class="tag">&lt;/<span class="name">onMatch</span>&gt;</span></span><br><span class="line">			<span class="comment">&lt;!-- 不匹配时的操作：拒绝（不记录） --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMismatch</span>&gt;</span>DENY<span class="tag">&lt;/<span class="name">onMismatch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- 用户访问日志输出  --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"sys-user"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">file</span>&gt;</span>$&#123;log.path&#125;/sys-user.log<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 按天回滚 daily --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>$&#123;log.path&#125;/sys-user.%d&#123;yyyy-MM-dd&#125;.log<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日志最大的历史 60天 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>60<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>$&#123;log.pattern&#125;<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- sql 输出配置 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"log.dao"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">file</span>&gt;</span>$&#123;log.path&#125;/log-dao.log<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 按天回滚 daily --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>$&#123;log.path&#125;/log-dao.%d&#123;yyyy-MM-dd&#125;.log<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日志最大的历史 2天 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>2<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日志最大文件大小10m --&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>$&#123;log.pattern&#125;<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 系统模块日志级别控制  --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">logger</span> <span class="attr">name</span>=<span class="string">"io.renren.config"</span> <span class="attr">level</span>=<span class="string">"info"</span> /&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- Spring日志级别控制  --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">logger</span> <span class="attr">name</span>=<span class="string">"org.springframework"</span> <span class="attr">level</span>=<span class="string">"warn"</span> /&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--系统操作日志--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"info"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"console"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--系统用户操作日志--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">logger</span> <span class="attr">name</span>=<span class="string">"sys-user"</span> <span class="attr">level</span>=<span class="string">"info"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"sys-user"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">logger</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--sql日志--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">logger</span> <span class="attr">name</span>=<span class="string">"io.renren.dao"</span> <span class="attr">level</span>=<span class="string">"DEBUG"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"log.dao"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">logger</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>contextName：设置上下文名称，用来区分不同进程</li>
+<li>property 两个属性name 和value,name是变量名称，定义后可使用${}来使用。</li>
+<li>appender格式化日志输出节点，有俩个属性name和class，class用来指定哪种输出策略，常用就是控制台输出策略和文件输出策略。（控制台输出ConsoleAppender、输出到文件RollingFileAppender）设置文件大小限制和保留天数时冲突解决方案：<a href="https://blog.csdn.net/wujianmin577/article/details/68922545" target="_blank" rel="noopener">https://blog.csdn.net/wujianmin577/article/details/68922545</a></li>
+<li>encoder 表示日志编码：%d{HH: mm:ss.SSS}输出时间、%thread——输出日志的进程名字、%-5level——日志级别，并且使用5个字符靠左对齐、%msg——日志消息、%n——平台的换行符</li>
+<li>logger 设置某一个包或者具体的某一个类的日志打印级别、以及指定<appender>。<logger>仅有一个name属性，一个可选的level和一个可选的addtivity属性。addtivity ：是否向上级logger传递打印信息。默认是true</logger></appender></li>
+<li>conversionRule  可配置自定义class来输出到日志中.</li>
+</ul>
+<h1 id="3-使用时需要注意什么？"><a href="#3-使用时需要注意什么？" class="headerlink" title="3.使用时需要注意什么？"></a>3.使用时需要注意什么？</h1><h2 id="1-日志命名的规范"><a href="#1-日志命名的规范" class="headerlink" title="1.日志命名的规范"></a>1.日志命名的规范</h2><p>推荐日志的命名方式为：appName_logType_logName.log,logType是日志类型，推荐分类有stats、monitor、visit等；logName为日志描述。这种命名方式的好处是通过文件名就可以知道日志文件属于什么应用，什么类型。</p>
+<h2 id="2-日志的存储周期"><a href="#2-日志的存储周期" class="headerlink" title="2.日志的存储周期"></a>2.日志的存储周期</h2><p>在EasyCoding中推荐将日志文件至少保存15天，防止以周为频率发生的异常无法被发现。然后根据日志文件的重要程度，文件大小，磁盘空间来自行延长保存时间。</p>
+<h2 id="3-使用时注意"><a href="#3-使用时注意" class="headerlink" title="3.使用时注意"></a>3.使用时注意</h2><p>在使用时为了防止产生无用的字符串对象，建议使用条件判断 + 占位符形式来输出日志。例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用条件判断形式</span></span><br><span class="line"><span class="keyword">if</span>(myLogger.isInfoEnabled())&#123;</span><br><span class="line"><span class="comment">//使用占位符形式</span></span><br><span class="line">	myLogger.info(<span class="string">"This logInfo id:&#123;&#125;,and value:&#123;&#125;"</span>,<span class="string">"木大木大木大"</span>,<span class="string">"阿嘟嘟嘟嘟"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-避免无效的日志输出"><a href="#4-避免无效的日志输出" class="headerlink" title="4.避免无效的日志输出"></a>4.避免无效的日志输出</h2><p>因为日志打印的顺序是由低到高先子级再父级，包名级别越高则logger的级别越高。在执行完子级日志后执行父级日志会重复输出，此时应在子级配置中设置additivity=”false”，例：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 系统模块日志级别控制  --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">logger</span> <span class="attr">name</span>=<span class="string">"io.renren.config"</span> <span class="attr">level</span>=<span class="string">"info"</span> <span class="attr">additivity</span>=<span class="string">"false"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="5-使用异步写入日志AsyncAppender"><a href="#5-使用异步写入日志AsyncAppender" class="headerlink" title="5.使用异步写入日志AsyncAppender"></a>5.使用异步写入日志AsyncAppender</h2><p>一般程序使用串行状态，要记录日志时必然会阻塞到程序的运行，这是一种损耗效率的方式，所以实际使用日志时使用异步的方式来记录，这样日志同主程序就会形成并行状态，不会影响程序运行。</p>
+<blockquote>
+<p>AsyncAppender并不处理日志，只是将日志缓冲到一个BlockingQueue里面去，并在内部创建一个工作线程从队列头部获取日志，之后将获取的日志循环记录到附加的其他appender上去，从而达到不阻塞主线程的效果。因此AsynAppender仅仅充当事件转发器，必须引用另一个appender来写日志。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span> =<span class="string">"ASYNC"</span> <span class="attr">class</span>= <span class="string">"ch.qos.logback.classic.AsyncAppender"</span>&gt;</span>  </span><br><span class="line">    <span class="comment">&lt;!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 --&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">discardingThreshold</span> &gt;</span>0<span class="tag">&lt;/<span class="name">discardingThreshold</span>&gt;</span>  </span><br><span class="line">    <span class="comment">&lt;!-- 更改默认的队列的深度,该值会影响性能.默认值为256 --&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">queueSize</span>&gt;</span>512<span class="tag">&lt;/<span class="name">queueSize</span>&gt;</span>  </span><br><span class="line">    <span class="comment">&lt;!-- 添加附加的appender,最多只能添加一个 --&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span> =<span class="string">"FILE_LOG"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="6-根据环境不同使用不同的日志策略"><a href="#6-根据环境不同使用不同的日志策略" class="headerlink" title="6.根据环境不同使用不同的日志策略"></a>6.根据环境不同使用不同的日志策略</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 开发环境输出到控制台 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">springProfile</span>  <span class="attr">name</span>=<span class="string">"dev"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"INFO"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"STDOUT"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">springProfile</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 生产环境输出到文件 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">springProfile</span>  <span class="attr">name</span>=<span class="string">"prod"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"INFO"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"FILE_LOG"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">springProfile</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>在root节点外面套了一层springProfile ，指定了name属性的值，此时启用时有两种方式.</strong><br>方式1：执行jar包时添加参数：<br><figure class="highlight"><figcaption><span>-jar xxx.jar --spring.profiles.active</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">方式<span class="number">2</span>：在项目的application.properties配置文件中添加：</span><br><span class="line">spring.profiles.active=prod</span><br><span class="line"></span><br><span class="line"># 4.整合</span><br><span class="line">```xml</span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;configuration&gt;    </span><br><span class="line">    &lt;!--定义一个将日志输出到控制台的appender，名称为STDOUT --&gt;</span><br><span class="line">    &lt;appender name=<span class="string">"STDOUT"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</span><br><span class="line">        &lt;encoder&gt;</span><br><span class="line">            &lt;pattern&gt;[%contextName]%date [%thread %line] %level &gt;&gt; %msg &gt;&gt; %logger&#123;10&#125;%n&lt;/pattern&gt;</span><br><span class="line">        &lt;/encoder&gt;</span><br><span class="line">    &lt;/appender&gt; </span><br><span class="line">    </span><br><span class="line">    &lt;!--定义一个将日志输出到文件的appender，名称为FILE_LOG --&gt;</span><br><span class="line">    &lt;appender name=<span class="string">"FILE_LOG"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.FileAppender"</span>&gt;  </span><br><span class="line">        &lt;file&gt;D:/test.log&lt;/file&gt;</span><br><span class="line">        &lt;append&gt;true&lt;/append&gt;  </span><br><span class="line">        &lt;encoder&gt;  </span><br><span class="line">            &lt;pattern&gt;[Eran]%date [%thread %line] %level &gt;&gt; %msg &gt;&gt; %logger&#123;10&#125;%n&lt;/pattern&gt;</span><br><span class="line">        &lt;/encoder&gt;</span><br><span class="line">    &lt;/appender&gt;  </span><br><span class="line">    </span><br><span class="line">    &lt;!--  按时间滚动产生日志文件 --&gt;</span><br><span class="line">    &lt;appender name=<span class="string">"ROL-FILE-LOG"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt; </span><br><span class="line">      &lt;!--滚动策略，按照时间滚动 TimeBasedRollingPolicy--&gt;</span><br><span class="line">      &lt;rollingPolicy <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span><br><span class="line">      	&lt;fileNamePattern&gt;D:/logs/test.%d&#123;yyyy-MM-dd&#125;.log&lt;/fileNamePattern&gt;</span><br><span class="line">      	&lt;!-- 只保留近七天的日志 --&gt;</span><br><span class="line">      	&lt;maxHistory&gt;7&lt;/maxHistory&gt;</span><br><span class="line">      	&lt;!-- 用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志 --&gt;</span><br><span class="line">      	&lt;totalSizeCap&gt;1GB&lt;/totalSizeCap&gt;</span><br><span class="line">      &lt;/rollingPolicy&gt; </span><br><span class="line">      </span><br><span class="line">      &lt;encoder&gt;</span><br><span class="line">    	&lt;pattern&gt;[Eran]%date [%thread %line] %level &gt;&gt; %msg &gt;&gt; %logger&#123;10&#125;%n&lt;/pattern&gt;</span><br><span class="line">      &lt;/encoder&gt;</span><br><span class="line">    &lt;/appender&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 按时间和文件大小滚动产生日志文件 --&gt;</span><br><span class="line">    &lt;appender name=<span class="string">"ROL-SIZE-FILE-LOG"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span><br><span class="line">        &lt;rollingPolicy <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy"</span>&gt;</span><br><span class="line">            &lt;fileNamePattern&gt;D:/logs/test.%d&#123;yyyy-MM-dd&#125;.%i.log&lt;/fileNamePattern&gt;</span><br><span class="line">            &lt;!-- 单个文件的最大内存 --&gt;</span><br><span class="line">            &lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;</span><br><span class="line">            &lt;!-- 只保留近七天的日志 --&gt;</span><br><span class="line">            &lt;maxHistory&gt;7&lt;/maxHistory&gt;</span><br><span class="line">            &lt;!-- 用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志 --&gt;</span><br><span class="line">            &lt;totalSizeCap&gt;1GB&lt;/totalSizeCap&gt;</span><br><span class="line">        &lt;/rollingPolicy&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;encoder&gt;</span><br><span class="line">            &lt;pattern&gt;[Eran]%date [%thread %line] %level &gt;&gt; %msg &gt;&gt; %logger&#123;10&#125;%n&lt;/pattern&gt;</span><br><span class="line">        &lt;/encoder&gt;</span><br><span class="line">        &lt;!-- 只处理INFO级别以及之上的日志 --&gt;</span><br><span class="line">        &lt;filter <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.classic.filter.ThresholdFilter"</span>&gt;   </span><br><span class="line">            &lt;level&gt;INFO&lt;/level&gt;   </span><br><span class="line">        &lt;/filter&gt;</span><br><span class="line">        &lt;!-- 只处理INFO级别的日志 --&gt;</span><br><span class="line">        &lt;filter <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.classic.filter.LevelFilter"</span>&gt;   </span><br><span class="line">            &lt;level&gt;INFO&lt;/level&gt;   </span><br><span class="line">            &lt;onMatch&gt;ACCEPT&lt;/onMatch&gt;   </span><br><span class="line">            &lt;onMismatch&gt;DENY&lt;/onMismatch&gt;   </span><br><span class="line">        &lt;/filter&gt;</span><br><span class="line">    &lt;/appender&gt;</span><br><span class="line">    &lt;!-- 异步写入日志 --&gt;</span><br><span class="line">    &lt;appender name =<span class="string">"ASYNC"</span> <span class="class"><span class="keyword">class</span></span>= <span class="string">"ch.qos.logback.classic.AsyncAppender"</span>&gt;  </span><br><span class="line">        &lt;!-- 不丢失日志.默认的,如果队列的<span class="number">80</span>%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 --&gt;  </span><br><span class="line">        &lt;discardingThreshold &gt;0&lt;/discardingThreshold&gt;  </span><br><span class="line">        &lt;!-- 更改默认的队列的深度,该值会影响性能.默认值为<span class="number">256</span> --&gt;  </span><br><span class="line">        &lt;queueSize&gt;512&lt;/queueSize&gt;  </span><br><span class="line">        &lt;!-- 添加附加的appender,最多只能添加一个 --&gt;  </span><br><span class="line">        &lt;appender-ref ref =<span class="string">"FILE_LOG"</span>/&gt;</span><br><span class="line">    &lt;/appender&gt;</span><br><span class="line">    &lt;!-- 指定com.demo包下的日志打印级别为DEBUG，但是由于没有引用appender，所以该logger不会打印日志信息，日志信息向上传递 --&gt;</span><br><span class="line">    &lt;logger name="com.example" level="DEBUG"&gt;&lt;/logger&gt;</span><br><span class="line">    &lt;!-- 指定开发环境基础的日志输出级别为DEBUG，并且绑定了名为STDOUT的appender，表示将日志信息输出到控制台 --&gt;</span><br><span class="line">    &lt;springProfile  name=<span class="string">"dev"</span>&gt;</span><br><span class="line">        &lt;root level=<span class="string">"DEBUG"</span>&gt;</span><br><span class="line">            &lt;appender-ref ref=<span class="string">"STDOUT"</span> /&gt;</span><br><span class="line">        &lt;/root&gt;</span><br><span class="line">    &lt;/springProfile&gt;</span><br><span class="line">    &lt;!-- 指定生产环境基础的日志输出级别为INFO，并且绑定了名为ASYNC的appender，表示将日志信息异步输出到文件 --&gt;</span><br><span class="line">    &lt;springProfile  name=<span class="string">"prod"</span>&gt;</span><br><span class="line">        &lt;root level=<span class="string">"INFO"</span>&gt;</span><br><span class="line">            &lt;appender-ref ref=<span class="string">"ASYNC"</span> /&gt;</span><br><span class="line">        &lt;/root&gt;</span><br><span class="line">    &lt;/springProfile&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
+<p>参考资源：<br><a href="https://juejin.im/post/5c7e2445f265da2de71370f2" target="_blank" rel="noopener">https://juejin.im/post/5c7e2445f265da2de71370f2</a><br><a href="http://tengj.top/2017/04/05/springboot7/#%E5%A4%9A%E7%8E%AF%E5%A2%83%E6%97%A5%E5%BF%97%E8%BE%93%E5%87%BA" target="_blank" rel="noopener">http://tengj.top/2017/04/05/springboot7/#%E5%A4%9A%E7%8E%AF%E5%A2%83%E6%97%A5%E5%BF%97%E8%BE%93%E5%87%BA</a><br><a href="https://blog.csdn.net/wujianmin577/article/details/68922545" target="_blank" rel="noopener">https://blog.csdn.net/wujianmin577/article/details/68922545</a><br><a href="http://tengj.top/2017/02/28/springboot2/" target="_blank" rel="noopener">http://tengj.top/2017/02/28/springboot2/</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringBoot/" rel="tag"># SpringBoot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/10/SpringCloud学习五-GateWay网关/" rel="next" title="SpringCloud学习五-GateWay网关">
+                <i class="fa fa-chevron-left"></i> SpringCloud学习五-GateWay网关
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDQyNC8yMDk1Ng=="></div>
+    </div>
+
+
+  
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/nini.png" alt="李斯大炮">
+            
+              <p class="site-author-name" itemprop="name">李斯大炮</p>
+              <p class="site-description motion-element" itemprop="description">我从不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现更广阔的人生，那样的自由才是珍贵的、有价值的。我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/cmevolve/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lisidapao@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/lisidapao?t=1" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.baidu.com" title="基情资词" target="_blank">基情资词</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+			<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28138493&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-什么是日志？"><span class="nav-number">1.</span> <span class="nav-text">1.什么是日志？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-如何引入日志？"><span class="nav-number">2.</span> <span class="nav-text">2.如何引入日志？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用日志框架及区别"><span class="nav-number">2.1.</span> <span class="nav-text">常用日志框架及区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志级别详解"><span class="nav-number">2.2.</span> <span class="nav-text">日志级别详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式"><span class="nav-number">2.3.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-使用时需要注意什么？"><span class="nav-number">3.</span> <span class="nav-text">3.使用时需要注意什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-日志命名的规范"><span class="nav-number">3.1.</span> <span class="nav-text">1.日志命名的规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-日志的存储周期"><span class="nav-number">3.2.</span> <span class="nav-text">2.日志的存储周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-使用时注意"><span class="nav-number">3.3.</span> <span class="nav-text">3.使用时注意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-避免无效的日志输出"><span class="nav-number">3.4.</span> <span class="nav-text">4.避免无效的日志输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-使用异步写入日志AsyncAppender"><span class="nav-number">3.5.</span> <span class="nav-text">5.使用异步写入日志AsyncAppender</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-根据环境不同使用不同的日志策略"><span class="nav-number">3.5.1.</span> <span class="nav-text">6.根据环境不同使用不同的日志策略</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李斯大炮</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://iamlfc.top/2019/10/10/日志输出使用姿势/';
+          this.page.identifier = '2019/10/10/日志输出使用姿势/';
+          this.page.title = '日志输出使用姿势';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
