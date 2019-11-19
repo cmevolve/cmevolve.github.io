@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="分布式,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.概念 幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。在编程中一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数。这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。例如，“setTrue()”函数就是一个幂等函数,无论多次执行，其结果都是一样">
+<meta name="keywords" content="分布式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="接口的幂等性设计">
+<meta property="og:url" content="http://iamlfc.top/2019/11/20/接口的幂等性设计/index.html">
+<meta property="og:site_name" content="邪恶小代码">
+<meta property="og:description" content="1.概念 幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。在编程中一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数。这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。例如，“setTrue()”函数就是一个幂等函数,无论多次执行，其结果都是一样">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2019/11/04/srAzcduVxBUCnZR.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/03/rLB2RXT4YS13Msq.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/04/xMF3z4y7VKg5L2Q.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/11/04/KzrM8S.png">
+<meta property="og:updated_time" content="2019-11-19T16:06:49.955Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="接口的幂等性设计">
+<meta name="twitter:description" content="1.概念 幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。在编程中一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数。这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。例如，“setTrue()”函数就是一个幂等函数,无论多次执行，其结果都是一样">
+<meta name="twitter:image" content="https://i.loli.net/2019/11/04/srAzcduVxBUCnZR.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://iamlfc.top/2019/11/20/接口的幂等性设计/">
+
+
+
+
+
+  <title>接口的幂等性设计 | 邪恶小代码</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">邪恶小代码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/11/20/接口的幂等性设计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     2.6k 字
+	</span>
+	<span title="阅读时长">
+     10 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">接口的幂等性设计</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T00:06:06+08:00">
+                2019-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/20/接口的幂等性设计/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/20/接口的幂等性设计/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-概念"><a href="#1-概念" class="headerlink" title="1.概念"></a>1.概念</h1><blockquote>
+<p>幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。<br>在编程中一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数。这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。例如，“setTrue()”函数就是一个幂等函数,无论多次执行，其结果都是一样的.更复杂的操作幂等保证是利用唯一交易号(流水号)实现.          ——————【维基百科】</p>
+</blockquote>
+<p>简单来说就是 <strong>一个操作如果执行多次，其产生的影响均与一次执行的影响相同。</strong></p>
+<h1 id="2-为什么要做幂等"><a href="#2-为什么要做幂等" class="headerlink" title="2.为什么要做幂等"></a>2.为什么要做幂等</h1><p>分布式场景：</p>
+<ul>
+<li>一个订单创建接口，在第一次调用时超时。</li>
+<li>订单创建时，要先减去库存，调用接口时发生了超时。</li>
+<li>订单开始支付，支付请求发出了之后，在到达微信支付前就发生超时。</li>
+<li>到达微信支付，但是支付交易失败，未返回，此时超时。</li>
+<li>到达微信支付且交易成功，未返回回执，此时超时。</li>
+<li>到达微信支付并且交易成功，返回了回执，客户端未接收到回执此时客户端超时。</li>
+<li>订单支付成功，调用订单状态更新接口，调用方发送了两条消息，一个是已创建，一个是已付款，如果先收到已付款消息后收到已创建。</li>
+</ul>
+<p><strong>幂等性在购物支付场景下显得尤为重要，我请求了多次是否会产生了多笔订单，是否引发了多次支付？</strong><br>为了解决这些问题，就必须保证API的幂等性，也就是接口可重复调用，接口最终结果是与一次调用时一致。（这里说的是数据一致性，不是返回结果一致性，如：已提交订单，再次提交提示请勿重复提交，但是数据结果与第一次调用时一致）</p>
+<h1 id="3-幂等如何实现"><a href="#3-幂等如何实现" class="headerlink" title="3.幂等如何实现"></a>3.幂等如何实现</h1><p>具体方案有：业务去重表（建立唯一索引）、悲观锁、乐观锁（版本控制、有限状态机验证）、Token（全局唯一标识）、分布式锁、select+insert、</p>
+<h2 id="3-1-Token-全局唯一标识"><a href="#3-1-Token-全局唯一标识" class="headerlink" title="3.1 Token(全局唯一标识)"></a>3.1 Token(全局唯一标识)</h2><p><img src="https://i.loli.net/2019/11/04/srAzcduVxBUCnZR.png" alt="流程 _1_.png"></p>
+<ul>
+<li>在数据提交前向服务申请token，token放到redis或者内存中（加入失效时间）；在提交时后台校验token，同时删除token，生成新的token返回。（<strong>此处校验token和删除token为原子性操作，，如果分为两步，存在并发问题。</strong>）</li>
+<li>全局唯一标识原理与之类似，根据操作类型和业务标识组合生成一个全局ID，执行操作前判断是否已存在该key，如果不存在则存储到系统中，存在则表示该方法已操作。（<strong>利用Redis的setnx命令。此命令同样是原子性操作，只有在key不存在的情况下，才能set成功。</strong>）</li>
+</ul>
+<h2 id="3-2-唯一索引"><a href="#3-2-唯一索引" class="headerlink" title="3.2 唯一索引"></a>3.2 唯一索引</h2><p>在CRUD中查询和删除（物理删除、逻辑删除）是天然的幂等的，既多次查询对数据与一次查询一致不会产生影响，删除也是无论是物理删除还是逻辑删除，都是根据条件进行删除无论执行几次造成的结果是一样的。<br>增加数据时如果不进行幂等会导致目标数据产生多条，此时建议将目标表增加唯一索引或者唯一组合索引防止脏数据，在重复进行执行时，插入失败时，重新查询数据此时已存在则成功返回。</p>
+<h2 id="3-3-数据库悲观锁"><a href="#3-3-数据库悲观锁" class="headerlink" title="3.3 数据库悲观锁"></a>3.3 数据库悲观锁</h2><p>获取数据时加锁<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> table_xxx <span class="keyword">where</span> <span class="keyword">id</span>=<span class="string">'xxx'</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用时ID需要是主键或者唯一索引，在mysql中会导致锁表而不是行级锁。悲观锁使用一般同事务一起使用。</strong></p>
+<h2 id="3-4-数据库乐观锁"><a href="#3-4-数据库乐观锁" class="headerlink" title="3.4 数据库乐观锁"></a>3.4 数据库乐观锁</h2><p>乐观锁在更新数据时才会产生锁表，其他时间不锁表，所以对比悲观锁，乐观锁并发场景使用效率更高。<br>实现方式：<br>原理如图：同java CAS<br><img src="https://i.loli.net/2019/11/03/rLB2RXT4YS13Msq.png" alt="image.png"></p>
+<ol>
+<li><p>通过版本号或者状态条件实现</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> table_xxx <span class="keyword">set</span> <span class="keyword">name</span>=<span class="comment">#name#,version=version+1 where version=#version#  and id=#id#;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过条件限制</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> table_xxx <span class="keyword">set</span> avai_amount=avai_amount-<span class="comment">#subAmount# where avai_amount-#subAmount# &gt;= 0 and id=#id#;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>此场景适用于秒杀等库存场景，防止因并发出现库存-1场景。</p>
+<ol start="3">
+<li>任务相关的业务，肯定会涉及到状态机（状态变更），业务数据在不同情况下回发生变更，一般情况下存在有限状态机，如果状态机位于下一个状态，此时来了一个上一个状态的变更，此时不能变更，从而保证有限状态机的幂等。<br>例：订单创建为0，付款成功为2，付款失败为1在进行状态机更新时可以这样控制<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update table_xx set status=#status# where id=#id# and status&lt;#status#</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果此次操作成功该update返回结果为1条，若数据已被更新则返回结果为0条，可再次查询验证更新状态是否成功。</p>
+<h2 id="3-5-select-insert"><a href="#3-5-select-insert" class="headerlink" title="3.5 select + insert"></a>3.5 select + insert</h2><p>对并发不高的系统，为了支持幂等可以先查询下数据判断是否已经执行过，未执行则进行业务的处理。<strong>注：此种方法高并发场景切不可使用</strong></p>
+<h2 id="3-6-业务去重表"><a href="#3-6-业务去重表" class="headerlink" title="3.6 业务去重表"></a>3.6 业务去重表</h2><p>上面几种通过数据库进行幂等的方法有一个弊端，就是为了实现幂等性需要在业务表中加入一个无关的版本号或者状态，此时可将操作单独提取出来构建一个业务去重表，在业务表操作前对此表进行操作验证，利用数据库唯一索引特性保证唯一逻辑，唯一的序列号可以是一个字段，也可以是多字段的唯一性组合，在幂等验证通过后方可进行业务操作。<br>表结构:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> DUPLICATEREMOVAL(</span><br><span class="line">  c_id          VARCHAR2(<span class="number">32</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  c_serial_no   VARCHAR2(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  c_source_type VARCHAR2(<span class="number">255</span>),</span><br><span class="line">  c_status      VARCHAR2(<span class="number">64</span>),</span><br><span class="line">  c_remark      VARCHAR2(<span class="number">255</span>),</span><br><span class="line">  c_crt_cde     VARCHAR2(<span class="number">20</span>) ,</span><br><span class="line">  t_crt_tm      <span class="built_in">DATE</span> ,</span><br><span class="line">  c_upd_cde     VARCHAR2(<span class="number">20</span>),</span><br><span class="line">  t_upd_tm      <span class="built_in">DATE</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">-- Add comments to the table </span></span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">table</span> DUPLICATEREMOVAL</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'业务去重表'</span>;</span><br><span class="line"><span class="comment">-- Add comments to the columns </span></span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_id</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'业务标识'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_serial_no</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'唯一标识'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_source_type</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'资源类型'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_status</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'状态'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_remark</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'备注'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_crt_cde</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'创建人'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.t_crt_tm</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'创建时间'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_upd_cde</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'修改人'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.t_upd_tm</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'修改时间'</span>;</span><br><span class="line"><span class="comment">-- Create/Recreate primary, unique and foreign key constraints </span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> DUPLICATEREMOVAL</span><br><span class="line">  <span class="keyword">add</span> <span class="keyword">constraint</span> C_PK_SERIAL <span class="keyword">unique</span> (C_ID, C_SERIAL_NO);</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-7-分布式锁"><a href="#3-7-分布式锁" class="headerlink" title="3.7 分布式锁"></a>3.7 分布式锁</h2><p>在分布式应用的时代背景下，跨系统的调用想满足锁的语义只能依赖于第三方的中间件，比如redis、zookeeper。<br><strong>实现点：某个流程要求不能并发执行，可以在执行之前根据业务上的唯一标识 获取分布式锁，其他流程执行时获取锁就会失败，也就是同一时间该流程只能有一个能执行成功，执行完后，释放分布式锁。</strong></p>
+<p>使用方式：<br><a href="http://doc.redisfans.com/string/set.html" target="_blank" rel="noopener">API文档</a><br>加锁：set key value px milliseconds nx<br>键不存在时才进行操作并设置键的过期时间，此命令是原子操作不会出现多线程问题。<br><img src="https://i.loli.net/2019/11/04/xMF3z4y7VKg5L2Q.png" alt="加锁流程.png"><br>释放锁：在释放锁时为了防止将别的线程加的锁误删可以在加锁时将线程id作为value，解锁时判断是否是当前锁，然后删除。但是判断和释放锁是两个独立的操作不具备原子性所以此处推荐使用del+lua脚本实现。<br><a href="https://ftp.bmp.ovh/imgs/2019/11/a79904d25d081716.png" target="_blank" rel="noopener">https://ftp.bmp.ovh/imgs/2019/11/a79904d25d081716.png</a><br><img src="https://s2.ax1x.com/2019/11/04/KzrM8S.png" alt="解锁流程.png"><br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String luaScript = <span class="string">"if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end"</span>;</span><br><span class="line">redisClient.eval(luaScript , Collections.singletonList(key), Collections.singletonList(threadId));</span><br></pre></td></tr></table></figure></p>
+<p>分布式锁参考：<a href="https://wudashan.cn/2017/10/23/Redis-Distributed-Lock-Implement/" target="_blank" rel="noopener">使用 px nx 加锁</a><br>扩展：<a href="https://blog.csdn.net/forezp/article/details/70305336" target="_blank" rel="noopener">redis官方支持的分布式锁redlock</a></p>
+<h1 id="4-基于redis实现分布式锁"><a href="#4-基于redis实现分布式锁" class="headerlink" title="4.基于redis实现分布式锁"></a>4.基于redis实现分布式锁</h1><h2 id="4-1-核心加锁代码："><a href="#4-1-核心加锁代码：" class="headerlink" title="4.1 核心加锁代码："></a>4.1 核心加锁代码：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//SET IF NOT EXIST key不存在时，set</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SET_IF_NOT_EXIST = <span class="string">"NX"</span>;</span><br><span class="line"><span class="comment">//expx 超时时间 单位毫秒  EX 单位 秒</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SET_WITH_EXPIRE_TIME = <span class="string">"PX"</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryGetDistributedLock</span><span class="params">( String lockKey, String requestId , <span class="keyword">int</span> expireTime)</span> </span>&#123;</span><br><span class="line">    Jedis jedis = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        jedis = getJedis();</span><br><span class="line">        String result = jedis.set(lockKey, requestId , SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);</span><br><span class="line">        <span class="keyword">if</span> (LOCK_SUCCESS.equals(result)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(<span class="string">"set key:&#123;&#125; value:&#123;&#125; error"</span>, lockKey, requestId , e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        close(jedis);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用NX PX 来保证插入值时的原子性<br>NX，意思是SET IF NOT EXIST，即当key不存在时，我们进行set操作；若key已经存在，则不做任何操作；<br>PX，意思是我们要给这个key加一个过期设置。<br><strong>错误使用：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">wrongGetLock1</span><span class="params">(Jedis jedis, String lockKey, String requestId, <span class="keyword">int</span> expireTime)</span> </span>&#123;</span><br><span class="line">    Long result = jedis.setnx(lockKey, requestId);</span><br><span class="line">    <span class="keyword">if</span> (result == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 若在这里程序突然崩溃，则无法设置过期时间，将发生死锁</span></span><br><span class="line">        jedis.expire(lockKey, expireTime);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码是将赋值的操作分为两步，先设置值，成功了再设置超时时间，但是如果在未设置超时时间前程序崩溃，此处会形成死锁。</p>
+<h2 id="4-2-解锁代码："><a href="#4-2-解锁代码：" class="headerlink" title="4.2 解锁代码："></a>4.2 解锁代码：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">releaseDistributedLock</span><span class="params">(Jedis jedis, String lockKey, String requestId)</span> </span>&#123;</span><br><span class="line">    String script = <span class="string">"if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end"</span>;</span><br><span class="line">    Object result = jedis.eval(script, Collections.singletonList(lockKey), Collections.singletonList(requestId));</span><br><span class="line">    <span class="keyword">if</span> (RELEASE_SUCCESS.equals(result)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用lua脚本将解锁时判断如果获取的key = 目标值则执行后续的操作，保证比较并操作行为的原子性。<br><strong>错误代码：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">wrongReleaseLock2</span><span class="params">(Jedis jedis, String lockKey, String requestId)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 判断加锁与解锁是不是同一个客户端</span></span><br><span class="line">    <span class="keyword">if</span> (requestId.equals(jedis.get(lockKey))) &#123;</span><br><span class="line">        <span class="comment">// 若在此时，这把锁突然不是这个客户端的，则会误解锁</span></span><br><span class="line">        jedis.del(lockKey);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果经过上面比较判断后，此时锁因为超时已经过期了，在执行后面的del命令时可能会删除别的进程（线程）加的锁。</p>
+<p>代码地址：<a href="https://github.com/cmevolve/InterfaceIdempotent" target="_blank" rel="noopener">https://github.com/cmevolve/InterfaceIdempotent</a><br>参考资料：<a href="https://wudashan.cn/2017/10/23/Redis-Distributed-Lock-Implement/" target="_blank" rel="noopener">https://wudashan.cn/2017/10/23/Redis-Distributed-Lock-Implement/</a></p>
+<h1 id="5-代码测试（工具扩展）"><a href="#5-代码测试（工具扩展）" class="headerlink" title="5.代码测试（工具扩展）"></a>5.代码测试（工具扩展）</h1><p>压力测试工具：<a href="https://www.cnblogs.com/stulzq/p/8971531.html" target="_blank" rel="noopener">JMeter</a><br>性能分析工具：<a href="http://www.ddooo.com/softdown/150941.htm#dltab" target="_blank" rel="noopener">JProfiler</a> <a href="https://segmentfault.com/a/1190000017795841" target="_blank" rel="noopener">基本使用手册</a><br><a href="https://mp.weixin.qq.com/s?__biz=MzU2MTI4MjI0MQ==&amp;mid=2247486515&amp;idx=1&amp;sn=fa09c3790d85a54683ec0208c077bbb6&amp;chksm=fc7a619dcb0de88b7ef2c27632f05d8414adeaa6721c6410df9cf2de7f268c38c725e549a33e&amp;mpshare=1&amp;scene=24&amp;srcid=1102HmJLce0mjnZn6WS0nmh7&amp;sharer_sharetime=1572669522564&amp;sharer_shareid=b85a2e91deba228c5ba2c72863129902&amp;key=3e754fdb358244867276411b1d091f79586fdaa28ae7a2d4dfbb4626ed502ee7fcb21ead7a462d3a3c79e7f374aea7a67334d07ec6821c599a948dbd439ad67e819093dbc397c033b7ca6683baea7fed&amp;ascene=14&amp;uin=NTUxNjkzNDU1&amp;devicetype=Windows%2010&amp;version=62070152&amp;lang=zh_CN&amp;pass_ticket=ZpgRpjustSAK02Y%2bDhuafqaYqoPFsLeDK4oj6v4MXd5W3fKHyTSYXIryKYAP6wD0" target="_blank" rel="noopener">Springboot+redis+注解+拦截器</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/分布式/" rel="tag"># 分布式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/10/日志输出使用姿势/" rel="next" title="日志输出使用姿势">
+                <i class="fa fa-chevron-left"></i> 日志输出使用姿势
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDQyNC8yMDk1Ng=="></div>
+    </div>
+
+
+  
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/nini.png" alt="李斯大炮">
+            
+              <p class="site-author-name" itemprop="name">李斯大炮</p>
+              <p class="site-description motion-element" itemprop="description">我从不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现更广阔的人生，那样的自由才是珍贵的、有价值的。我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/cmevolve/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lisidapao@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/lisidapao?t=1" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.baidu.com" title="基情资词" target="_blank">基情资词</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+			<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28138493&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-概念"><span class="nav-number">1.</span> <span class="nav-text">1.概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-为什么要做幂等"><span class="nav-number">2.</span> <span class="nav-text">2.为什么要做幂等</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-幂等如何实现"><span class="nav-number">3.</span> <span class="nav-text">3.幂等如何实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Token-全局唯一标识"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 Token(全局唯一标识)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-唯一索引"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 唯一索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-数据库悲观锁"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 数据库悲观锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-数据库乐观锁"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 数据库乐观锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-select-insert"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 select + insert</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-业务去重表"><span class="nav-number">3.6.</span> <span class="nav-text">3.6 业务去重表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-分布式锁"><span class="nav-number">3.7.</span> <span class="nav-text">3.7 分布式锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-基于redis实现分布式锁"><span class="nav-number">4.</span> <span class="nav-text">4.基于redis实现分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-核心加锁代码："><span class="nav-number">4.1.</span> <span class="nav-text">4.1 核心加锁代码：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-解锁代码："><span class="nav-number">4.2.</span> <span class="nav-text">4.2 解锁代码：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-代码测试（工具扩展）"><span class="nav-number">5.</span> <span class="nav-text">5.代码测试（工具扩展）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李斯大炮</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://iamlfc.top/2019/11/20/接口的幂等性设计/';
+          this.page.identifier = '2019/11/20/接口的幂等性设计/';
+          this.page.title = '接口的幂等性设计';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
