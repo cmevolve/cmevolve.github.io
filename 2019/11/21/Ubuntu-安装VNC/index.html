@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="邪恶小代码">
 <meta property="og:description" content="最近在用Windows 连接 Ubuntu的PC时想使用下图形化界面，因为之前玩树莓派用过VNC因此将为PC安装VNC 来进行图形传输。 准备工作：windows安装VNC-Viewer 或者相关工具，Linux 安装vncserver. 1.安装1.1更新源和系统12apt updateapt upgrade -y 1.2安装桌面mate 桌面较为精简且不会出现显示不全的问题，选择其中一个安装即">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-21T15:44:39.859Z">
+<meta property="og:updated_time" content="2019-11-21T15:49:54.303Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ubuntu 安装VNC">
 <meta name="twitter:description" content="最近在用Windows 连接 Ubuntu的PC时想使用下图形化界面，因为之前玩树莓派用过VNC因此将为PC安装VNC 来进行图形传输。 准备工作：windows安装VNC-Viewer 或者相关工具，Linux 安装vncserver. 1.安装1.1更新源和系统12apt updateapt upgrade -y 1.2安装桌面mate 桌面较为精简且不会出现显示不全的问题，选择其中一个安装即">
@@ -297,7 +297,7 @@
       <meta itemprop="name" content="邪恶小代码">
     </span>
 	<span title="字数统计">
-     360 字
+     358 字
 	</span>
 	<span title="阅读时长">
      1 分钟
@@ -361,7 +361,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  360
+                  358
                 </span>
               
 
@@ -402,16 +402,16 @@
 <p>准备工作：<br>windows安装VNC-Viewer 或者相关工具，Linux 安装vncserver.</p>
 <h1 id="1-安装"><a href="#1-安装" class="headerlink" title="1.安装"></a>1.安装</h1><h2 id="1-1更新源和系统"><a href="#1-1更新源和系统" class="headerlink" title="1.1更新源和系统"></a>1.1更新源和系统</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt upgrade -y</span><br></pre></td></tr></table></figure>
 <h2 id="1-2安装桌面"><a href="#1-2安装桌面" class="headerlink" title="1.2安装桌面"></a>1.2安装桌面</h2><p>mate 桌面较为精简且不会出现显示不全的问题，选择其中一个安装即可。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">apt install ubuntu-desktop, gnome-panel # Gnome桌面</span><br><span class="line">apt install kubuntu-full  # KDE桌面</span><br><span class="line"><span class="meta">#</span> Mate桌面 （推荐）</span><br><span class="line"><span class="meta">#</span> 仅安装核心组件</span><br><span class="line">apt install ntp</span><br><span class="line">apt install ubuntu-mate-core</span><br><span class="line"><span class="meta">#</span> 完整安装</span><br><span class="line">apt install ubuntu-mate-core ubuntu-mate-desktop</span><br></pre></td></tr></table></figure></p>
-<h1 id="2-基本操作"><a href="#2-基本操作" class="headerlink" title="2.基本操作"></a>2.基本操作</h1><p>安装 VNC server<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install vnc4server -y</span><br></pre></td></tr></table></figure></p>
-<p>第一次启动需要配置密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver (或vnc4server)</span><br></pre></td></tr></table></figure></p>
-<p>打开会话<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver :1</span><br></pre></td></tr></table></figure></p>
-<p>关闭会话<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver -kill :1</span><br></pre></td></tr></table></figure></p>
-<p> 设置分辨率<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver -geometry 1920x1080 :1</span><br></pre></td></tr></table></figure></p>
-<h1 id="3-文件配置"><a href="#3-文件配置" class="headerlink" title="3.文件配置"></a>3.文件配置</h1><p>vim /root/.vnc<br>添加配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line"> </span><br><span class="line"># Uncomment the following two lines for normal desktop:</span><br><span class="line"># unset SESSION_MANAGER</span><br><span class="line"># exec /etc/X11/xinit/xinitrc</span><br><span class="line">[ -x /etc/vnc/xstartup ] &amp;&amp; exec /etc/vnc/xstartup</span><br><span class="line">[ -r $HOME/.Xresources ] &amp;&amp; xrdb $HOME/.Xresources</span><br><span class="line">xsetroot -solid grey </span><br><span class="line">vncconfig -iconic &amp;</span><br><span class="line"># x-terminal-emulator -geometry 80x24+10+10 -ls -title &quot;$VNCDESKTOP Desktop&quot; &amp;</span><br><span class="line">        </span><br><span class="line">mate-session &amp;</span><br></pre></td></tr></table></figure></p>
-<p>其他桌面配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gnome-panel &amp;</span><br><span class="line">gnome-settings-daemon &amp;</span><br><span class="line">metacity &amp;</span><br><span class="line">nautilus &amp;</span><br></pre></td></tr></table></figure></p>
-<p>#4.开机启动<br>首先输入 crontab 命令,显示如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Select an editor. To change later, run ‘select-editor’.</span><br><span class="line">1. /bin/ed</span><br><span class="line">2. /bin/nano &lt;---- easiest 3. /usr/bin/vim.basic 4. /usr/bin/vim.tiny Choose 1-4 [2]:</span><br></pre></td></tr></table></figure></p>
-<p>在末尾添加命令,设置开机启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@reboot /usr/bin/vncserver :1</span><br></pre></td></tr></table></figure></p>
-<p>重启服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure></p>
+<h1 id="2-基本操作"><a href="#2-基本操作" class="headerlink" title="2.基本操作"></a>2.基本操作</h1><p>安装 VNC server<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install vnc4server -y</span><br></pre></td></tr></table></figure></p>
+<p>第一次启动需要配置密码<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver (或vnc4server)</span><br></pre></td></tr></table></figure></p>
+<p>打开会话<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver :1</span><br></pre></td></tr></table></figure></p>
+<p>关闭会话<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver -kill :1</span><br></pre></td></tr></table></figure></p>
+<p> 设置分辨率<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver -geometry 1920x1080 :1</span><br></pre></td></tr></table></figure></p>
+<h1 id="3-文件配置"><a href="#3-文件配置" class="headerlink" title="3.文件配置"></a>3.文件配置</h1><p>vim /root/.vnc<br>添加配置：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line"> </span><br><span class="line"><span class="meta">#</span> Uncomment the following two lines for normal desktop:</span><br><span class="line"><span class="meta">#</span> unset SESSION_MANAGER</span><br><span class="line"><span class="meta">#</span> exec /etc/X11/xinit/xinitrc</span><br><span class="line">[ -x /etc/vnc/xstartup ] &amp;&amp; exec /etc/vnc/xstartup</span><br><span class="line">[ -r $HOME/.Xresources ] &amp;&amp; xrdb $HOME/.Xresources</span><br><span class="line">xsetroot -solid grey </span><br><span class="line">vncconfig -iconic &amp;</span><br><span class="line"><span class="meta">#</span> x-terminal-emulator -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &amp;</span><br><span class="line">        </span><br><span class="line">mate-session &amp;</span><br></pre></td></tr></table></figure></p>
+<p>其他桌面配置：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gnome-panel &amp;</span><br><span class="line">gnome-settings-daemon &amp;</span><br><span class="line">metacity &amp;</span><br><span class="line">nautilus &amp;</span><br></pre></td></tr></table></figure></p>
+<p>#4.开机启动<br>首先输入 crontab 命令,显示如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Select an editor. To change later, run ‘select-editor’.</span><br><span class="line">1. /bin/ed</span><br><span class="line">2. /bin/nano &lt;---- easiest 3. /usr/bin/vim.basic 4. /usr/bin/vim.tiny Choose 1-4 [2]:</span><br></pre></td></tr></table></figure></p>
+<p>在末尾添加命令,设置开机启动<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@reboot /usr/bin/vncserver :1</span><br></pre></td></tr></table></figure></p>
+<p>重启服务<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -451,6 +451,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/25/Docker-学习一（镜像基本操作）/" rel="prev" title="Docker-学习一（镜像基本操作）">
+                Docker-学习一（镜像基本操作） <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -536,7 +540,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -547,7 +551,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -558,7 +562,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

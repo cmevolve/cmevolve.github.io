@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Docker,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="内容提要docker镜像相关操作，包括获取，查看，搜索，删除，创建，存出和载入，上传等。 1.启动1servie start docker 为了避免每次使用docker命令都要用特权身份将当前用户加入docker用户组1sudo usermod -aG docker USER_NAME 2.获取镜像可以使用docker pull NAME[：TAG]直接从DockerHub镜像源下载镜像。NAME">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker-学习一（镜像基本操作）">
+<meta property="og:url" content="http://iamlfc.top/2019/11/25/Docker-学习一（镜像基本操作）/index.html">
+<meta property="og:site_name" content="邪恶小代码">
+<meta property="og:description" content="内容提要docker镜像相关操作，包括获取，查看，搜索，删除，创建，存出和载入，上传等。 1.启动1servie start docker 为了避免每次使用docker命令都要用特权身份将当前用户加入docker用户组1sudo usermod -aG docker USER_NAME 2.获取镜像可以使用docker pull NAME[：TAG]直接从DockerHub镜像源下载镜像。NAME">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2019/11/24/eA2lS7NiG5qEugj.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/25/fZMsUl7kmcoe3T8.png">
+<meta property="og:updated_time" content="2019-11-25T15:34:52.827Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker-学习一（镜像基本操作）">
+<meta name="twitter:description" content="内容提要docker镜像相关操作，包括获取，查看，搜索，删除，创建，存出和载入，上传等。 1.启动1servie start docker 为了避免每次使用docker命令都要用特权身份将当前用户加入docker用户组1sudo usermod -aG docker USER_NAME 2.获取镜像可以使用docker pull NAME[：TAG]直接从DockerHub镜像源下载镜像。NAME">
+<meta name="twitter:image" content="https://i.loli.net/2019/11/24/eA2lS7NiG5qEugj.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://iamlfc.top/2019/11/25/Docker-学习一（镜像基本操作）/">
+
+
+
+
+
+  <title>Docker-学习一（镜像基本操作） | 邪恶小代码</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">邪恶小代码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/11/25/Docker-学习一（镜像基本操作）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     1.8k 字
+	</span>
+	<span title="阅读时长">
+     7 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Docker-学习一（镜像基本操作）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-25T23:33:19+08:00">
+                2019-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker镜像/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker镜像</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/25/Docker-学习一（镜像基本操作）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/25/Docker-学习一（镜像基本操作）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.8k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="内容提要"><a href="#内容提要" class="headerlink" title="内容提要"></a>内容提要</h1><p>docker镜像相关操作，包括获取，查看，搜索，删除，创建，存出和载入，上传等。</p>
+<h2 id="1-启动"><a href="#1-启动" class="headerlink" title="1.启动"></a>1.启动</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">servie start docker</span><br></pre></td></tr></table></figure>
+<p>为了避免每次使用docker命令都要用特权身份<br>将当前用户加入docker用户组<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker USER_NAME</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-获取镜像"><a href="#2-获取镜像" class="headerlink" title="2.获取镜像"></a>2.获取镜像</h2><p>可以使用<strong>docker pull NAME[：TAG]</strong>直接从DockerHub镜像源下载镜像。NAME是镜像仓库名称，TAG是镜像标签（版本信息），例如获取一个Ubuntu14.04系统基本镜像<br>如果不显式指定TAG，则默认会选择latest 标签,这会下载仓库中最新版本的镜像（<em>最新镜像一般非稳定版本</em>）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pulling from library/ubuntu</span><br></pre></td></tr></table></figure></p>
+<p>非官方的仓库下载，则需要在仓库名称前指定完整的仓库地址。<br>例如从网易蜂巢的镜像源来下载ubuntu： 14.04 镜像，可以使用如下命令，此<br>时下载的镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull hub.c.163.com/public/ubuntu：14.04</span><br></pre></td></tr></table></figure></p>
+<h3 id="子命令详解"><a href="#子命令详解" class="headerlink" title="子命令详解"></a>子命令详解</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-a，--all-tags=true| false：是否获取仓库中的所有镜像，默认为否。</span><br></pre></td></tr></table></figure>
+<h2 id="3-镜像操作"><a href="#3-镜像操作" class="headerlink" title="3.镜像操作"></a>3.镜像操作</h2><h3 id="1-安装Nginx-并启动"><a href="#1-安装Nginx-并启动" class="headerlink" title="1.安装Nginx 并启动"></a>1.安装Nginx 并启动</h3><p>pull镜像，并启动 -d后台启动 -p宿主机端口映射容器端口。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -d -p 80:80 --restart=always nginx:latest</span><br></pre></td></tr></table></figure></p>
+<p>此时访问即可80端口即可。</p>
+<h3 id="2-images列出镜像"><a href="#2-images列出镜像" class="headerlink" title="2.images列出镜像"></a>2.images列出镜像</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2019/11/24/eA2lS7NiG5qEugj.png" alt="dockerImages.png"><br>在列出的信息中，可以看到的信息：</p>
+<ul>
+<li>来自于哪个仓库，比如 ubuntu 仓库用来保存 ubuntu 系列的基础镜像；</li>
+<li>镜像的标签信息，比如14.04、latest用来标注不同的版本信息。</li>
+<li>镜像的ID（唯一标识镜像）如oracle11g与registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g镜像ID相同证明实际上指向的是同一镜像。</li>
+<li>创建时间，说明镜像最后的更新时间；</li>
+<li>镜像大小</li>
+</ul>
+<p><strong>镜像ID信息十分重要，它标识了镜像。在使用时前若干个字符串来代替完整ID.<br>TAG 信息用来标记来自同一个仓库的不同镜像。通过TAG信息来区分发行版本。</strong></p>
+<h4 id="子命令详解-1"><a href="#子命令详解-1" class="headerlink" title="子命令详解"></a>子命令详解</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-a，--all=true| false：列出所有的镜像文件（包括临时文件），默认为否；</span><br><span class="line">--digests=true| false：列出镜像的数字摘要值，默认为否</span><br><span class="line">-f，--filter=[]：过滤列出的镜像，如 dangling=true 只显示没有被使用</span><br><span class="line">的镜像；也可指定带有特定标注的镜像等</span><br><span class="line">--format=&quot;TEMPLATE&quot;：控制输出格式，如.ID代表 ID信息，.Repository代表仓库信息等；</span><br><span class="line">-no-trunc=true| false：对输出结果中太长的部分是否进行截断，如镜像的ID 信息，默认为是</span><br><span class="line">-q，--quiet=true|false：仅输出ID信息，默认为否。</span><br><span class="line">更多子命令选项还可以通过 man docker-images 来查看</span><br></pre></td></tr></table></figure>
+<h3 id="3-使用tag-命令添加镜像标签"><a href="#3-使用tag-命令添加镜像标签" class="headerlink" title="3.使用tag 命令添加镜像标签"></a>3.使用tag 命令添加镜像标签</h3><p>为了方便在后续工作中使用特定镜像，还可以使用 docker tag命令来为本地镜像任意添加新的标签。例如添加一个新的oracle镜像标签<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g oracle11g:latest</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-使用inspect-命令查看详细信息"><a href="#4-使用inspect-命令查看详细信息" class="headerlink" title="4.使用inspect 命令查看详细信息"></a>4.使用inspect 命令查看详细信息</h3><p>使用<strong>docker inspect</strong> 命令可以获取该镜像的详细信息，包括制作者、架构、各层的数字摘要等<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"Id"</span>: <span class="string">"sha256:4152a960875253728e0ba43da37d023e4626c43a268ca0a9c6083119542119fb"</span>,</span><br><span class="line">        <span class="attr">"RepoTags"</span>: [</span><br><span class="line">            <span class="string">"nginx:latest"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"RepoDigests"</span>: [</span><br><span class="line">            <span class="string">"nginx@sha256:9916837e6b165e967e2beb5a586b1c980084d08eb3b3d7f79178a0c79426d880"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"Parent"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"Comment"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"Created"</span>: <span class="string">"2019-11-20T01:15:47.501397881Z"</span>,</span><br><span class="line">        <span class="attr">"Container"</span>: <span class="string">"b976da4ad5a3f13d191cfedd87ab06bc7b3bf0d5eb37876fa091c3aaae572056"</span>,</span><br><span class="line">        <span class="attr">"ContainerConfig"</span>: &#123;</span><br><span class="line">            <span class="attr">"Hostname"</span>: <span class="string">"b976da4ad5a3"</span>,</span><br><span class="line">            <span class="attr">"Domainname"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"User"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"AttachStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStdout"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStderr"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"ExposedPorts"</span>: &#123;</span><br><span class="line">                <span class="attr">"80/tcp"</span>: &#123;&#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"Tty"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"OpenStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"StdinOnce"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"Env"</span>: [</span><br><span class="line">                <span class="string">"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span>,</span><br><span class="line">                <span class="string">"NGINX_VERSION=1.17.6"</span>,</span><br><span class="line">                <span class="string">"NJS_VERSION=0.3.7"</span>,</span><br><span class="line">                <span class="string">"PKG_RELEASE=1~buster"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"Cmd"</span>: [</span><br><span class="line">                <span class="string">"/bin/sh"</span>,</span><br><span class="line">                <span class="string">"-c"</span>,</span><br><span class="line">                <span class="string">"#(nop) "</span>,</span><br><span class="line">                <span class="string">"CMD [\"nginx\" \"-g\" \"daemon off;\"]"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"ArgsEscaped"</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">"Image"</span>: <span class="string">"sha256:d96abf34b30211ae8cdb9700ff30dddb3b45ed410bb159fe562ea428b6280851"</span>,</span><br><span class="line">            <span class="attr">"Volumes"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"WorkingDir"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"Entrypoint"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"OnBuild"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"Labels"</span>: &#123;</span><br><span class="line">                <span class="attr">"maintainer"</span>: <span class="string">"NGINX Docker Maintainers &lt;docker-maint@nginx.com&gt;"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"StopSignal"</span>: <span class="string">"SIGTERM"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"DockerVersion"</span>: <span class="string">"18.06.1-ce"</span>,</span><br><span class="line">        <span class="attr">"Author"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"Config"</span>: &#123;</span><br><span class="line">            <span class="attr">"Hostname"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"Domainname"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"User"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"AttachStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStdout"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStderr"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"ExposedPorts"</span>: &#123;</span><br><span class="line">                <span class="attr">"80/tcp"</span>: &#123;&#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"Tty"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"OpenStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"StdinOnce"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"Env"</span>: [</span><br><span class="line">                <span class="string">"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span>,</span><br><span class="line">                <span class="string">"NGINX_VERSION=1.17.6"</span>,</span><br><span class="line">                <span class="string">"NJS_VERSION=0.3.7"</span>,</span><br><span class="line">                <span class="string">"PKG_RELEASE=1~buster"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"Cmd"</span>: [</span><br><span class="line">                <span class="string">"nginx"</span>,</span><br><span class="line">                <span class="string">"-g"</span>,</span><br><span class="line">                <span class="string">"daemon off;"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"ArgsEscaped"</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">"Image"</span>: <span class="string">"sha256:d96abf34b30211ae8cdb9700ff30dddb3b45ed410bb159fe562ea428b6280851"</span>,</span><br><span class="line">            <span class="attr">"Volumes"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"WorkingDir"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"Entrypoint"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"OnBuild"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"Labels"</span>: &#123;</span><br><span class="line">                <span class="attr">"maintainer"</span>: <span class="string">"NGINX Docker Maintainers &lt;docker-maint@nginx.com&gt;"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"StopSignal"</span>: <span class="string">"SIGTERM"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"Architecture"</span>: <span class="string">"amd64"</span>,</span><br><span class="line">        <span class="attr">"Os"</span>: <span class="string">"linux"</span>,</span><br><span class="line">        <span class="attr">"Size"</span>: <span class="number">126346569</span>,</span><br><span class="line">        <span class="attr">"VirtualSize"</span>: <span class="number">126346569</span>,</span><br><span class="line">        <span class="attr">"GraphDriver"</span>: &#123;</span><br><span class="line">            <span class="attr">"Data"</span>: &#123;</span><br><span class="line">                <span class="attr">"LowerDir"</span>: <span class="string">"/var/lib/docker/overlay2/da7346d91a599e73e4d394bb85a467ac618131460f846683aaa596c779b1ea07/diff:/var/lib/docker/overlay2/5c3cf4f87fe4f7f16433918981eb3471b5bc2b23eea1c0883db2d3561b73dd47/diff"</span>,</span><br><span class="line">                <span class="attr">"MergedDir"</span>: <span class="string">"/var/lib/docker/overlay2/6168e5e9a57d684f9c5809e6e4722c73bc2434326d39e90cfcdefe0a1b84999d/merged"</span>,</span><br><span class="line">                <span class="attr">"UpperDir"</span>: <span class="string">"/var/lib/docker/overlay2/6168e5e9a57d684f9c5809e6e4722c73bc2434326d39e90cfcdefe0a1b84999d/diff"</span>,</span><br><span class="line">                <span class="attr">"WorkDir"</span>: <span class="string">"/var/lib/docker/overlay2/6168e5e9a57d684f9c5809e6e4722c73bc2434326d39e90cfcdefe0a1b84999d/work"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"Name"</span>: <span class="string">"overlay2"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"RootFS"</span>: &#123;</span><br><span class="line">            <span class="attr">"Type"</span>: <span class="string">"layers"</span>,</span><br><span class="line">            <span class="attr">"Layers"</span>: [</span><br><span class="line">                <span class="string">"sha256:b67d19e65ef653823ed62a5835399c610a40e8205c16f839c5cc567954fcf594"</span>,</span><br><span class="line">                <span class="string">"sha256:de1b802e9897894b1f7e78346beda84dce9ba1c5514f3d479d40bb553bc623f8"</span>,</span><br><span class="line">                <span class="string">"sha256:c2d3130eb3f6afd3ad600119c363e84f33b0d05837de48adf7b638bc66403397"</span></span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"Metadata"</span>: &#123;</span><br><span class="line">            <span class="attr">"LastTagTime"</span>: <span class="string">"0001-01-01T00:00:00Z"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>返回的是一个json格式的信息，如果要获取其中一项内容可使用-f来指定<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker inspect -f &#123;&#123;".Architecture"&#125;&#125;</span><br><span class="line">amd64</span><br></pre></td></tr></table></figure></p>
+<h3 id="5-使用history-命令查看镜像历史"><a href="#5-使用history-命令查看镜像历史" class="headerlink" title="5.使用history 命令查看镜像历史"></a>5.使用history 命令查看镜像历史</h3><p>例如，查看ubuntu： 14.04 镜像的创建过程，可以使用如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker history ubuntu:14.04 -- no-trunc</span><br></pre></td></tr></table></figure></p>
+<p>过长的命令会被自动截断，可以使用– no-trunc 选项来输出完整命令。</p>
+<h3 id="6-搜寻镜像"><a href="#6-搜寻镜像" class="headerlink" title="6.搜寻镜像"></a>6.搜寻镜像</h3><p>查找远端仓库镜像，默认搜索官方仓库镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search --automated -s 10 redis</span><br></pre></td></tr></table></figure></p>
+<p>上述命令：查找自动创建评价为10+带redis关键字的镜像<br><img src="https://i.loli.net/2019/11/25/fZMsUl7kmcoe3T8.png" alt="dockerSearch.png"></p>
+<h3 id="7-删除镜像"><a href="#7-删除镜像" class="headerlink" title="7.删除镜像"></a>7.删除镜像</h3><h4 id="1-使用标签删除"><a href="#1-使用标签删除" class="headerlink" title="1.使用标签删除"></a>1.使用标签删除</h4><p>命令格式为 docker rmi IMAGE[IMAGE…]，其中IMAGE可以为标签或ID<br>例如删除redis：latest镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi redis:latest</span><br></pre></td></tr></table></figure></p>
+<p>当多个标签指向同一镜像文件时，rmi命令只删除该镜像的指定标签。当只有一个镜像标签时使用命令时需注意，此时会删除镜像文件。</p>
+<h4 id="2-使用镜像ID删除"><a href="#2-使用镜像ID删除" class="headerlink" title="2.使用镜像ID删除"></a>2.使用镜像ID删除</h4><p>当使用docker rmi 后面跟上了镜像的ID,此时会先删除所有指向该镜像的标签，然后删除镜像。<strong>但是当该镜像创造的容器还存在时，镜像是无法被删除的。</strong><br>如果想强行删除镜像可以使用 -f 参数强制删除一个存在容器依赖的镜像。<strong>但是不推荐这么使用</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi -f redis:4.0</span><br></pre></td></tr></table></figure></p>
+<p><strong>正确做法是先找到依赖该镜像的容器依次删除，然后再执行docker rm 命令删除镜像。</strong></p>
+<h3 id="8-创建镜像"><a href="#8-创建镜像" class="headerlink" title="8.创建镜像"></a>8.创建镜像</h3><p>创建镜像的方法主要有三种：基于已有镜像的容器创建、基于本地模板<br>导入、基于 Dockerfile 创建。（Dockerfile 方法后续补充）</p>
+<h4 id="1-基于已有镜像的容器创建"><a href="#1-基于已有镜像的容器创建" class="headerlink" title="1. 基于已有镜像的容器创建"></a>1. 基于已有镜像的容器创建</h4><p>在原有镜像中进行改动后提交,其中51a551dea4f7为容器ID.<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit -m'Add a new file' -a "lfc" 51a551dea4f7 test:0.1</span><br></pre></td></tr></table></figure></p>
+<p><strong>子命令</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">·-a，--author=&quot;&quot;：作者信息；</span><br><span class="line">·- c，--change=[]：提交的时候执行 Dockerfile指令，包括CMD|</span><br><span class="line">ENTRYPOINT|ENV|EXPOSE|LABEL|ONBUILD|USER|VOLUME|WORKDIR</span><br><span class="line">等；</span><br><span class="line">·-m，--message=&quot;&quot;：提交消息；</span><br><span class="line">·- p，--pause=true：提交时暂停容器运行。</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-基于本地模板导入"><a href="#2-基于本地模板导入" class="headerlink" title="2. 基于本地模板导入"></a>2. 基于本地模板导入</h4><p>使用镜像模版来创建，OPENVZ模板的下载地址为<a href="http://openvz.org/Download/templates/precreated。" target="_blank" rel="noopener">http://openvz.org/Download/templates/precreated。</a><br>命令格式为<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker import[OPTIONS]file|URL|-[REPOSITORY[:TAG]]</span><br></pre></td></tr></table></figure></p>
+<p>例如下载Ubuntu模版压缩包，之后用命令导入<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat ubuntu-14.04-x86_64-minimal.tar.gz | docker import - ubuntu:14.04</span><br></pre></td></tr></table></figure></p>
+<h3 id="9-镜像导出和载入"><a href="#9-镜像导出和载入" class="headerlink" title="9.镜像导出和载入"></a>9.镜像导出和载入</h3><h4 id="1-镜像导出"><a href="#1-镜像导出" class="headerlink" title="1.镜像导出"></a>1.镜像导出</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker save -o ubuntu_14.04.tar ubuntu:14.04</span><br></pre></td></tr></table></figure>
+<p>导出本地Ubuntu镜像为文件Ubuntu14，04.tar</p>
+<h4 id="2-镜像载入"><a href="#2-镜像载入" class="headerlink" title="2.镜像载入"></a>2.镜像载入</h4><p>可以使用docker load将导出的tar文件导入到本地镜像库，例如<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker load --input ubuntu_14.04.tar</span><br><span class="line">或：</span><br><span class="line">docker load &lt; ubuntu_14.04.tar</span><br></pre></td></tr></table></figure></p>
+<h3 id="10-上传镜像"><a href="#10-上传镜像" class="headerlink" title="10.上传镜像"></a>10.上传镜像</h3><p>使用docker push 命令上传镜像到仓库，默认上传到docker hub官方仓库。<br>命令格式：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push NAME[:TAG] | [REGISTRY_HOST[:REGISTRY_PORT]/]NAME[:TAG]</span><br></pre></td></tr></table></figure></p>
+<p>例如将test镜像添加新的标签user/test:latest 然后用docker push 上传镜像。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker tag test:latest user/test:latest</span><br><span class="line">docker push user/test:latest</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/21/Ubuntu-安装VNC/" rel="next" title="Ubuntu 安装VNC">
+                <i class="fa fa-chevron-left"></i> Ubuntu 安装VNC
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDQyNC8yMDk1Ng=="></div>
+    </div>
+
+
+  
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/nini.png" alt="李斯大炮">
+            
+              <p class="site-author-name" itemprop="name">李斯大炮</p>
+              <p class="site-description motion-element" itemprop="description">我从不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现更广阔的人生，那样的自由才是珍贵的、有价值的。我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/cmevolve/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lisidapao@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/lisidapao?t=1" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.baidu.com" title="基情资词" target="_blank">基情资词</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+			<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28138493&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#内容提要"><span class="nav-number">1.</span> <span class="nav-text">内容提要</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-启动"><span class="nav-number">1.1.</span> <span class="nav-text">1.启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-获取镜像"><span class="nav-number">1.2.</span> <span class="nav-text">2.获取镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#子命令详解"><span class="nav-number">1.2.1.</span> <span class="nav-text">子命令详解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-镜像操作"><span class="nav-number">1.3.</span> <span class="nav-text">3.镜像操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-安装Nginx-并启动"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.安装Nginx 并启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-images列出镜像"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.images列出镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#子命令详解-1"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">子命令详解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-使用tag-命令添加镜像标签"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.使用tag 命令添加镜像标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-使用inspect-命令查看详细信息"><span class="nav-number">1.3.4.</span> <span class="nav-text">4.使用inspect 命令查看详细信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-使用history-命令查看镜像历史"><span class="nav-number">1.3.5.</span> <span class="nav-text">5.使用history 命令查看镜像历史</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-搜寻镜像"><span class="nav-number">1.3.6.</span> <span class="nav-text">6.搜寻镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-删除镜像"><span class="nav-number">1.3.7.</span> <span class="nav-text">7.删除镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-使用标签删除"><span class="nav-number">1.3.7.1.</span> <span class="nav-text">1.使用标签删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-使用镜像ID删除"><span class="nav-number">1.3.7.2.</span> <span class="nav-text">2.使用镜像ID删除</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-创建镜像"><span class="nav-number">1.3.8.</span> <span class="nav-text">8.创建镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-基于已有镜像的容器创建"><span class="nav-number">1.3.8.1.</span> <span class="nav-text">1. 基于已有镜像的容器创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-基于本地模板导入"><span class="nav-number">1.3.8.2.</span> <span class="nav-text">2. 基于本地模板导入</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-镜像导出和载入"><span class="nav-number">1.3.9.</span> <span class="nav-text">9.镜像导出和载入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-镜像导出"><span class="nav-number">1.3.9.1.</span> <span class="nav-text">1.镜像导出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-镜像载入"><span class="nav-number">1.3.9.2.</span> <span class="nav-text">2.镜像载入</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-上传镜像"><span class="nav-number">1.3.10.</span> <span class="nav-text">10.上传镜像</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李斯大炮</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://iamlfc.top/2019/11/25/Docker-学习一（镜像基本操作）/';
+          this.page.identifier = '2019/11/25/Docker-学习一（镜像基本操作）/';
+          this.page.title = 'Docker-学习一（镜像基本操作）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
