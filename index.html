@@ -284,6 +284,226 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/11/27/Docker-学习二-容器基本操作/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     1.7k 字
+	</span>
+	<span title="阅读时长">
+     7 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/27/Docker-学习二-容器基本操作/" itemprop="url">Docker-学习二(容器基本操作)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T23:41:37+08:00">
+                2019-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker容器/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker容器</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/27/Docker-学习二-容器基本操作/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/27/Docker-学习二-容器基本操作/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.7k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="内容提要"><a href="#内容提要" class="headerlink" title="内容提要"></a>内容提要</h1><p>docker容器相关操作，包括容器启停，查看，删除，创建，导入导出，内存配置等。</p>
+<h2 id="1-创建并启动容器"><a href="#1-创建并启动容器" class="headerlink" title="1.创建并启动容器"></a>1.创建并启动容器</h2><h3 id="1-新建容器"><a href="#1-新建容器" class="headerlink" title="1.新建容器"></a>1.新建容器</h3><p>可以使用<strong>docker create</strong>命令新建一个容器，例如：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker create -it ubuntu:latest</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-启动容器"><a href="#2-启动容器" class="headerlink" title="2.启动容器"></a>2.启动容器</h3><p>使用<strong>docker create</strong><br>命令新建的容器处于停止状态需要配合使用<strong>docker start</strong> 命令启动。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start ssf</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-新建并启动容器"><a href="#3-新建并启动容器" class="headerlink" title="3.新建并启动容器"></a>3.新建并启动容器</h3><p>可以使用docker run 命令来直接新建并启动容器。（如果本地镜像有则启动，没有则获取最新镜像）<br>这里用ubuntu镜像echo一个hello word<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run ubuntu /bin/echo 'Hello world'</span><br></pre></td></tr></table></figure></p>
+<p>下面的命令启动一个bash终端，允许用户进行交互 并在后台运行：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -d ubuntu:14.04 /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p>—P参数是随机指定一个32768～61000的主机端口与容器绑定，而－p则是指定一个端口与容器绑定<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 80:80 nginx:v1.0</span><br></pre></td></tr></table></figure></p>
+<h4 id="命令详解"><a href="#命令详解" class="headerlink" title="命令详解"></a>命令详解</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">-a, --attach=[]             Attach to STDIN, STDOUT or STDERR</span><br><span class="line">--add-host=[]               Add a custom host-to-IP mapping (host:ip)</span><br><span class="line">--blkio-weight=0            Block IO (relative weight), between 10 and 1000</span><br><span class="line">-c, --cpu-shares=0          CPU shares (relative weight)</span><br><span class="line">--cap-add=[]                Add Linux capabilities</span><br><span class="line">--cap-drop=[]               Drop Linux capabilities</span><br><span class="line">--cgroup-parent=            Optional parent cgroup for the container</span><br><span class="line">--cidfile=                  Write the container ID to the file</span><br><span class="line">--cpu-period=0              Limit CPU CFS (Completely Fair Scheduler) period</span><br><span class="line">--cpu-quota=0               Limit the CPU CFS quota</span><br><span class="line">--cpuset-cpus=              CPUs in which to allow execution (0-3, 0,1)</span><br><span class="line">--cpuset-mems=              MEMs in which to allow execution (0-3, 0,1)</span><br><span class="line">-d, --detach=false          Run container in background and print container ID</span><br><span class="line">--device=[]                 Add a host device to the container</span><br><span class="line">--dns=[]                    Set custom DNS servers</span><br><span class="line">--dns-search=[]             Set custom DNS search domains</span><br><span class="line">-e, --env=[]                Set environment variables</span><br><span class="line">--entrypoint=               Overwrite the default ENTRYPOINT of the image</span><br><span class="line">--env-file=[]               Read in a file of environment variables</span><br><span class="line">--expose=[]                 Expose a port or a range of ports</span><br><span class="line">-h, --hostname=             Container host name</span><br><span class="line">--help=false                Print usage</span><br><span class="line">-i, --interactive=false     Keep STDIN open even if not attached</span><br><span class="line">--init=                     Run container following specified init system container method (systemd)</span><br><span class="line">--ipc=                      IPC namespace to use</span><br><span class="line">-l, --label=[]              Set meta data on a container</span><br><span class="line">--label-file=[]             Read in a line delimited file of labels</span><br><span class="line">--link=[]                   Add link to another container</span><br><span class="line">--log-driver=               Logging driver for container</span><br><span class="line">--log-opt=[]                Log driver options</span><br><span class="line">--lxc-conf=[]               Add custom lxc options</span><br><span class="line">-m, --memory=               Memory limit</span><br><span class="line">--mac-address=              Container MAC address (e.g. 92:d0:c6:0a:29:33)</span><br><span class="line">--memory-swap=              Total memory (memory + swap), &apos;-1&apos; to disable swap</span><br><span class="line">--name=                     Assign a name to the container</span><br><span class="line">--net=bridge                Set the Network mode for the container</span><br><span class="line">--oom-kill-disable=false    Disable OOM Killer</span><br><span class="line">-P, --publish-all=false     Publish all exposed ports to random ports</span><br><span class="line">-p, --publish=[]            Publish a container&apos;s port(s) to the host</span><br><span class="line">--pid=                      PID namespace to use</span><br><span class="line">--privileged=false          Give extended privileges to this container</span><br><span class="line">--read-only=false           Mount the container&apos;s root filesystem as read only</span><br><span class="line">--restart=no                Restart policy to apply when a container exits</span><br><span class="line">--rm=false                  Automatically remove the container when it exits</span><br><span class="line">--security-opt=[]           Security Options</span><br><span class="line">--sig-proxy=true            Proxy received signals to the process</span><br><span class="line">-t, --tty=false             Allocate a pseudo-TTY</span><br><span class="line">-u, --user=                 Username or UID (format: &lt;name|uid&gt;[:&lt;group|gid&gt;])</span><br><span class="line">--ulimit=[]                 Ulimit options</span><br><span class="line">--uts=                      UTS namespace to use</span><br><span class="line">-v, --volume=[]             Bind mount a volume</span><br><span class="line">--volumes-from=[]           Mount volumes from the specified container(s)</span><br><span class="line">-w, --workdir=              Working directory inside the container</span><br></pre></td></tr></table></figure>
+<h2 id="2-终止容器"><a href="#2-终止容器" class="headerlink" title="2.终止容器"></a>2.终止容器</h2><h3 id="1-容器终止"><a href="#1-容器终止" class="headerlink" title="1.容器终止"></a>1.容器终止</h3><p>可以使用docker stop来终止运行中的容器，格式为：<br><strong>docker stop[-t|–time[=10]][CONTAINER…]</strong><br>首先会向容器发送SIGTERM信号，等待一段超时时间（默认为 10秒）后，再发送 SIGKILL 信号来终止容器。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop ce5</span><br></pre></td></tr></table></figure></p>
+<p>使用 docker kill 命令直接强行终止容器。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker kill ce5</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-容器重启"><a href="#2-容器重启" class="headerlink" title="2.容器重启"></a>2.容器重启</h3><p>终止状态的容器可以使用docker start 启动<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start ce5</span><br></pre></td></tr></table></figure></p>
+<p>在运行状态的容器可以使用docker restart重启<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart ce5</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-进入容器"><a href="#3-进入容器" class="headerlink" title="3.进入容器"></a>3.进入容器</h2><p>进入容器有三种方法，其中主要<strong>推荐使用第一种exec方法</strong>，其他方法了解作用即可。</p>
+<h3 id="1-exec命令-重点"><a href="#1-exec命令-重点" class="headerlink" title="1.exec命令(重点)"></a>1.exec命令(<strong>重点</strong>)</h3><p>Docker从1.3.0版本起提供了一个更加方便的exec命令，可以在容器内直接执行任意命令。该命令的基本格式为：<br><strong>docker exec [-d|–detach] [–detach-keys[=[]]] [-i|–interactive] [–privileged]<br>[-t|–tty] [-u|–user[=USER]] CONTAINER COMMAND</strong> [ARG…] 。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 243c32535da7 /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p>通过指定- it 参数来保持标准输入打开，并且分配一个伪终端。</p>
+<h4 id="相关参数"><a href="#相关参数" class="headerlink" title="相关参数"></a>相关参数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">·-i，--interactive=true| false：打开标准输入接受用户输入命令，默认为false；</span><br><span class="line">·--privileged=true| false：是否给执行命令以高权限，默认为false；</span><br><span class="line">·-t，--tty=true| false：分配伪终端，默认为false；</span><br><span class="line">·- u，--user=&quot;&quot;：执行命令的用户名或ID。</span><br></pre></td></tr></table></figure>
+<h3 id="2-attach命令"><a href="#2-attach命令" class="headerlink" title="2.attach命令"></a>2.attach命令</h3><p>命令格式：<strong>docker attach [–detach-keys[=[]]] [–no-stdin] [–sig-proxy[=true]] CONTAINER</strong><br>支持三个主要选项：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">·--detach-keys[=[]]：指定退出attach 模式的快捷键序列，默认是 CTRL-p CTRL-q；</span><br><span class="line">·--no-stdin=true| false：是否关闭标准输入，默认是保持打开；</span><br><span class="line">·--sig-proxy=true| false：是否代理收到的系统信号给应用进程，默认为true</span><br></pre></td></tr></table></figure></p>
+<p>使用示例：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker attach myredis</span><br></pre></td></tr></table></figure></p>
+<p>当多个窗口同时用attach命令连到同一个容器的时候，所有窗口都会同步显示。当某个窗口因命令阻塞时，其他窗口也无法执行操作了。</p>
+<h3 id="3-nsenter工具"><a href="#3-nsenter工具" class="headerlink" title="3.nsenter工具"></a>3.nsenter工具</h3><p>在util-linux 软件包版本2.23+中包含nsenter工具。如果系统中的 util-linux包没有该命令需下载。（略…）</p>
+<h3 id="4-容器操作"><a href="#4-容器操作" class="headerlink" title="4. 容器操作"></a>4. 容器操作</h3><p>在容器中操作时，使用ps 报错，是因为ps没有安装在基础wheezy图像。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get update &amp;&amp; apt-get install procps</span><br></pre></td></tr></table></figure></p>
+<p><strong>同样在容器中安装vim等工具时，需要先使用apt-get update 同步一下容器内和服务器的更新源，才可安装。</strong></p>
+<h2 id="4-删除容器"><a href="#4-删除容器" class="headerlink" title="4.删除容器"></a>4.删除容器</h2><p>使用docker rm 命令删除处于终止或者退出状态的容器。命令格式为：<strong>docker rm[-f|–force][-l|–link][-v|–volumes]CONTAINER[CONTAINER…]</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm ce554267d7a4</span><br></pre></td></tr></table></figure></p>
+<p>默认情况下rm命令只能删除停止或者退出状态的容器，但是可以添加-f参数，将容器kill后强行删除。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f ce554267d7a4</span><br></pre></td></tr></table></figure></p>
+<p>###相关参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">·- f，--force=false：是否强行终止并删除一个运行中的容器；</span><br><span class="line">·- l，--link=false：删除容器的连接，但保留容器；</span><br><span class="line">·- v，--volumes=false：删除容器挂载的数据卷。</span><br></pre></td></tr></table></figure></p>
+<h2 id="5-导入导出容器"><a href="#5-导入导出容器" class="headerlink" title="5.导入导出容器"></a>5.导入导出容器</h2><h3 id="1-导出容器"><a href="#1-导出容器" class="headerlink" title="1.导出容器"></a>1.导出容器</h3><p>命令的格式为 <strong>docker export[-o|– output[=””]]CONTAINER</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker export -o test_for_run.tar ce5</span><br><span class="line"> 或</span><br><span class="line">docker export e81 &gt;test_for_stop.tar</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-导入容器"><a href="#2-导入容器" class="headerlink" title="2.导入容器"></a>2.导入容器</h3><p>和导入镜像一样可以使用docker import将tar导入变成镜像，命令格式为：<br><strong>docker import [-c|–change[=[]]] [-m|–message[=MESSAGE]] file|URL|-[REPOSITORY [:TAG]]</strong><br><strong>导入时可以定义标签信息</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker import test_for_run.tar - test/ubuntu:v1.0</span><br></pre></td></tr></table></figure></p>
+<p>在使用docker load 导入由docker export保存容器生成的tar时会报异常信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">open /var/lib/docker/tmp/docker-import-283259618/repositories: no such file or directory</span><br></pre></td></tr></table></figure></p>
+<p><strong>导入容器tar需使用docker import命令</strong></p>
+<h2 id="6-容器资源配置"><a href="#6-容器资源配置" class="headerlink" title="6.容器资源配置"></a>6.容器资源配置</h2><p>使用docker stats命令来看当前服务器的内存,针对各个场景对相应容器分配合理内存资源。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stats</span><br></pre></td></tr></table></figure></p>
+<p>使用docker的update命令来对内存大小进行管理分配<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker update -m 350m  --memory-swap -1  mysqlserver</span><br></pre></td></tr></table></figure></p>
+<p><strong>–memory-swap -1</strong> 参数是指不让容器和宿主机进行内存交换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">--automated=true| false：仅显示自动创建的镜像，默认为否；</span><br><span class="line">·--no-trunc=true| false：输出信息不截断显示，默认为否；</span><br><span class="line">·- s，--stars=X：指定仅显示评价为指定星级以上的镜像，默认为0，即输出所有镜像。</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://i.loli.net/2019/11/25/csIVayoYXUhRrDp.png" alt="dockerstats.png"></p>
+<p>参考资料：Docker技术入门与实战</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/11/25/Docker-学习一（镜像基本操作）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -296,10 +516,10 @@
       <meta itemprop="name" content="邪恶小代码">
     </span>
 	<span title="字数统计">
-     1.8k 字
+     2k 字
 	</span>
 	<span title="阅读时长">
-     7 分钟
+     8 分钟
 	</span>
     
       <header class="post-header">
@@ -384,7 +604,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.8k
+                  2k
                 </span>
               
 
@@ -400,7 +620,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  7
+                  8
                 </span>
               
             </div>
@@ -443,6 +663,7 @@
 <p><strong>镜像ID信息十分重要，它标识了镜像。在使用时前若干个字符串来代替完整ID.<br>TAG 信息用来标记来自同一个仓库的不同镜像。通过TAG信息来区分发行版本。</strong></p>
 <h4 id="子命令详解-1"><a href="#子命令详解-1" class="headerlink" title="子命令详解"></a>子命令详解</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-a，--all=true| false：列出所有的镜像文件（包括临时文件），默认为否；</span><br><span class="line">--digests=true| false：列出镜像的数字摘要值，默认为否</span><br><span class="line">-f，--filter=[]：过滤列出的镜像，如 dangling=true 只显示没有被使用</span><br><span class="line">的镜像；也可指定带有特定标注的镜像等</span><br><span class="line">--format=&quot;TEMPLATE&quot;：控制输出格式，如.ID代表 ID信息，.Repository代表仓库信息等；</span><br><span class="line">-no-trunc=true| false：对输出结果中太长的部分是否进行截断，如镜像的ID 信息，默认为是</span><br><span class="line">-q，--quiet=true|false：仅输出ID信息，默认为否。</span><br><span class="line">更多子命令选项还可以通过 man docker-images 来查看</span><br></pre></td></tr></table></figure>
 <h3 id="3-使用tag-命令添加镜像标签"><a href="#3-使用tag-命令添加镜像标签" class="headerlink" title="3.使用tag 命令添加镜像标签"></a>3.使用tag 命令添加镜像标签</h3><p>为了方便在后续工作中使用特定镜像，还可以使用 docker tag命令来为本地镜像任意添加新的标签。例如添加一个新的oracle镜像标签<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g oracle11g:latest</span><br></pre></td></tr></table></figure></p>
+<p>也可以指定镜像ID来修改其标签<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag 5sbdf471761  test/oracle11g:latest</span><br></pre></td></tr></table></figure></p>
 <h3 id="4-使用inspect-命令查看详细信息"><a href="#4-使用inspect-命令查看详细信息" class="headerlink" title="4.使用inspect 命令查看详细信息"></a>4.使用inspect 命令查看详细信息</h3><p>使用<strong>docker inspect</strong> 命令可以获取该镜像的详细信息，包括制作者、架构、各层的数字摘要等<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"Id"</span>: <span class="string">"sha256:4152a960875253728e0ba43da37d023e4626c43a268ca0a9c6083119542119fb"</span>,</span><br><span class="line">        <span class="attr">"RepoTags"</span>: [</span><br><span class="line">            <span class="string">"nginx:latest"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"RepoDigests"</span>: [</span><br><span class="line">            <span class="string">"nginx@sha256:9916837e6b165e967e2beb5a586b1c980084d08eb3b3d7f79178a0c79426d880"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"Parent"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"Comment"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"Created"</span>: <span class="string">"2019-11-20T01:15:47.501397881Z"</span>,</span><br><span class="line">        <span class="attr">"Container"</span>: <span class="string">"b976da4ad5a3f13d191cfedd87ab06bc7b3bf0d5eb37876fa091c3aaae572056"</span>,</span><br><span class="line">        <span class="attr">"ContainerConfig"</span>: &#123;</span><br><span class="line">            <span class="attr">"Hostname"</span>: <span class="string">"b976da4ad5a3"</span>,</span><br><span class="line">            <span class="attr">"Domainname"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"User"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"AttachStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStdout"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStderr"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"ExposedPorts"</span>: &#123;</span><br><span class="line">                <span class="attr">"80/tcp"</span>: &#123;&#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"Tty"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"OpenStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"StdinOnce"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"Env"</span>: [</span><br><span class="line">                <span class="string">"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span>,</span><br><span class="line">                <span class="string">"NGINX_VERSION=1.17.6"</span>,</span><br><span class="line">                <span class="string">"NJS_VERSION=0.3.7"</span>,</span><br><span class="line">                <span class="string">"PKG_RELEASE=1~buster"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"Cmd"</span>: [</span><br><span class="line">                <span class="string">"/bin/sh"</span>,</span><br><span class="line">                <span class="string">"-c"</span>,</span><br><span class="line">                <span class="string">"#(nop) "</span>,</span><br><span class="line">                <span class="string">"CMD [\"nginx\" \"-g\" \"daemon off;\"]"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"ArgsEscaped"</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">"Image"</span>: <span class="string">"sha256:d96abf34b30211ae8cdb9700ff30dddb3b45ed410bb159fe562ea428b6280851"</span>,</span><br><span class="line">            <span class="attr">"Volumes"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"WorkingDir"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"Entrypoint"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"OnBuild"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"Labels"</span>: &#123;</span><br><span class="line">                <span class="attr">"maintainer"</span>: <span class="string">"NGINX Docker Maintainers &lt;docker-maint@nginx.com&gt;"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"StopSignal"</span>: <span class="string">"SIGTERM"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"DockerVersion"</span>: <span class="string">"18.06.1-ce"</span>,</span><br><span class="line">        <span class="attr">"Author"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"Config"</span>: &#123;</span><br><span class="line">            <span class="attr">"Hostname"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"Domainname"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"User"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"AttachStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStdout"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStderr"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"ExposedPorts"</span>: &#123;</span><br><span class="line">                <span class="attr">"80/tcp"</span>: &#123;&#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"Tty"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"OpenStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"StdinOnce"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"Env"</span>: [</span><br><span class="line">                <span class="string">"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span>,</span><br><span class="line">                <span class="string">"NGINX_VERSION=1.17.6"</span>,</span><br><span class="line">                <span class="string">"NJS_VERSION=0.3.7"</span>,</span><br><span class="line">                <span class="string">"PKG_RELEASE=1~buster"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"Cmd"</span>: [</span><br><span class="line">                <span class="string">"nginx"</span>,</span><br><span class="line">                <span class="string">"-g"</span>,</span><br><span class="line">                <span class="string">"daemon off;"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"ArgsEscaped"</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">"Image"</span>: <span class="string">"sha256:d96abf34b30211ae8cdb9700ff30dddb3b45ed410bb159fe562ea428b6280851"</span>,</span><br><span class="line">            <span class="attr">"Volumes"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"WorkingDir"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"Entrypoint"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"OnBuild"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"Labels"</span>: &#123;</span><br><span class="line">                <span class="attr">"maintainer"</span>: <span class="string">"NGINX Docker Maintainers &lt;docker-maint@nginx.com&gt;"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"StopSignal"</span>: <span class="string">"SIGTERM"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"Architecture"</span>: <span class="string">"amd64"</span>,</span><br><span class="line">        <span class="attr">"Os"</span>: <span class="string">"linux"</span>,</span><br><span class="line">        <span class="attr">"Size"</span>: <span class="number">126346569</span>,</span><br><span class="line">        <span class="attr">"VirtualSize"</span>: <span class="number">126346569</span>,</span><br><span class="line">        <span class="attr">"GraphDriver"</span>: &#123;</span><br><span class="line">            <span class="attr">"Data"</span>: &#123;</span><br><span class="line">                <span class="attr">"LowerDir"</span>: <span class="string">"/var/lib/docker/overlay2/da7346d91a599e73e4d394bb85a467ac618131460f846683aaa596c779b1ea07/diff:/var/lib/docker/overlay2/5c3cf4f87fe4f7f16433918981eb3471b5bc2b23eea1c0883db2d3561b73dd47/diff"</span>,</span><br><span class="line">                <span class="attr">"MergedDir"</span>: <span class="string">"/var/lib/docker/overlay2/6168e5e9a57d684f9c5809e6e4722c73bc2434326d39e90cfcdefe0a1b84999d/merged"</span>,</span><br><span class="line">                <span class="attr">"UpperDir"</span>: <span class="string">"/var/lib/docker/overlay2/6168e5e9a57d684f9c5809e6e4722c73bc2434326d39e90cfcdefe0a1b84999d/diff"</span>,</span><br><span class="line">                <span class="attr">"WorkDir"</span>: <span class="string">"/var/lib/docker/overlay2/6168e5e9a57d684f9c5809e6e4722c73bc2434326d39e90cfcdefe0a1b84999d/work"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"Name"</span>: <span class="string">"overlay2"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"RootFS"</span>: &#123;</span><br><span class="line">            <span class="attr">"Type"</span>: <span class="string">"layers"</span>,</span><br><span class="line">            <span class="attr">"Layers"</span>: [</span><br><span class="line">                <span class="string">"sha256:b67d19e65ef653823ed62a5835399c610a40e8205c16f839c5cc567954fcf594"</span>,</span><br><span class="line">                <span class="string">"sha256:de1b802e9897894b1f7e78346beda84dce9ba1c5514f3d479d40bb553bc623f8"</span>,</span><br><span class="line">                <span class="string">"sha256:c2d3130eb3f6afd3ad600119c363e84f33b0d05837de48adf7b638bc66403397"</span></span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"Metadata"</span>: &#123;</span><br><span class="line">            <span class="attr">"LastTagTime"</span>: <span class="string">"0001-01-01T00:00:00Z"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
 <p>返回的是一个json格式的信息，如果要获取其中一项内容可使用-f来指定<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker inspect -f &#123;&#123;".Architecture"&#125;&#125;</span><br><span class="line">amd64</span><br></pre></td></tr></table></figure></p>
 <h3 id="5-使用history-命令查看镜像历史"><a href="#5-使用history-命令查看镜像历史" class="headerlink" title="5.使用history 命令查看镜像历史"></a>5.使用history 命令查看镜像历史</h3><p>例如，查看ubuntu： 14.04 镜像的创建过程，可以使用如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker history ubuntu:14.04 -- no-trunc</span><br></pre></td></tr></table></figure></p>
@@ -456,13 +677,15 @@
 <h3 id="8-创建镜像"><a href="#8-创建镜像" class="headerlink" title="8.创建镜像"></a>8.创建镜像</h3><p>创建镜像的方法主要有三种：基于已有镜像的容器创建、基于本地模板<br>导入、基于 Dockerfile 创建。（Dockerfile 方法后续补充）</p>
 <h4 id="1-基于已有镜像的容器创建"><a href="#1-基于已有镜像的容器创建" class="headerlink" title="1. 基于已有镜像的容器创建"></a>1. 基于已有镜像的容器创建</h4><p>在原有镜像中进行改动后提交,其中51a551dea4f7为容器ID.<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit -m'Add a new file' -a "lfc" 51a551dea4f7 test:0.1</span><br></pre></td></tr></table></figure></p>
 <p><strong>子命令</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">·-a，--author=&quot;&quot;：作者信息；</span><br><span class="line">·- c，--change=[]：提交的时候执行 Dockerfile指令，包括CMD|</span><br><span class="line">ENTRYPOINT|ENV|EXPOSE|LABEL|ONBUILD|USER|VOLUME|WORKDIR</span><br><span class="line">等；</span><br><span class="line">·-m，--message=&quot;&quot;：提交消息；</span><br><span class="line">·- p，--pause=true：提交时暂停容器运行。</span><br></pre></td></tr></table></figure></p>
-<h4 id="2-基于本地模板导入"><a href="#2-基于本地模板导入" class="headerlink" title="2. 基于本地模板导入"></a>2. 基于本地模板导入</h4><p>使用镜像模版来创建，OPENVZ模板的下载地址为<a href="http://openvz.org/Download/templates/precreated。" target="_blank" rel="noopener">http://openvz.org/Download/templates/precreated。</a><br>命令格式为<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker import[OPTIONS]file|URL|-[REPOSITORY[:TAG]]</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-基于本地模板导入"><a href="#2-基于本地模板导入" class="headerlink" title="2. 基于本地模板导入"></a>2. 基于本地模板导入</h4><p>使用镜像模版来创建，OPENVZ模板的下载地址为<a href="http://openvz.org/Download/templates/precreated。" target="_blank" rel="noopener">http://openvz.org/Download/templates/precreated。</a><br>命令格式为<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker import[OPTIONS]file|URL| [REPOSITORY[:TAG]]</span><br></pre></td></tr></table></figure></p>
 <p>例如下载Ubuntu模版压缩包，之后用命令导入<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat ubuntu-14.04-x86_64-minimal.tar.gz | docker import - ubuntu:14.04</span><br></pre></td></tr></table></figure></p>
-<h3 id="9-镜像导出和载入"><a href="#9-镜像导出和载入" class="headerlink" title="9.镜像导出和载入"></a>9.镜像导出和载入</h3><h4 id="1-镜像导出"><a href="#1-镜像导出" class="headerlink" title="1.镜像导出"></a>1.镜像导出</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker save -o ubuntu_14.04.tar ubuntu:14.04</span><br></pre></td></tr></table></figure>
+<h3 id="9-镜像导出和载入"><a href="#9-镜像导出和载入" class="headerlink" title="9.镜像导出和载入"></a>9.镜像导出和载入</h3><h4 id="1-镜像导出"><a href="#1-镜像导出" class="headerlink" title="1.镜像导出"></a>1.镜像导出</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker save -o ubuntu_14.04.tar ubuntu:14.04</span><br><span class="line">或 docker  save nginx &gt;/tmp/nginx.tar.gz</span><br></pre></td></tr></table></figure>
 <p>导出本地Ubuntu镜像为文件Ubuntu14，04.tar</p>
 <h4 id="2-镜像载入"><a href="#2-镜像载入" class="headerlink" title="2.镜像载入"></a>2.镜像载入</h4><p>可以使用docker load将导出的tar文件导入到本地镜像库，例如<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker load --input ubuntu_14.04.tar</span><br><span class="line">或：</span><br><span class="line">docker load &lt; ubuntu_14.04.tar</span><br></pre></td></tr></table></figure></p>
+<h3 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h3><p>另外 docker load 和 docker import都可以导入一个镜像存储文件， <strong>区别：<br>docker import：丢弃了所有的历史记录和元数据信息，仅保存容器当时的快照状态。在导入的时候可以重新制定标签等元数据信息。<br>docker load：将保存完整记录，体积较大。</strong></p>
 <h3 id="10-上传镜像"><a href="#10-上传镜像" class="headerlink" title="10.上传镜像"></a>10.上传镜像</h3><p>使用docker push 命令上传镜像到仓库，默认上传到docker hub官方仓库。<br>命令格式：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push NAME[:TAG] | [REGISTRY_HOST[:REGISTRY_PORT]/]NAME[:TAG]</span><br></pre></td></tr></table></figure></p>
 <p>例如将test镜像添加新的标签user/test:latest 然后用docker push 上传镜像。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker tag test:latest user/test:latest</span><br><span class="line">docker push user/test:latest</span><br></pre></td></tr></table></figure></p>
+<p>参考资料：Docker技术入门与实战</p>
 
           
         
@@ -2348,234 +2571,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/03/SpringCloud-学习笔记-资源整合/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     746 字
-	</span>
-	<span title="阅读时长">
-     3 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/03/SpringCloud-学习笔记-资源整合/" itemprop="url">SpringCloud 学习笔记(资源整合)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-03T23:19:57+08:00">
-                2019-10-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/03/SpringCloud-学习笔记-资源整合/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/03/SpringCloud-学习笔记-资源整合/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  746
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、微服务"><a href="#一、微服务" class="headerlink" title="一、微服务"></a>一、微服务</h2><p>单体架构：<br>——优点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1、易于开发：开发的方式简单，方便运行也容易调试。</span><br><span class="line">2、易于测试。</span><br><span class="line">3、易于部署。</span><br></pre></td></tr></table></figure></p>
-<p>——缺点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、项目过于臃肿，维护成本大，出现bug难定位。</span><br><span class="line">2、资源无法隔离：共享一个数据库，或者一块内存。</span><br><span class="line">如果一个功能模块突然访问量过大，可能影响整个系统的性能。</span><br><span class="line">3、无法灵活扩展：单体系统也可以集群部署，但是不够灵活，我明明只是订单系统遇到了瓶颈，</span><br><span class="line">只需要将订单模块水平扩展就行，但现在要将整个系统水平扩展。不灵活！</span><br><span class="line">4、交付周期长：所有功能得一起上线，一起构建，一起部署。</span><br><span class="line">任何一个环节出错，都可能影响交付。</span><br></pre></td></tr></table></figure></p>
-<p>分布式的优点与单体应用缺点对立，但是也带来了一些问题<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.性能，访问速度受带宽影响。</span><br><span class="line">2.可靠性，高度依赖网络。</span><br><span class="line">3.数据一致性：C（一致性）A（可用性）P（分区容错），cap原理</span><br><span class="line">4.运维成本：一个系统拆成了多个服务，每个服务都得配置，部署，监控，日志处理</span><br></pre></td></tr></table></figure></p>
-<p>CAP 定理:<a href="http://www.ruanyifeng.com/blog/2018/07/cap.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2018/07/cap.html</a></p>
-<p>微服务就是在分布式的特点上对业务的的一个横向划分，拆分成不同模块对外提供服务。</p>
-<h2 id="二-Spring-Cloud是什么"><a href="#二-Spring-Cloud是什么" class="headerlink" title="二.Spring Cloud是什么?"></a>二.Spring Cloud是什么?</h2><p>Spring Cloud是一系列框架的有序集合。它利用Spring Boot的开发便利性巧妙地简化了分布式系统基础设施的开发，如服务发现注册、配置中心、消息总线、负载均衡、断路器、数据监控等，都可以用Spring Boot的开发风格做到一键启动和部署。Spring Cloud就像一个老大哥带了一帮小弟，是一个资源的整合。</p>
-<h2 id="三-微服务入门"><a href="#三-微服务入门" class="headerlink" title="三.微服务入门"></a>三.微服务入门</h2><p>服务链路过程图：<br><img src="https://i.loli.net/2019/08/28/hUK8V2we1f4HNFG.png" alt="请求链路"></p>
-<h3 id="技术选择"><a href="#技术选择" class="headerlink" title="技术选择"></a>技术选择</h3><p><img src="https://s3.amazonaws.com/infoq.content.live.0/articles/comparing-api-gateway-performances/zh/resources/1269-1523696433477.png" alt="技术选择"></p>
-<h3 id="1-注册中心"><a href="#1-注册中心" class="headerlink" title="1.注册中心"></a>1.注册中心</h3><p>参考文章链接：<a href="https://blog.csdn.net/forezp/article/details/81040925" target="_blank" rel="noopener">https://blog.csdn.net/forezp/article/details/81040925</a><br>整理内容连接：<a href="https://www.iamlfc.top/2019/08/25/SpringCloud%E5%AD%A6%E4%B9%A0%E4%B8%80-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%92%8C%E5%8F%91%E7%8E%B0/" target="_blank" rel="noopener">https://www.iamlfc.top/2019/08/25/SpringCloud%E5%AD%A6%E4%B9%A0%E4%B8%80-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%92%8C%E5%8F%91%E7%8E%B0/</a></p>
-<h3 id="2-服务消费"><a href="#2-服务消费" class="headerlink" title="2.服务消费"></a>2.服务消费</h3><p>参考链接：<a href="https://blog.csdn.net/forezp/article/details/81040965" target="_blank" rel="noopener">https://blog.csdn.net/forezp/article/details/81040965</a></p>
-<h3 id="3-路由网关"><a href="#3-路由网关" class="headerlink" title="3.路由网关"></a>3.路由网关</h3><p>zuul:<br>    – 参考连接：<a href="https://blog.csdn.net/forezp/article/details/81041012" target="_blank" rel="noopener">https://blog.csdn.net/forezp/article/details/81041012</a><br>gateway:<br>    – 参考连接：<a href="https://blog.csdn.net/forezp/article/details/85210153" target="_blank" rel="noopener">https://blog.csdn.net/forezp/article/details/85210153</a></p>
-<h3 id="4-配置中心"><a href="#4-配置中心" class="headerlink" title="4.配置中心"></a>4.配置中心</h3><p>SpringColud Config：<br>    – 参考链接：<a href="https://www.cnblogs.com/lfalex0831/p/9206605.html" target="_blank" rel="noopener">https://www.cnblogs.com/lfalex0831/p/9206605.html</a></p>
-<p>推荐学习资料<br><a href="http://xujin.org/categories/%E8%B7%9F%E6%88%91%E5%AD%A6Spring-Cloud/" target="_blank" rel="noopener">http://xujin.org/categories/%E8%B7%9F%E6%88%91%E5%AD%A6Spring-Cloud/</a><br><a href="http://www.itmuch.com/categories/Spring-Cloud/" target="_blank" rel="noopener">http://www.itmuch.com/categories/Spring-Cloud/</a><br><a href="http://blog.didispace.com/Spring-Cloud%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" target="_blank" rel="noopener">http://blog.didispace.com/Spring-Cloud%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/</a></p>
-<p>demo地址：<a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/springcloud/springCloud" target="_blank" rel="noopener">https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/springcloud/springCloud</a><br>用途 | 技术<br>—-|——<br>基础容器 | spring-boot 2.0.6<br>分布式服务框架 | Spring cloud F SR3<br>项目构建 | Maven<br>注册中心 | eureka<br>网关    |gateway<br>服务消费者|Fegin<br>配置中心 | Spring Cloud Config<br><em>…</em></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2624,7 +2624,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2635,7 +2635,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

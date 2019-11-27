@@ -284,6 +284,229 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/03/SpringCloud-学习笔记-资源整合/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     746 字
+	</span>
+	<span title="阅读时长">
+     3 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/03/SpringCloud-学习笔记-资源整合/" itemprop="url">SpringCloud 学习笔记(资源整合)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-03T23:19:57+08:00">
+                2019-10-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringCloud</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/03/SpringCloud-学习笔记-资源整合/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/03/SpringCloud-学习笔记-资源整合/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  746
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、微服务"><a href="#一、微服务" class="headerlink" title="一、微服务"></a>一、微服务</h2><p>单体架构：<br>——优点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1、易于开发：开发的方式简单，方便运行也容易调试。</span><br><span class="line">2、易于测试。</span><br><span class="line">3、易于部署。</span><br></pre></td></tr></table></figure></p>
+<p>——缺点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、项目过于臃肿，维护成本大，出现bug难定位。</span><br><span class="line">2、资源无法隔离：共享一个数据库，或者一块内存。</span><br><span class="line">如果一个功能模块突然访问量过大，可能影响整个系统的性能。</span><br><span class="line">3、无法灵活扩展：单体系统也可以集群部署，但是不够灵活，我明明只是订单系统遇到了瓶颈，</span><br><span class="line">只需要将订单模块水平扩展就行，但现在要将整个系统水平扩展。不灵活！</span><br><span class="line">4、交付周期长：所有功能得一起上线，一起构建，一起部署。</span><br><span class="line">任何一个环节出错，都可能影响交付。</span><br></pre></td></tr></table></figure></p>
+<p>分布式的优点与单体应用缺点对立，但是也带来了一些问题<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.性能，访问速度受带宽影响。</span><br><span class="line">2.可靠性，高度依赖网络。</span><br><span class="line">3.数据一致性：C（一致性）A（可用性）P（分区容错），cap原理</span><br><span class="line">4.运维成本：一个系统拆成了多个服务，每个服务都得配置，部署，监控，日志处理</span><br></pre></td></tr></table></figure></p>
+<p>CAP 定理:<a href="http://www.ruanyifeng.com/blog/2018/07/cap.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2018/07/cap.html</a></p>
+<p>微服务就是在分布式的特点上对业务的的一个横向划分，拆分成不同模块对外提供服务。</p>
+<h2 id="二-Spring-Cloud是什么"><a href="#二-Spring-Cloud是什么" class="headerlink" title="二.Spring Cloud是什么?"></a>二.Spring Cloud是什么?</h2><p>Spring Cloud是一系列框架的有序集合。它利用Spring Boot的开发便利性巧妙地简化了分布式系统基础设施的开发，如服务发现注册、配置中心、消息总线、负载均衡、断路器、数据监控等，都可以用Spring Boot的开发风格做到一键启动和部署。Spring Cloud就像一个老大哥带了一帮小弟，是一个资源的整合。</p>
+<h2 id="三-微服务入门"><a href="#三-微服务入门" class="headerlink" title="三.微服务入门"></a>三.微服务入门</h2><p>服务链路过程图：<br><img src="https://i.loli.net/2019/08/28/hUK8V2we1f4HNFG.png" alt="请求链路"></p>
+<h3 id="技术选择"><a href="#技术选择" class="headerlink" title="技术选择"></a>技术选择</h3><p><img src="https://s3.amazonaws.com/infoq.content.live.0/articles/comparing-api-gateway-performances/zh/resources/1269-1523696433477.png" alt="技术选择"></p>
+<h3 id="1-注册中心"><a href="#1-注册中心" class="headerlink" title="1.注册中心"></a>1.注册中心</h3><p>参考文章链接：<a href="https://blog.csdn.net/forezp/article/details/81040925" target="_blank" rel="noopener">https://blog.csdn.net/forezp/article/details/81040925</a><br>整理内容连接：<a href="https://www.iamlfc.top/2019/08/25/SpringCloud%E5%AD%A6%E4%B9%A0%E4%B8%80-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%92%8C%E5%8F%91%E7%8E%B0/" target="_blank" rel="noopener">https://www.iamlfc.top/2019/08/25/SpringCloud%E5%AD%A6%E4%B9%A0%E4%B8%80-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%92%8C%E5%8F%91%E7%8E%B0/</a></p>
+<h3 id="2-服务消费"><a href="#2-服务消费" class="headerlink" title="2.服务消费"></a>2.服务消费</h3><p>参考链接：<a href="https://blog.csdn.net/forezp/article/details/81040965" target="_blank" rel="noopener">https://blog.csdn.net/forezp/article/details/81040965</a></p>
+<h3 id="3-路由网关"><a href="#3-路由网关" class="headerlink" title="3.路由网关"></a>3.路由网关</h3><p>zuul:<br>    – 参考连接：<a href="https://blog.csdn.net/forezp/article/details/81041012" target="_blank" rel="noopener">https://blog.csdn.net/forezp/article/details/81041012</a><br>gateway:<br>    – 参考连接：<a href="https://blog.csdn.net/forezp/article/details/85210153" target="_blank" rel="noopener">https://blog.csdn.net/forezp/article/details/85210153</a></p>
+<h3 id="4-配置中心"><a href="#4-配置中心" class="headerlink" title="4.配置中心"></a>4.配置中心</h3><p>SpringColud Config：<br>    – 参考链接：<a href="https://www.cnblogs.com/lfalex0831/p/9206605.html" target="_blank" rel="noopener">https://www.cnblogs.com/lfalex0831/p/9206605.html</a></p>
+<p>推荐学习资料<br><a href="http://xujin.org/categories/%E8%B7%9F%E6%88%91%E5%AD%A6Spring-Cloud/" target="_blank" rel="noopener">http://xujin.org/categories/%E8%B7%9F%E6%88%91%E5%AD%A6Spring-Cloud/</a><br><a href="http://www.itmuch.com/categories/Spring-Cloud/" target="_blank" rel="noopener">http://www.itmuch.com/categories/Spring-Cloud/</a><br><a href="http://blog.didispace.com/Spring-Cloud%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" target="_blank" rel="noopener">http://blog.didispace.com/Spring-Cloud%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/</a></p>
+<p>demo地址：<a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/springcloud/springCloud" target="_blank" rel="noopener">https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/springcloud/springCloud</a><br>用途 | 技术<br>—-|——<br>基础容器 | spring-boot 2.0.6<br>分布式服务框架 | Spring cloud F SR3<br>项目构建 | Maven<br>注册中心 | eureka<br>网关    |gateway<br>服务消费者|Fegin<br>配置中心 | Spring Cloud Config<br><em>…</em></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/01/同一机器配置多个git账号的ssh秘钥/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2447,213 +2670,11 @@ User　        #　用户名
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/16/Spring学习七-Spring整合Junit的配置/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     405 字
-	</span>
-	<span title="阅读时长">
-     1 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/16/Spring学习七-Spring整合Junit的配置/" itemprop="url">Spring学习七-Spring整合Junit的配置</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-16T00:30:09+08:00">
-                2019-06-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/16/Spring学习七-Spring整合Junit的配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/16/Spring学习七-Spring整合Junit的配置/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  405
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h2><p>在Junit测试时，在将通用的bean注入提到方法外面形成全局变量时，在运行测试类代码时，会无法注入bean对象。<br>在Junit单元测试中，没有main方法也能执行，其实是因为Junit集成了一个main方法，该方法会判断当前测试类哪些方法使用了@Test注解，Junit会让有注解的方法执行，但是Junit不会探测是否使用了Spring框架，在执行方法时也不会读取配置文件创建Spring核心容器，所以在Junit中没有没有ioc容器就算写了Autowired注解，bean对象也没办法注入。</p>
-<h2 id="方法：Spring整合Junit的配置"><a href="#方法：Spring整合Junit的配置" class="headerlink" title="方法：Spring整合Junit的配置"></a>方法：Spring整合Junit的配置</h2><p>1.导入spring整合junit的配置<br>2.使用junit提供的注解把原有的runner方法替换为Spring提供的@Runwith<br>3.告知Spring运行器，spring和IOC创建是基于注解的还是xml配置的，描述文件位置。<br>4.@ContextConfiguration<br>    locations：指定xml文件的位置，加上classpath关键字，标识在类路径下<br>    classes：指定注解类所在的地址<br><strong>注：当使用spring5.x版本的时候，要求junit的版本必须是4.12及以上</strong><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring-version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="comment">//@ContextConfiguration(locations = "classpath:applicationContext.xml")</span></span><br><span class="line"><span class="meta">@ContextConfiguration</span>(classes = Car.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> Car car;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testFindAll</span><span class="params">()</span></span>&#123;</span><br><span class="line">        car.produce();</span><br><span class="line">        System.out.println(<span class="string">"收拾收拾"</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p><a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/spring/day07_ioc" target="_blank" rel="noopener">练习资源</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2702,7 +2723,7 @@ User　        #　用户名
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2713,7 +2734,7 @@ User　        #　用户名
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

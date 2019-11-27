@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="算法,">
+  <meta name="keywords" content="Docker,">
 
 
 
@@ -79,22 +79,20 @@
 
 
 
-<meta name="description" content="如何设计一个工业级的散列函数？何为一个工业级的散列表？工业级的散列表应该具有哪些特性？1.支持快速的查询、插入、删除操作； 2.内存占用合理，不能浪费过多空间； 3.性能稳定，散列函数生成的值要尽可能的均匀分布，在极端情况下，散列表的性能也不会退化到无法接受的情况。 方案：如何设计这样一个散列表呢？根据前面的知识点，从3个方面来考虑设计思路：   1.设计一个不复杂，散列值尽可能分布均匀的散列函数">
-<meta name="keywords" content="算法">
+<meta name="description" content="内容提要docker容器相关操作，包括容器启停，查看，删除，创建，导入导出，内存配置等。 1.创建并启动容器1.新建容器可以使用docker create命令新建一个容器，例如：1docker create -it ubuntu:latest 2.启动容器使用docker create命令新建的容器处于停止状态需要配合使用docker start 命令启动。1docker start ssf 3.">
+<meta name="keywords" content="Docker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="散列表（中）">
-<meta property="og:url" content="http://iamlfc.top/2019/05/21/散列表（中）/index.html">
+<meta property="og:title" content="Docker-学习二(容器基本操作)">
+<meta property="og:url" content="http://iamlfc.top/2019/11/27/Docker-学习二-容器基本操作/index.html">
 <meta property="og:site_name" content="邪恶小代码">
-<meta property="og:description" content="如何设计一个工业级的散列函数？何为一个工业级的散列表？工业级的散列表应该具有哪些特性？1.支持快速的查询、插入、删除操作； 2.内存占用合理，不能浪费过多空间； 3.性能稳定，散列函数生成的值要尽可能的均匀分布，在极端情况下，散列表的性能也不会退化到无法接受的情况。 方案：如何设计这样一个散列表呢？根据前面的知识点，从3个方面来考虑设计思路：   1.设计一个不复杂，散列值尽可能分布均匀的散列函数">
+<meta property="og:description" content="内容提要docker容器相关操作，包括容器启停，查看，删除，创建，导入导出，内存配置等。 1.创建并启动容器1.新建容器可以使用docker create命令新建一个容器，例如：1docker create -it ubuntu:latest 2.启动容器使用docker create命令新建的容器处于停止状态需要配合使用docker start 命令启动。1docker start ssf 3.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g33k21nm2lj30vq0l07a8.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g33kdeu374j30vq0ldgx4.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g33kxyy3zkj30vq0ghdix.jpg">
-<meta property="og:updated_time" content="2019-05-23T14:06:09.814Z">
+<meta property="og:image" content="https://i.loli.net/2019/11/25/csIVayoYXUhRrDp.png">
+<meta property="og:updated_time" content="2019-11-27T15:42:42.730Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="散列表（中）">
-<meta name="twitter:description" content="如何设计一个工业级的散列函数？何为一个工业级的散列表？工业级的散列表应该具有哪些特性？1.支持快速的查询、插入、删除操作； 2.内存占用合理，不能浪费过多空间； 3.性能稳定，散列函数生成的值要尽可能的均匀分布，在极端情况下，散列表的性能也不会退化到无法接受的情况。 方案：如何设计这样一个散列表呢？根据前面的知识点，从3个方面来考虑设计思路：   1.设计一个不复杂，散列值尽可能分布均匀的散列函数">
-<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g33k21nm2lj30vq0l07a8.jpg">
+<meta name="twitter:title" content="Docker-学习二(容器基本操作)">
+<meta name="twitter:description" content="内容提要docker容器相关操作，包括容器启停，查看，删除，创建，导入导出，内存配置等。 1.创建并启动容器1.新建容器可以使用docker create命令新建一个容器，例如：1docker create -it ubuntu:latest 2.启动容器使用docker create命令新建的容器处于停止状态需要配合使用docker start 命令启动。1docker start ssf 3.">
+<meta name="twitter:image" content="https://i.loli.net/2019/11/25/csIVayoYXUhRrDp.png">
 
 
 
@@ -124,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://iamlfc.top/2019/05/21/散列表（中）/">
+  <link rel="canonical" href="http://iamlfc.top/2019/11/27/Docker-学习二-容器基本操作/">
 
 
 
 
 
-  <title>散列表（中） | 邪恶小代码</title>
+  <title>Docker-学习二(容器基本操作) | 邪恶小代码</title>
   
 
 
@@ -289,7 +287,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/05/21/散列表（中）/">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/11/27/Docker-学习二-容器基本操作/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="李斯大炮">
@@ -301,17 +299,17 @@
       <meta itemprop="name" content="邪恶小代码">
     </span>
 	<span title="字数统计">
-     1.6k 字
+     1.7k 字
 	</span>
 	<span title="阅读时长">
-     5 分钟
+     7 分钟
 	</span>
     
       <header class="post-header">
 
         
         
-          <h1 class="post-title" itemprop="name headline">散列表（中）</h1>
+          <h1 class="post-title" itemprop="name headline">Docker-学习二(容器基本操作)</h1>
         
 
         <div class="post-meta">
@@ -323,8 +321,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-21T23:26:28+08:00">
-                2019-05-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T23:41:37+08:00">
+                2019-11-27
               </time>
             
 
@@ -346,8 +344,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法与数据结构/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
+                  <a href="/categories/Docker容器/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker容器</span>
                   </a>
                 </span>
 
@@ -364,8 +362,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/05/21/散列表（中）/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/21/散列表（中）/" itemprop="commentCount"></span>
+                <a href="/2019/11/27/Docker-学习二-容器基本操作/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/27/Docker-学习二-容器基本操作/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -387,7 +385,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.6k
+                  1.7k
                 </span>
               
 
@@ -403,7 +401,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  5
+                  7
                 </span>
               
             </div>
@@ -424,25 +422,39 @@
       
 
       
-        <h1 id="如何设计一个工业级的散列函数？"><a href="#如何设计一个工业级的散列函数？" class="headerlink" title="如何设计一个工业级的散列函数？"></a>如何设计一个工业级的散列函数？</h1><h2 id="何为一个工业级的散列表？工业级的散列表应该具有哪些特性？"><a href="#何为一个工业级的散列表？工业级的散列表应该具有哪些特性？" class="headerlink" title="何为一个工业级的散列表？工业级的散列表应该具有哪些特性？"></a>何为一个工业级的散列表？工业级的散列表应该具有哪些特性？</h2><pre><code>1.支持快速的查询、插入、删除操作；
-2.内存占用合理，不能浪费过多空间；
-3.性能稳定，散列函数生成的值要尽可能的均匀分布，在极端情况下，散列表的性能也不会退化到无法接受的情况。
-</code></pre><p>方案：<br>如何设计这样一个散列表呢？根据前面的知识点，从3个方面来考虑设计思路：<br>   <strong>1.设计一个不复杂，散列值尽可能分布均匀的散列函数；<br>    2.定义装载因子阈值，并且设计高效动态扩容策略；<br>    3.选择合适的散列冲突解决方法。</strong></p>
-<p>步骤拆分：</p>
-<h2 id="一、如何设计散列函数？"><a href="#一、如何设计散列函数？" class="headerlink" title="一、如何设计散列函数？"></a>一、如何设计散列函数？</h2><p>1.要尽可能让散列后的值随机且均匀分布，这样会尽可能减少散列冲突，即便冲突之后，分配到每个槽内的数据也比较均匀。<br>2.除此之外，散列函数的设计也不能太复杂，太复杂就会太耗时间，也会影响到散列表的性能。<br>3.常见的散列函数设计方法：直接寻址法、平方取中法、折叠法、随机数法等。</p>
-<h2 id="二、如何根据装载因子动态扩容？"><a href="#二、如何根据装载因子动态扩容？" class="headerlink" title="二、如何根据装载因子动态扩容？"></a>二、如何根据装载因子动态扩容？</h2><h3 id="1-如何设置装载因子阈值？"><a href="#1-如何设置装载因子阈值？" class="headerlink" title="1.如何设置装载因子阈值？"></a>1.如何设置装载因子阈值？</h3><ul>
-<li>装载因子越大，说明散列表中的元素越多，空闲的位置就越少，冲突的概率就越大，对于动态的散列表，<strong>可以通过设置装载因子的阈值来控制是扩容还是缩容</strong>，支持动态扩容的散列表，创建一个更大的散列表将数据迁移到新散列表中,如果每次扩容都是原来大小的两倍，那么扩容后的负载因子就会降为原来的一半。（<strong>插入数据的时间复杂度使用摊还分析法，均摊复杂度O(1)</strong>）<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g33k21nm2lj30vq0l07a8.jpg" alt="avatar"></li>
-<li>装载因子的阈值设置需要权衡时间复杂度和空间复杂度。如果内存空间不紧张，对执行效率要求很高，可以降低装载因子的阈值；相反，如果内存空间紧张，对执行效率要求又不高，可以增加装载因子的阈值。</li>
-</ul>
-<h3 id="2-如何避免低效扩容？"><a href="#2-如何避免低效扩容？" class="headerlink" title="2.如何避免低效扩容？"></a>2.如何避免低效扩容？</h3><p>大部分情况下散列表插入一个数据都很快，但是当负载因子到达阀值，需要进行扩容，再插入数据，再扩容的过程中因为散列表大小进行了改变所以存储的位置也得到了改变，这个时候插入数据就会变得很慢。<br> <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g33kdeu374j30vq0ldgx4.jpg" alt="avatar"></p>
-<ul>
-<li>分批扩容的插入操作：当有新数据要插入时，我们将数据插入新的散列表，并且从老的散列表中拿出一个数据放入新散列表。每次插入都重复上面的过程。这样插入操作就变得很快了。</li>
-<li>分批扩容的查询操作：先查新散列表，再查老散列表。</li>
-<li>通过分批扩容的方式，任何情况下，插入一个数据的时间复杂度都是O(1)。</li>
-</ul>
-<h2 id="三、如何选择散列冲突解决方法？"><a href="#三、如何选择散列冲突解决方法？" class="headerlink" title="三、如何选择散列冲突解决方法？"></a>三、如何选择散列冲突解决方法？</h2><p><strong>常见的2中方法：开放寻址法和链表法。</strong><br>1.<strong>链表法对内存的空间利用率更高，链表节点可以在冲突时再创建，并不需要开放寻址法提前将空间申请好。其对大装载因子的容忍度更高。开放寻址适用于装载因子小于1的情景，接近1的时候，就会出现大量的散列冲突，导致大量探测，再散列，性能会下降很多。但是对于链表法来说只要散列函数值均匀，即使装载因子变成了10，也只是链表的长度拉长了，虽然查找效率变慢，但是比顺序查找还是要快很多。</strong>而且，我们还可以通过将链表法中的链表改造成其他动态查找数据结构，比如红黑树、跳表，来避免散列表时间复杂度退化成O(n)，抵御散列冲突攻击。<br> <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g33kxyy3zkj30vq0ghdix.jpg" alt="avatar"><br>2.<strong>开放寻址法可以利用CPU缓存加快查询速度但是删除数据比较麻烦，并不能直接删除，需要标记已经删除掉的数据，而且每个冲突的数据都在数组中，冲突的代价很高，装载因子也不能设置的过大，导致了此方法比较浪费内存空间。</strong>但是对于小规模数据、装载因子不高的散列表，比较适合用。</p>
-<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><p>基于链表的散列冲突方法比较适合存储大对象，大数据量的散列表，因为对于大对象而言散列表中存储的指针大小基本可以忽略了，对于比较小的对象存储，是比较消耗内存的。但是比起开放寻址法它更加的灵活，支持更多的优化策略，比如红黑树代替链表。</p>
-<h3 id="举例分析"><a href="#举例分析" class="headerlink" title="举例分析"></a>举例分析</h3><p><strong>1.初始大小</strong><br>Java中的HashMap的默认初始大小是16，可以在预先知道大小时修改默认配置，减少扩容次数。<br><strong>2.装载因子和动态扩容</strong><br>最大装载因子默认是0.75，当元素个数超过了 0.75 * size 的时候，就会启动扩容，每次扩容是原来的两倍。<br><strong>3.散列冲突解决方法</strong><br>HashMap底层使用链表法来解决冲突，负载因子和散列函数设计的再合理也会出现拉链过场的情况，严重影响HashMap的性能。<br>在JDK1.8版本中，引入了红黑树。当链表长度太长（默认为8）时，链表就转化为红黑树。利用红黑树快速增删改查的特点提高性能，在红黑树节点少于8个的时候又将红黑树转化为链表。（在数据量矫情的情况下，红黑树要维护平衡，和链表比起来性能上没什么优势）<br><strong>4.散列函数</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h = key.hashCode()；</span><br><span class="line">    <span class="keyword">return</span> (h ^ (h &gt;&gt;&gt; <span class="number">16</span>)) &amp; (capitity -<span class="number">1</span>); <span class="comment">//capicity 表示散列表的大小</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h1 id="内容提要"><a href="#内容提要" class="headerlink" title="内容提要"></a>内容提要</h1><p>docker容器相关操作，包括容器启停，查看，删除，创建，导入导出，内存配置等。</p>
+<h2 id="1-创建并启动容器"><a href="#1-创建并启动容器" class="headerlink" title="1.创建并启动容器"></a>1.创建并启动容器</h2><h3 id="1-新建容器"><a href="#1-新建容器" class="headerlink" title="1.新建容器"></a>1.新建容器</h3><p>可以使用<strong>docker create</strong>命令新建一个容器，例如：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker create -it ubuntu:latest</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-启动容器"><a href="#2-启动容器" class="headerlink" title="2.启动容器"></a>2.启动容器</h3><p>使用<strong>docker create</strong><br>命令新建的容器处于停止状态需要配合使用<strong>docker start</strong> 命令启动。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start ssf</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-新建并启动容器"><a href="#3-新建并启动容器" class="headerlink" title="3.新建并启动容器"></a>3.新建并启动容器</h3><p>可以使用docker run 命令来直接新建并启动容器。（如果本地镜像有则启动，没有则获取最新镜像）<br>这里用ubuntu镜像echo一个hello word<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run ubuntu /bin/echo 'Hello world'</span><br></pre></td></tr></table></figure></p>
+<p>下面的命令启动一个bash终端，允许用户进行交互 并在后台运行：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -d ubuntu:14.04 /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p>—P参数是随机指定一个32768～61000的主机端口与容器绑定，而－p则是指定一个端口与容器绑定<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 80:80 nginx:v1.0</span><br></pre></td></tr></table></figure></p>
+<h4 id="命令详解"><a href="#命令详解" class="headerlink" title="命令详解"></a>命令详解</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">-a, --attach=[]             Attach to STDIN, STDOUT or STDERR</span><br><span class="line">--add-host=[]               Add a custom host-to-IP mapping (host:ip)</span><br><span class="line">--blkio-weight=0            Block IO (relative weight), between 10 and 1000</span><br><span class="line">-c, --cpu-shares=0          CPU shares (relative weight)</span><br><span class="line">--cap-add=[]                Add Linux capabilities</span><br><span class="line">--cap-drop=[]               Drop Linux capabilities</span><br><span class="line">--cgroup-parent=            Optional parent cgroup for the container</span><br><span class="line">--cidfile=                  Write the container ID to the file</span><br><span class="line">--cpu-period=0              Limit CPU CFS (Completely Fair Scheduler) period</span><br><span class="line">--cpu-quota=0               Limit the CPU CFS quota</span><br><span class="line">--cpuset-cpus=              CPUs in which to allow execution (0-3, 0,1)</span><br><span class="line">--cpuset-mems=              MEMs in which to allow execution (0-3, 0,1)</span><br><span class="line">-d, --detach=false          Run container in background and print container ID</span><br><span class="line">--device=[]                 Add a host device to the container</span><br><span class="line">--dns=[]                    Set custom DNS servers</span><br><span class="line">--dns-search=[]             Set custom DNS search domains</span><br><span class="line">-e, --env=[]                Set environment variables</span><br><span class="line">--entrypoint=               Overwrite the default ENTRYPOINT of the image</span><br><span class="line">--env-file=[]               Read in a file of environment variables</span><br><span class="line">--expose=[]                 Expose a port or a range of ports</span><br><span class="line">-h, --hostname=             Container host name</span><br><span class="line">--help=false                Print usage</span><br><span class="line">-i, --interactive=false     Keep STDIN open even if not attached</span><br><span class="line">--init=                     Run container following specified init system container method (systemd)</span><br><span class="line">--ipc=                      IPC namespace to use</span><br><span class="line">-l, --label=[]              Set meta data on a container</span><br><span class="line">--label-file=[]             Read in a line delimited file of labels</span><br><span class="line">--link=[]                   Add link to another container</span><br><span class="line">--log-driver=               Logging driver for container</span><br><span class="line">--log-opt=[]                Log driver options</span><br><span class="line">--lxc-conf=[]               Add custom lxc options</span><br><span class="line">-m, --memory=               Memory limit</span><br><span class="line">--mac-address=              Container MAC address (e.g. 92:d0:c6:0a:29:33)</span><br><span class="line">--memory-swap=              Total memory (memory + swap), &apos;-1&apos; to disable swap</span><br><span class="line">--name=                     Assign a name to the container</span><br><span class="line">--net=bridge                Set the Network mode for the container</span><br><span class="line">--oom-kill-disable=false    Disable OOM Killer</span><br><span class="line">-P, --publish-all=false     Publish all exposed ports to random ports</span><br><span class="line">-p, --publish=[]            Publish a container&apos;s port(s) to the host</span><br><span class="line">--pid=                      PID namespace to use</span><br><span class="line">--privileged=false          Give extended privileges to this container</span><br><span class="line">--read-only=false           Mount the container&apos;s root filesystem as read only</span><br><span class="line">--restart=no                Restart policy to apply when a container exits</span><br><span class="line">--rm=false                  Automatically remove the container when it exits</span><br><span class="line">--security-opt=[]           Security Options</span><br><span class="line">--sig-proxy=true            Proxy received signals to the process</span><br><span class="line">-t, --tty=false             Allocate a pseudo-TTY</span><br><span class="line">-u, --user=                 Username or UID (format: &lt;name|uid&gt;[:&lt;group|gid&gt;])</span><br><span class="line">--ulimit=[]                 Ulimit options</span><br><span class="line">--uts=                      UTS namespace to use</span><br><span class="line">-v, --volume=[]             Bind mount a volume</span><br><span class="line">--volumes-from=[]           Mount volumes from the specified container(s)</span><br><span class="line">-w, --workdir=              Working directory inside the container</span><br></pre></td></tr></table></figure>
+<h2 id="2-终止容器"><a href="#2-终止容器" class="headerlink" title="2.终止容器"></a>2.终止容器</h2><h3 id="1-容器终止"><a href="#1-容器终止" class="headerlink" title="1.容器终止"></a>1.容器终止</h3><p>可以使用docker stop来终止运行中的容器，格式为：<br><strong>docker stop[-t|–time[=10]][CONTAINER…]</strong><br>首先会向容器发送SIGTERM信号，等待一段超时时间（默认为 10秒）后，再发送 SIGKILL 信号来终止容器。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop ce5</span><br></pre></td></tr></table></figure></p>
+<p>使用 docker kill 命令直接强行终止容器。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker kill ce5</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-容器重启"><a href="#2-容器重启" class="headerlink" title="2.容器重启"></a>2.容器重启</h3><p>终止状态的容器可以使用docker start 启动<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start ce5</span><br></pre></td></tr></table></figure></p>
+<p>在运行状态的容器可以使用docker restart重启<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart ce5</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-进入容器"><a href="#3-进入容器" class="headerlink" title="3.进入容器"></a>3.进入容器</h2><p>进入容器有三种方法，其中主要<strong>推荐使用第一种exec方法</strong>，其他方法了解作用即可。</p>
+<h3 id="1-exec命令-重点"><a href="#1-exec命令-重点" class="headerlink" title="1.exec命令(重点)"></a>1.exec命令(<strong>重点</strong>)</h3><p>Docker从1.3.0版本起提供了一个更加方便的exec命令，可以在容器内直接执行任意命令。该命令的基本格式为：<br><strong>docker exec [-d|–detach] [–detach-keys[=[]]] [-i|–interactive] [–privileged]<br>[-t|–tty] [-u|–user[=USER]] CONTAINER COMMAND</strong> [ARG…] 。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 243c32535da7 /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p>通过指定- it 参数来保持标准输入打开，并且分配一个伪终端。</p>
+<h4 id="相关参数"><a href="#相关参数" class="headerlink" title="相关参数"></a>相关参数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">·-i，--interactive=true| false：打开标准输入接受用户输入命令，默认为false；</span><br><span class="line">·--privileged=true| false：是否给执行命令以高权限，默认为false；</span><br><span class="line">·-t，--tty=true| false：分配伪终端，默认为false；</span><br><span class="line">·- u，--user=&quot;&quot;：执行命令的用户名或ID。</span><br></pre></td></tr></table></figure>
+<h3 id="2-attach命令"><a href="#2-attach命令" class="headerlink" title="2.attach命令"></a>2.attach命令</h3><p>命令格式：<strong>docker attach [–detach-keys[=[]]] [–no-stdin] [–sig-proxy[=true]] CONTAINER</strong><br>支持三个主要选项：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">·--detach-keys[=[]]：指定退出attach 模式的快捷键序列，默认是 CTRL-p CTRL-q；</span><br><span class="line">·--no-stdin=true| false：是否关闭标准输入，默认是保持打开；</span><br><span class="line">·--sig-proxy=true| false：是否代理收到的系统信号给应用进程，默认为true</span><br></pre></td></tr></table></figure></p>
+<p>使用示例：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker attach myredis</span><br></pre></td></tr></table></figure></p>
+<p>当多个窗口同时用attach命令连到同一个容器的时候，所有窗口都会同步显示。当某个窗口因命令阻塞时，其他窗口也无法执行操作了。</p>
+<h3 id="3-nsenter工具"><a href="#3-nsenter工具" class="headerlink" title="3.nsenter工具"></a>3.nsenter工具</h3><p>在util-linux 软件包版本2.23+中包含nsenter工具。如果系统中的 util-linux包没有该命令需下载。（略…）</p>
+<h3 id="4-容器操作"><a href="#4-容器操作" class="headerlink" title="4. 容器操作"></a>4. 容器操作</h3><p>在容器中操作时，使用ps 报错，是因为ps没有安装在基础wheezy图像。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get update &amp;&amp; apt-get install procps</span><br></pre></td></tr></table></figure></p>
+<p><strong>同样在容器中安装vim等工具时，需要先使用apt-get update 同步一下容器内和服务器的更新源，才可安装。</strong></p>
+<h2 id="4-删除容器"><a href="#4-删除容器" class="headerlink" title="4.删除容器"></a>4.删除容器</h2><p>使用docker rm 命令删除处于终止或者退出状态的容器。命令格式为：<strong>docker rm[-f|–force][-l|–link][-v|–volumes]CONTAINER[CONTAINER…]</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm ce554267d7a4</span><br></pre></td></tr></table></figure></p>
+<p>默认情况下rm命令只能删除停止或者退出状态的容器，但是可以添加-f参数，将容器kill后强行删除。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f ce554267d7a4</span><br></pre></td></tr></table></figure></p>
+<p>###相关参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">·- f，--force=false：是否强行终止并删除一个运行中的容器；</span><br><span class="line">·- l，--link=false：删除容器的连接，但保留容器；</span><br><span class="line">·- v，--volumes=false：删除容器挂载的数据卷。</span><br></pre></td></tr></table></figure></p>
+<h2 id="5-导入导出容器"><a href="#5-导入导出容器" class="headerlink" title="5.导入导出容器"></a>5.导入导出容器</h2><h3 id="1-导出容器"><a href="#1-导出容器" class="headerlink" title="1.导出容器"></a>1.导出容器</h3><p>命令的格式为 <strong>docker export[-o|– output[=””]]CONTAINER</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker export -o test_for_run.tar ce5</span><br><span class="line"> 或</span><br><span class="line">docker export e81 &gt;test_for_stop.tar</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-导入容器"><a href="#2-导入容器" class="headerlink" title="2.导入容器"></a>2.导入容器</h3><p>和导入镜像一样可以使用docker import将tar导入变成镜像，命令格式为：<br><strong>docker import [-c|–change[=[]]] [-m|–message[=MESSAGE]] file|URL|-[REPOSITORY [:TAG]]</strong><br><strong>导入时可以定义标签信息</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker import test_for_run.tar - test/ubuntu:v1.0</span><br></pre></td></tr></table></figure></p>
+<p>在使用docker load 导入由docker export保存容器生成的tar时会报异常信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">open /var/lib/docker/tmp/docker-import-283259618/repositories: no such file or directory</span><br></pre></td></tr></table></figure></p>
+<p><strong>导入容器tar需使用docker import命令</strong></p>
+<h2 id="6-容器资源配置"><a href="#6-容器资源配置" class="headerlink" title="6.容器资源配置"></a>6.容器资源配置</h2><p>使用docker stats命令来看当前服务器的内存,针对各个场景对相应容器分配合理内存资源。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stats</span><br></pre></td></tr></table></figure></p>
+<p>使用docker的update命令来对内存大小进行管理分配<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker update -m 350m  --memory-swap -1  mysqlserver</span><br></pre></td></tr></table></figure></p>
+<p><strong>–memory-swap -1</strong> 参数是指不让容器和宿主机进行内存交换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">--automated=true| false：仅显示自动创建的镜像，默认为否；</span><br><span class="line">·--no-trunc=true| false：输出信息不截断显示，默认为否；</span><br><span class="line">·- s，--stars=X：指定仅显示评价为指定星级以上的镜像，默认为0，即输出所有镜像。</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://i.loli.net/2019/11/25/csIVayoYXUhRrDp.png" alt="dockerstats.png"></p>
+<p>参考资料：Docker技术入门与实战</p>
 
       
     </div>
@@ -460,7 +472,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/算法/" rel="tag"># 算法</a>
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
           
         </div>
       
@@ -473,8 +485,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/20/散列表（上）/" rel="next" title="散列表（上）">
-                <i class="fa fa-chevron-left"></i> 散列表（上）
+              <a href="/2019/11/25/Docker-学习一（镜像基本操作）/" rel="next" title="Docker-学习一（镜像基本操作）">
+                <i class="fa fa-chevron-left"></i> Docker-学习一（镜像基本操作）
               </a>
             
           </div>
@@ -482,10 +494,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/26/hexo搭建个人博客/" rel="prev" title="hexo搭建个人博客">
-                hexo搭建个人博客 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -662,7 +670,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#如何设计一个工业级的散列函数？"><span class="nav-number">1.</span> <span class="nav-text">如何设计一个工业级的散列函数？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#何为一个工业级的散列表？工业级的散列表应该具有哪些特性？"><span class="nav-number">1.1.</span> <span class="nav-text">何为一个工业级的散列表？工业级的散列表应该具有哪些特性？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一、如何设计散列函数？"><span class="nav-number">1.2.</span> <span class="nav-text">一、如何设计散列函数？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、如何根据装载因子动态扩容？"><span class="nav-number">1.3.</span> <span class="nav-text">二、如何根据装载因子动态扩容？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-如何设置装载因子阈值？"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.如何设置装载因子阈值？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-如何避免低效扩容？"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.如何避免低效扩容？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、如何选择散列冲突解决方法？"><span class="nav-number">1.4.</span> <span class="nav-text">三、如何选择散列冲突解决方法？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、总结"><span class="nav-number">1.5.</span> <span class="nav-text">四、总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#举例分析"><span class="nav-number">1.5.1.</span> <span class="nav-text">举例分析</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#内容提要"><span class="nav-number">1.</span> <span class="nav-text">内容提要</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-创建并启动容器"><span class="nav-number">1.1.</span> <span class="nav-text">1.创建并启动容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-新建容器"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.新建容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-启动容器"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.启动容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-新建并启动容器"><span class="nav-number">1.1.3.</span> <span class="nav-text">3.新建并启动容器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令详解"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">命令详解</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-终止容器"><span class="nav-number">1.2.</span> <span class="nav-text">2.终止容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-容器终止"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.容器终止</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-容器重启"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.容器重启</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-进入容器"><span class="nav-number">1.3.</span> <span class="nav-text">3.进入容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-exec命令-重点"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.exec命令(重点)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#相关参数"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">相关参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-attach命令"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.attach命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-nsenter工具"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.nsenter工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-容器操作"><span class="nav-number">1.3.4.</span> <span class="nav-text">4. 容器操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-删除容器"><span class="nav-number">1.4.</span> <span class="nav-text">4.删除容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-导入导出容器"><span class="nav-number">1.5.</span> <span class="nav-text">5.导入导出容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-导出容器"><span class="nav-number">1.5.1.</span> <span class="nav-text">1.导出容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-导入容器"><span class="nav-number">1.5.2.</span> <span class="nav-text">2.导入容器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-容器资源配置"><span class="nav-number">1.6.</span> <span class="nav-text">6.容器资源配置</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -828,9 +836,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://iamlfc.top/2019/05/21/散列表（中）/';
-          this.page.identifier = '2019/05/21/散列表（中）/';
-          this.page.title = '散列表（中）';
+          this.page.url = 'http://iamlfc.top/2019/11/27/Docker-学习二-容器基本操作/';
+          this.page.identifier = '2019/11/27/Docker-学习二-容器基本操作/';
+          this.page.title = 'Docker-学习二(容器基本操作)';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://.disqus.com/embed.js';
