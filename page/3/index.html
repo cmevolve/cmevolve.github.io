@@ -284,6 +284,245 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/23/Spring学习八-之动态代理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     3k 字
+	</span>
+	<span title="阅读时长">
+     12 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/23/Spring学习八-之动态代理/" itemprop="url">Spring学习八-之动态代理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-23T22:39:21+08:00">
+                2019-06-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/06/23/Spring学习八-之动态代理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/23/Spring学习八-之动态代理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  12
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、问题来源"><a href="#一、问题来源" class="headerlink" title="一、问题来源"></a>一、问题来源</h2><p>在进行软件设计的时候往往会将一个大的系统按照业务模块拆分成一个个的低耦合、高内聚的模块，分而治之。<br>如图：<br><img src="http://ptavvqw3y.bkt.clouddn.com/%E5%AF%BC%E5%9B%BE4.jpeg" alt="软件系统模块划分"><br>拆分后发现一些问题，这些问题是通用的，跨模块的。比如：<br>1.日志：对执行某些操作分支判断时输出日志。<br>2.安全：在执行某些操作前进行权限检查。<br>3.事务：在方法开始前开始事务，方法结束时提交或者回滚事务。<br>4.性能统计：统计某些方法的执行时间。<br>以上这些属于非功能型需求，是多个业务模块都需要的，那么应该如何去写呢？</p>
+<h3 id="1-常规解决方法"><a href="#1-常规解决方法" class="headerlink" title="1.常规解决方法"></a>1.常规解决方法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Logger logger = Logger.getLogger(<span class="string">""</span>);</span><br><span class="line">        <span class="comment">//1.记录日志</span></span><br><span class="line">        logger.info(<span class="string">"XXXX"</span>);</span><br><span class="line">        <span class="comment">//2.性能统计</span></span><br><span class="line">        Long startTime = System.nanoTime();</span><br><span class="line">        <span class="comment">//3.权限检查</span></span><br><span class="line">        <span class="keyword">if</span>(!user.hasPreviledge())&#123;</span><br><span class="line">            <span class="comment">//抛出异常阻断流程</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//4.开始事务，进行增删改操作</span></span><br><span class="line">        ------业务代码-------</span><br><span class="line">        <span class="comment">//提交事务</span></span><br><span class="line">        commitTransaction();</span><br><span class="line">        Long endTime = System.nanoTime();</span><br><span class="line">        logger.info(<span class="string">"xxxxx"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码虽然解决了问题，但是使用起来十分不爽，日志、安全、性能、事务等代码都耦合到了业务代码中，使一个简单的业务逻辑模块代码都异常的复杂，且重复代码充斥在各个业务逻辑中。</p>
+<p><strong>那么如何解决解决痛点呢？</strong></p>
+<h3 id="1-设计模式：模版方法"><a href="#1-设计模式：模版方法" class="headerlink" title="1.设计模式：模版方法"></a>1.设计模式：模版方法</h3><p>首先先来回顾下模版方法：<br>模版模式是当不变的和可变的行为混在一起的时候通过把不变的行为提取到超类并且定义一个算法的骨架，去除子类中的重复代码，以此摆脱重复不变行为的纠缠。<br>一堆啰嗦的话，还是看下具体实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义超类模版公共部分</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Logger logger = Logger.getLogger(<span class="string">""</span>);</span><br><span class="line">        <span class="comment">//1.记录日志</span></span><br><span class="line">        logger.info(<span class="string">"XXXX"</span>);</span><br><span class="line">        <span class="comment">//2.性能统计</span></span><br><span class="line">        Long startTime = System.nanoTime();</span><br><span class="line">        <span class="comment">//3.权限检查</span></span><br><span class="line">        <span class="keyword">if</span>(!user.hasPreviledge())&#123;</span><br><span class="line">            <span class="comment">//抛出异常阻断流程</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//4.开始事务，进行增删改操作</span></span><br><span class="line">        <span class="comment">//5.业务代码操作交由具体子类独自实现</span></span><br><span class="line">        doBusiness();</span><br><span class="line">        <span class="comment">//提交事务</span></span><br><span class="line">        commitTransaction();</span><br><span class="line">        Long endTime = System.nanoTime();</span><br><span class="line">        logger.info(<span class="string">"xxxxx"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//具体业务实现，交给对应模块的子类</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doBusiness</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderCommand</span> <span class="keyword">extends</span> <span class="title">Command</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doBusiness</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//执行订单操作</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PaymentCommand</span> <span class="keyword">extends</span> <span class="title">Command</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doBusiness</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//执行支付操作</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>OK，这样一来，代码看起来清爽了好多，各种无关业务的代码在子类中也不复存在了。<br>调用也很简单，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Command cmd = <span class="keyword">new</span> PlaceOrderCommand();</span><br><span class="line">cmd.execute();</span><br></pre></td></tr></table></figure></p>
+<p><strong>总结：</strong><br>仔细观察可以发现，使用这个方法会导致超类会定义所有的操作，要执行哪些非功能性代码，以什么顺序，等等。子类只能默默接受，那么有没有什么方法可以让子类达到定制化的效果，比如只需要进行事务的支持，其他的不需要。</p>
+<h3 id="2-设计模式：装饰者模式"><a href="#2-设计模式：装饰者模式" class="headerlink" title="2.设计模式：装饰者模式"></a>2.设计模式：装饰者模式</h3><p>内容复习：<br>装饰者模式可以动态的给一个对象添加一些额外的职责，有效的区分类的核心职责就增加功能而言，装饰者模式比生成子类更加灵活。<br>废话不多说，上代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *   日志类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoggerDecorator</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    Command cmd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LoggerDecorator</span><span class="params">(Command cmd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Logger logger = Logger.getLogger(<span class="string">""</span>);</span><br><span class="line">        logger.info(<span class="string">"记录日志start"</span>);</span><br><span class="line">        <span class="keyword">this</span>.cmd.execute();</span><br><span class="line">        logger.info(<span class="string">"记录日志end"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 性能统计</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">PerformanceDecorator</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    Command cmd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PerformanceDecorator</span><span class="params">(Command cmd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        PerformanceUtil.startTimer();</span><br><span class="line">        <span class="keyword">this</span>.cmd.execute();</span><br><span class="line">        PerformanceUtil.endTimer();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行订单操作，具体业务代码</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderDecorator</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    Command cmd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PlaceOrderDecorator</span><span class="params">(Command cmd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//执行支付</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在就像递归一样层层调用，可以自由的决定让PlaceOrderDecorator可以选择打印日志或者性能统计等等。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Command cmd = <span class="keyword">new</span> LoggerDecorator(</span><br><span class="line"><span class="keyword">new</span> PerformanceDecorator(<span class="keyword">new</span> PlaceOrderDecorator()));</span><br><span class="line">cmd.execute();</span><br></pre></td></tr></table></figure></p>
+<p>如果只需要其中部分功能只需要实例化对应的模块即可，例如只需要订单操作时打印日志<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Command cmd = <span class="keyword">new</span> LoggerDecorator(</span><br><span class="line"><span class="keyword">new</span> PlaceOrderDecorator());</span><br><span class="line">cmd.execute();</span><br></pre></td></tr></table></figure></p>
+<p><strong>总结：</strong><br>装饰者模式虽然可以通过装饰器灵活的使用各种方法，但是由此也带出了两个问题：<br>1.一个处理日志/安全/事务/性能统计的类为什么要去实现业务接口呢？<br>2.如果其他模块没有实现业务接口，但是想使用日志/安全/事务/性能统计等功能，那该怎么办呢？</p>
+<h3 id="3-代理模式"><a href="#3-代理模式" class="headerlink" title="3.代理模式"></a>3.代理模式</h3><h4 id="Ⅰ-介绍："><a href="#Ⅰ-介绍：" class="headerlink" title="Ⅰ.介绍："></a>Ⅰ.介绍：</h4><p>为其他对象提供一种代理以此来控制这个对象的访问，使客户端不直接引用对象，很好的在客户端和目标对象之间起到中介的作用。</p>
+<h4 id="Ⅱ-适用场景："><a href="#Ⅱ-适用场景：" class="headerlink" title="Ⅱ.适用场景："></a>Ⅱ.适用场景：</h4><ol>
+<li><strong>远程代理</strong>，为一个对象在不同的地址空间提供局部代表。这样即使远程方法在服务器，但是本地调用其代理类，内部屏蔽了远程调用过程，对于客户端而言与本地方法无异。（如：webService）<br><img src="http://ptavvqw3y.bkt.clouddn.com/%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%90%86%E5%9B%BE%E8%A7%A3.jpg" alt="远程代理"></li>
+<li><strong>虚拟代理</strong>，占用系统资源较多或者加载时间较长的对象，可以给这些对象提供一个虚拟代理。在真实对象创建成功之前虚拟代理扮演真实对象的替身，而当真实对象创建之后，虚拟代理将用户的请求转发给真实对象。（比如：HTML加载时，有很多图片，为了及时的响应页面，可以先将图片位置展示代理对象，待缓存完成时，再展示出来；当一个对象加载耗费资源很大时，利用虚拟代理，将那些耗费资源的操作直到具体使用时再加载，在此之前使用虚拟代理对象来代替。可达到资源重用，节省内存，以时间换空间。；参考浏览器加载可在因io阻塞导致对象加载缓慢的时候，结合多线程技术先行一步创建加载较快的代理对象，另起线程加载真实对象，先行返回代理对象，当调用真实对象时，此时资源可能已经加载完毕，以此来加快相应时间。）</li>
+<li><strong>安全代理,</strong> 也叫保护代理，用来控制真实对象访问时的权限，如果有必要的话，可以给不同调用者提供不同的权限。</li>
+<li><strong>智能指引,</strong>是指当调用真实对象时，代理处理另外一些事，比如记录对此对象的调用次数等。</li>
+</ol>
+<p>了解了代理模式及使用场景后，此处我们使用其中的智能指引的这种场景，既在代理类中对被代理的类添加一些功能。</p>
+<p>代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderDecorator</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"执行支付"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 代理类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">CommandProxy</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    Command cmd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CommandProxy</span><span class="params">(Command cmd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"记录日志start"</span>);</span><br><span class="line">        <span class="keyword">this</span>.cmd.execute();</span><br><span class="line">        System.out.println(<span class="string">"记录日志end"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Command cmd = <span class="keyword">new</span> CommandProxy(<span class="keyword">new</span> PlaceOrderDecorator());</span><br><span class="line">        cmd.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>总结：</strong><br>　　1、代理模式可以在不修改初始类的前提下对其功能进行了增强。<br>　　2、接口中有多少方法，在proxy层就得实现多少方法，有多少方法就要开启和提交多少事务，代码繁琐复杂。<br>　　3、如果一个proxy实现了多个接口，如果其中的一个接口发生变化（添加了一个方法），那么proxy也要做改变。<br>    4、静态代理模式并没有做到日志的重用</p>
+<p>由此引出今天的主角，动态代理。</p>
+<h3 id="4-动态代理"><a href="#4-动态代理" class="headerlink" title="4.动态代理"></a>4.动态代理</h3><h4 id="Ⅰ、JDK动态代理"><a href="#Ⅰ、JDK动态代理" class="headerlink" title="Ⅰ、JDK动态代理"></a>Ⅰ、JDK动态代理</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Interceptor</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span></span>&#123;</span><br><span class="line">    Transaction transaction;</span><br><span class="line">    Object target;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Interceptor</span><span class="params">(Transaction transaction, Object target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.transaction = transaction;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> proxy 目标对象的代理类实例</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> method 对应于在代理实例上调用接口方法的Method实例</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args 传入到代理实例上方法参数值的对象数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 方法的返回值，没有返回值是null</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        String methodName = method.getName();</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">"execute"</span>.equals(methodName))&#123;</span><br><span class="line">            transaction.beginTransaction();</span><br><span class="line">            method.invoke(target);</span><br><span class="line">            transaction.commit();</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            method.invoke(target);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 事务类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Transaction</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">beginTransaction</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"******** 开启事务 **************"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">commit</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"********* 提交事务 ************"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 测试类</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testSave</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 1、创建一个目标对象</span></span><br><span class="line"><span class="comment">         * 2、创建一个事务</span></span><br><span class="line"><span class="comment">         * 3、创建一个拦截器</span></span><br><span class="line"><span class="comment">         * 4、动态产生一个代理对象</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        Object target = <span class="keyword">new</span> PlaceOrderDecorator();</span><br><span class="line">        Transaction transaction = <span class="keyword">new</span> Transaction();</span><br><span class="line">        Interceptor proxy = <span class="keyword">new</span> Interceptor(transaction,target);</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 参数一：设置代码使用的类加载器，一般采用跟目标类相同的类加载器</span></span><br><span class="line"><span class="comment">         * 参数二：设置代理类实现的接口，跟目标类使用相同的接口</span></span><br><span class="line"><span class="comment">         * 参数三：设置回调对象，当代理对象的方法被调用时，会调用该参数指定对象的invoke方法</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        Command com = (Command) Proxy.newProxyInstance(</span><br><span class="line">                target.getClass().getClassLoader(),</span><br><span class="line">                target.getClass().getInterfaces(),proxy);</span><br><span class="line">        com.execute();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>基于上述流程进行优化：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProxyFactory</span> </span>&#123;</span><br><span class="line">    Transaction transaction = <span class="keyword">new</span> Transaction();</span><br><span class="line">    Object target;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ProxyFactory</span><span class="params">(Object target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 生成代理类</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getProxyInstance</span> <span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(target.getClass().getClassLoader(),</span><br><span class="line">                target.getClass().getInterfaces(), <span class="keyword">new</span> InvocationHandler() &#123;</span><br><span class="line">                    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">                        String methodName = method.getName();</span><br><span class="line">                        <span class="keyword">if</span>(<span class="string">"execute"</span>.equals(methodName))&#123;</span><br><span class="line">                            transaction.beginTransaction();</span><br><span class="line">                            method.invoke(target,args);</span><br><span class="line">                            transaction.commit();</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            method.invoke(target);</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testProxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Object target = <span class="keyword">new</span> PlaceOrderDecorator();</span><br><span class="line">        Command com = (Command)<span class="keyword">new</span> ProxyFactory(target).getProxyInstance();</span><br><span class="line">        com.execute();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>总结：</strong><br>静态代理与动态代理的区别：</p>
+<ul>
+<li>静态代理在编译时就已经实现，编译完成后代理类是一个实际的class文件。</li>
+<li>动态代理是在运行时动态生成的，即编译完成后没有实际的class文件，而是在运行时动态生成类字节码，并加载到JVM中。</li>
+</ul>
+<p>特点：</p>
+<ol>
+<li>因为使用了JDKProxy生成的代理类实现了接口，所以目标类中所有的方法在代理类中会有。</li>
+<li>动态代理对象不需要实现接口，但是要求目标对象必须实现接口，否则不能使用动态代理。</li>
+<li>invoke方法中的三个参数可以访问目标类的被调用方法的API、被调用方法的参数、被调用方法的返回类型。</li>
+</ol>
+<p>缺点：<br>    1.在拦截器中除了能调用目标对象的目标方法之外功能比较单一。<br>    2.在使用拦截器中的invoke方法的if判断语句进行功能增强的时候具体实施时因为要支持日志/安全/事务/性能统计等功能，if语句需要写很多，这无疑是个灾难。</p>
+<h4 id="Ⅰ、CGLIB动态代理"><a href="#Ⅰ、CGLIB动态代理" class="headerlink" title="Ⅰ、CGLIB动态代理"></a>Ⅰ、CGLIB动态代理</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CglibProxyFactory</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line">    Transaction transaction;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CglibProxyFactory</span><span class="params">(Object target, Transaction transaction)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">        <span class="keyword">this</span>.transaction = transaction;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getProxyInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//工具类</span></span><br><span class="line">        Enhancer en = <span class="keyword">new</span> Enhancer();</span><br><span class="line">        <span class="comment">//设置父类</span></span><br><span class="line">        en.setSuperclass(target.getClass());</span><br><span class="line">        <span class="comment">//设置回调函数 拦截调用intercept函数</span></span><br><span class="line">        en.setCallback(<span class="keyword">this</span>);</span><br><span class="line">        <span class="comment">//创建子类对象代理</span></span><br><span class="line">        <span class="keyword">return</span> en.create();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] args, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        transaction.beginTransaction();</span><br><span class="line">         <span class="comment">// 执行目标对象的方法</span></span><br><span class="line">        Object returnValue = method.invoke(target, args);</span><br><span class="line">        transaction.commit();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCGlibProxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        PlaceOrderDecorator target = <span class="keyword">new</span> PlaceOrderDecorator();</span><br><span class="line">        System.out.println(target.getClass());</span><br><span class="line">        PlaceOrderDecorator proxy = (PlaceOrderDecorator)<span class="keyword">new</span> CglibProxyFactory(target,<span class="keyword">new</span> Transaction())</span><br><span class="line">                .getProxyInstance();</span><br><span class="line">        System.out.println(proxy.getClass());</span><br><span class="line">        proxy.execute();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PlaceOrderDecorator</span></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">PlaceOrderDecorator</span>$$<span class="title">EnhancerByCGLIB</span>$$640<span class="title">bbc4f</span></span></span><br><span class="line"><span class="class">******** 开启事务 **************</span></span><br><span class="line"><span class="class">执行支付</span></span><br><span class="line"><span class="class">********* 提交事务 ************</span></span><br></pre></td></tr></table></figure>
+<p><strong>总结：</strong><br>1.JDK动态代理需要目标对象和代理对象实现业务接口，拦截器需要实现InvocationHandler接口，其中invoke方法体中内容是具体代理对象方法体内容。<br>2.CGlib代理的目标类不需要实现接口，代理类是目标类的子类，拦截器需要实现MethodInterceptor接口，其中重写intercept方法时，进行具体功能增强操作。但是因为cglib是依靠继承目标对象重写其方法，所以目标对象不得是final类！！！</p>
+<p><a href="https://github.com/cmevolve/xieexiaodaima/tree/master/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/springAll/spring/day08_Aop" target="_blank" rel="noopener">练习资源</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/06/16/Spring学习七-Spring整合Junit的配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2208,212 +2447,6 @@ PostConstruct
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/05/21/散列表（中）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     1.6k 字
-	</span>
-	<span title="阅读时长">
-     5 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/21/散列表（中）/" itemprop="url">散列表（中）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-21T23:26:28+08:00">
-                2019-05-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法与数据结构/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/21/散列表（中）/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/21/散列表（中）/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.6k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  5
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="如何设计一个工业级的散列函数？"><a href="#如何设计一个工业级的散列函数？" class="headerlink" title="如何设计一个工业级的散列函数？"></a>如何设计一个工业级的散列函数？</h1><h2 id="何为一个工业级的散列表？工业级的散列表应该具有哪些特性？"><a href="#何为一个工业级的散列表？工业级的散列表应该具有哪些特性？" class="headerlink" title="何为一个工业级的散列表？工业级的散列表应该具有哪些特性？"></a>何为一个工业级的散列表？工业级的散列表应该具有哪些特性？</h2><pre><code>1.支持快速的查询、插入、删除操作；
-2.内存占用合理，不能浪费过多空间；
-3.性能稳定，散列函数生成的值要尽可能的均匀分布，在极端情况下，散列表的性能也不会退化到无法接受的情况。
-</code></pre><p>方案：<br>如何设计这样一个散列表呢？根据前面的知识点，从3个方面来考虑设计思路：<br>   <strong>1.设计一个不复杂，散列值尽可能分布均匀的散列函数；<br>    2.定义装载因子阈值，并且设计高效动态扩容策略；<br>    3.选择合适的散列冲突解决方法。</strong></p>
-<p>步骤拆分：</p>
-<h2 id="一、如何设计散列函数？"><a href="#一、如何设计散列函数？" class="headerlink" title="一、如何设计散列函数？"></a>一、如何设计散列函数？</h2><p>1.要尽可能让散列后的值随机且均匀分布，这样会尽可能减少散列冲突，即便冲突之后，分配到每个槽内的数据也比较均匀。<br>2.除此之外，散列函数的设计也不能太复杂，太复杂就会太耗时间，也会影响到散列表的性能。<br>3.常见的散列函数设计方法：直接寻址法、平方取中法、折叠法、随机数法等。</p>
-<h2 id="二、如何根据装载因子动态扩容？"><a href="#二、如何根据装载因子动态扩容？" class="headerlink" title="二、如何根据装载因子动态扩容？"></a>二、如何根据装载因子动态扩容？</h2><h3 id="1-如何设置装载因子阈值？"><a href="#1-如何设置装载因子阈值？" class="headerlink" title="1.如何设置装载因子阈值？"></a>1.如何设置装载因子阈值？</h3><ul>
-<li>装载因子越大，说明散列表中的元素越多，空闲的位置就越少，冲突的概率就越大，对于动态的散列表，<strong>可以通过设置装载因子的阈值来控制是扩容还是缩容</strong>，支持动态扩容的散列表，创建一个更大的散列表将数据迁移到新散列表中,如果每次扩容都是原来大小的两倍，那么扩容后的负载因子就会降为原来的一半。（<strong>插入数据的时间复杂度使用摊还分析法，均摊复杂度O(1)</strong>）<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g33k21nm2lj30vq0l07a8.jpg" alt="avatar"></li>
-<li>装载因子的阈值设置需要权衡时间复杂度和空间复杂度。如果内存空间不紧张，对执行效率要求很高，可以降低装载因子的阈值；相反，如果内存空间紧张，对执行效率要求又不高，可以增加装载因子的阈值。</li>
-</ul>
-<h3 id="2-如何避免低效扩容？"><a href="#2-如何避免低效扩容？" class="headerlink" title="2.如何避免低效扩容？"></a>2.如何避免低效扩容？</h3><p>大部分情况下散列表插入一个数据都很快，但是当负载因子到达阀值，需要进行扩容，再插入数据，再扩容的过程中因为散列表大小进行了改变所以存储的位置也得到了改变，这个时候插入数据就会变得很慢。<br> <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g33kdeu374j30vq0ldgx4.jpg" alt="avatar"></p>
-<ul>
-<li>分批扩容的插入操作：当有新数据要插入时，我们将数据插入新的散列表，并且从老的散列表中拿出一个数据放入新散列表。每次插入都重复上面的过程。这样插入操作就变得很快了。</li>
-<li>分批扩容的查询操作：先查新散列表，再查老散列表。</li>
-<li>通过分批扩容的方式，任何情况下，插入一个数据的时间复杂度都是O(1)。</li>
-</ul>
-<h2 id="三、如何选择散列冲突解决方法？"><a href="#三、如何选择散列冲突解决方法？" class="headerlink" title="三、如何选择散列冲突解决方法？"></a>三、如何选择散列冲突解决方法？</h2><p><strong>常见的2中方法：开放寻址法和链表法。</strong><br>1.<strong>链表法对内存的空间利用率更高，链表节点可以在冲突时再创建，并不需要开放寻址法提前将空间申请好。其对大装载因子的容忍度更高。开放寻址适用于装载因子小于1的情景，接近1的时候，就会出现大量的散列冲突，导致大量探测，再散列，性能会下降很多。但是对于链表法来说只要散列函数值均匀，即使装载因子变成了10，也只是链表的长度拉长了，虽然查找效率变慢，但是比顺序查找还是要快很多。</strong>而且，我们还可以通过将链表法中的链表改造成其他动态查找数据结构，比如红黑树、跳表，来避免散列表时间复杂度退化成O(n)，抵御散列冲突攻击。<br> <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g33kxyy3zkj30vq0ghdix.jpg" alt="avatar"><br>2.<strong>开放寻址法可以利用CPU缓存加快查询速度但是删除数据比较麻烦，并不能直接删除，需要标记已经删除掉的数据，而且每个冲突的数据都在数组中，冲突的代价很高，装载因子也不能设置的过大，导致了此方法比较浪费内存空间。</strong>但是对于小规模数据、装载因子不高的散列表，比较适合用。</p>
-<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><p>基于链表的散列冲突方法比较适合存储大对象，大数据量的散列表，因为对于大对象而言散列表中存储的指针大小基本可以忽略了，对于比较小的对象存储，是比较消耗内存的。但是比起开放寻址法它更加的灵活，支持更多的优化策略，比如红黑树代替链表。</p>
-<h3 id="举例分析"><a href="#举例分析" class="headerlink" title="举例分析"></a>举例分析</h3><p><strong>1.初始大小</strong><br>Java中的HashMap的默认初始大小是16，可以在预先知道大小时修改默认配置，减少扩容次数。<br><strong>2.装载因子和动态扩容</strong><br>最大装载因子默认是0.75，当元素个数超过了 0.75 * size 的时候，就会启动扩容，每次扩容是原来的两倍。<br><strong>3.散列冲突解决方法</strong><br>HashMap底层使用链表法来解决冲突，负载因子和散列函数设计的再合理也会出现拉链过场的情况，严重影响HashMap的性能。<br>在JDK1.8版本中，引入了红黑树。当链表长度太长（默认为8）时，链表就转化为红黑树。利用红黑树快速增删改查的特点提高性能，在红黑树节点少于8个的时候又将红黑树转化为链表。（在数据量矫情的情况下，红黑树要维护平衡，和链表比起来性能上没什么优势）<br><strong>4.散列函数</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h = key.hashCode()；</span><br><span class="line">    <span class="keyword">return</span> (h ^ (h &gt;&gt;&gt; <span class="number">16</span>)) &amp; (capitity -<span class="number">1</span>); <span class="comment">//capicity 表示散列表的大小</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2467,7 +2500,7 @@ PostConstruct
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2478,7 +2511,7 @@ PostConstruct
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

@@ -284,6 +284,253 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/12/12/负载均衡策略问题导致服务宕机（记一次生产问题）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     3.4k 字
+	</span>
+	<span title="阅读时长">
+     13 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/12/负载均衡策略问题导致服务宕机（记一次生产问题）/" itemprop="url">负载均衡策略问题导致服务宕机（记一次生产问题）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-12T23:41:37+08:00">
+                2019-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/避坑指南/" itemprop="url" rel="index">
+                    <span itemprop="name">避坑指南</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/避坑指南/算法与数据结构/" itemprop="url" rel="index">
+                    <span itemprop="name">算法与数据结构</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/避坑指南/算法与数据结构/计算机网络/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/12/负载均衡策略问题导致服务宕机（记一次生产问题）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/12/12/负载均衡策略问题导致服务宕机（记一次生产问题）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  13
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一-问题"><a href="#一-问题" class="headerlink" title="一.问题"></a>一.问题</h2><p>2019年12月4日上午11点左右收到线上报警，核心服务CPU使用率达到了3000%，看了下进程的线程信息都是active。因为使用的容器是weblogic，所以在console平台查看线程相关信息。<br>信息整理如下：</p>
+<ul>
+<li>活动线程43个，队列的长度已经到了23个</li>
+<li>数据库连接为不可用连接数为5，活动连接数为5，可用连接数为15</li>
+<li>线程池 线程空闲指标大部分都是false（暂时不可用）</li>
+<li>查看线程池 不可用连接执行操作为请求CAS或者或者请求portal</li>
+<li>查看转储线程堆栈,部分异常信息如下：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"[ACTIVE] ExecuteThread: '2' for queue: 'weblogic.kernel.Default (self-tuning)'"</span> id=<span class="number">34</span> idx=<span class="number">0xec</span> tid=<span class="number">23897</span> prio=<span class="number">5</span> alive, native_blocked, daemon</span><br><span class="line">at java/util/HashMap.put(HashMap.java:<span class="number">468</span>)[optimized]</span><br><span class="line">at org/jasig/cas/client/session/HashMapBackedSessionMappingStorage.addSessionById(HashMapBackedSessionMappingStorage.java:<span class="number">36</span>)[optimized]</span><br><span class="line">at org/jasig/cas/client/session/SingleSignOutFilter.doFilter(SingleSignOutFilter.java:<span class="number">95</span>)[optimized]</span><br><span class="line">at weblogic/servlet/internal/FilterChainImpl.doFilter(FilterChainImpl.java:<span class="number">56</span>)[optimized]</span><br><span class="line">at com/isoftstone/iaeap/web/filter/SetCharacterEncodingFilter.doFilter(SetCharacterEncodingFilter.java:<span class="number">105</span>)[optimized]</span><br><span class="line">at weblogic/servlet/internal/FilterChainImpl.doFilter(FilterChainImpl.java:<span class="number">56</span>)[inlined]</span><br><span class="line">at weblogic/servlet/internal/WebAppServletContext$ServletInvocationAction.wrapRun(WebAppServletContext.java:<span class="number">3730</span>)[inlined]</span><br><span class="line">at weblogic/servlet/internal/WebAppServletContext$ServletInvocationAction.run(WebAppServletContext.java:<span class="number">3696</span>)[optimized]</span><br><span class="line">at weblogic/security/acl/internal/AuthenticatedSubject.doAs(AuthenticatedSubject.java:<span class="number">321</span>)[optimized]</span><br><span class="line">at weblogic/security/service/SecurityManager.runAs(SecurityManager.java:<span class="number">120</span>)[inlined]</span><br><span class="line">at weblogic/servlet/internal/WebAppServletContext.securedExecute(WebAppServletContext.java:<span class="number">2273</span>)[inlined]</span><br><span class="line">at weblogic/servlet/internal/WebAppServletContext.execute(WebAppServletContext.java:<span class="number">2179</span>)[optimized]</span><br><span class="line">at weblogic/servlet/internal/ServletRequestImpl.run(ServletRequestImpl.java:<span class="number">1490</span>)[optimized]</span><br><span class="line">at weblogic/work/ExecuteThread.execute(ExecuteThread.java:<span class="number">256</span>)[optimized]</span><br><span class="line">at weblogic/work/ExecuteThread.run(ExecuteThread.java:<span class="number">221</span>)</span><br><span class="line">at jrockit/vm/RNI.c2java(JJJJJ)V(Native Method)</span><br><span class="line">-- end of trace</span><br><span class="line"><span class="string">"GC Daemon"</span> id=<span class="number">35</span> idx=<span class="number">0xf0</span> tid=<span class="number">23903</span> prio=<span class="number">2</span> alive, waiting, native_blocked, daemon</span><br><span class="line">-- Waiting <span class="keyword">for</span> notification on: sun/misc/GC$LatencyLock@<span class="number">0x51155130</span>[fat lock]</span><br><span class="line">at jrockit/vm/Threads.waitForNotifySignal(JLjava/lang/Object;)Z(Native Method)</span><br><span class="line">at java/lang/Object.wait(J)V(Native Method)</span><br><span class="line">at sun/misc/GC$Daemon.run(GC.java:<span class="number">100</span>)</span><br><span class="line">^-- Lock released <span class="keyword">while</span> waiting: sun/misc/GC$LatencyLock@<span class="number">0x51155130</span>[fat lock]</span><br><span class="line">at jrockit/vm/RNI.c2java(JJJJJ)V(Native Method)</span><br><span class="line">-- end of trace</span><br></pre></td></tr></table></figure>
+<p>此时发现熟悉的身影，因为项目引用的是cas-client3.1.3版本的jar包，其中存储session的数据结构是HashMap，且操作时未进行加锁，之前别的核心的小伙伴已经因为多线程环境下触发HashMap扩容死循环问题的BUG宕机过一次，此时看到这里立马确认CPU飙升罪魁祸首是这个jar包。</p>
+<p><strong>经过确认，核心一共9台服务器，其中4台为前端应用服务，CPU飙升的服务器正是这4台。</strong></p>
+<h2 id="2-曲折"><a href="#2-曲折" class="headerlink" title="2.曲折"></a>2.曲折</h2><p>  当有了一把锤子看什么都是钉子，因为此时心中已经认定是jar导致问题，所以看着服务器的各种异像都觉得符合逻辑。只是心中有些纳闷为何jar包问题这么久了都没有触发HashMap扩容死循环的bug，怎么单单就这次服务重启不过几十分钟CPU就又直线飙升。<br>  在服务器刚重启完的时候此时收到一个信息，有出单员页面部分资源打不开了。开了network跟了下发现部分资源返回404，页面间不涉及到数据加载的页面跳转无异，但是点击查询时页面就会卡死，而此时该进程的CPU也会上升。这个时候就有点诡异，之前的猜测跟目前情形好像并无关联。<br>到了中午使用的人数少了一些抱着病急乱投医，总得做点什么的心态，将jar包更新到3.5升级了上去，经过了几个小时CPU仍然状态稳定，心中长舒了一口气。<br>好景不长，没过多久又有出单员反馈页面卡死问题，此时看了一下线程吓了一跳，多个线程触发GC，后台日志多处报错提示OOM。赶紧看了下源码，发现原来jar包中有一个守护线程来定时触发删除过期的session，而新的jar包去除了此方法，而留了一个clean的方法清理session。猜测到可能是因为没有显式调用该方法导致的内存泄漏，并且并没有解决前端资源丢失加载不出页面，还是紧急将jar包替换了回来，重新查找原因。</p>
+<h2 id="3-整理线索"><a href="#3-整理线索" class="headerlink" title="3.整理线索"></a>3.整理线索</h2><h3 id="3-1"><a href="#3-1" class="headerlink" title="3.1"></a>3.1</h3><p>重新梳理了下系统的日志，发现了除了正常的业务流程异常外还有一个异常信息比较可疑。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="number">2019</span>-<span class="number">12</span>-<span class="number">5</span> 下午<span class="number">02</span>时<span class="number">35</span>分<span class="number">41</span>秒 CST&gt; &lt;Error&gt; &lt;HTTP&gt; &lt;BEA-<span class="number">101020</span>&gt; &lt;[ServletContext@<span class="number">199457131</span>[app:pcisv7 <span class="keyword">module</span>:WebRoot path:/pcisv7 spec-version:<span class="number">2.5</span>]] Servlet failed with Exception</span><br><span class="line">java.lang.NullPointerException</span><br><span class="line">	at jsp_servlet._core.__header._jspService(__header.java:<span class="number">295</span>)</span><br><span class="line">	at weblogic.servlet.jsp.JspBase.service(JspBase.java:<span class="number">34</span>)</span><br><span class="line">	at weblogic.servlet.internal.StubSecurityHelper$ServletServiceAction.run(StubSecurityHelper.java:<span class="number">227</span>)</span><br><span class="line">	at weblogic.servlet.internal.StubSecurityHelper.invokeServlet(StubSecurityHelper.java:<span class="number">125</span>)</span><br><span class="line">	at weblogic.servlet.internal.ServletStubImpl.execute(ServletStubImpl.java:<span class="number">301</span>)</span><br><span class="line">	Truncated. see log file <span class="keyword">for</span> complete stacktrace</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+<p>找到了weblogic缓存目录下的文件和测试环境文件比对了下也并没有区别，此文件也没有涉及过开发改动。查看了下源码，找到了一处可能发生空指针的地方：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;%</span><br><span class="line"> IUserDetails userDetails = CurrentUser.getUser();</span><br><span class="line"> String operCnm = userDetails.getOpCnm();</span><br><span class="line"> String companyCnm = userDetails.getCompanyCnm();</span><br><span class="line"> <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line"> GrtRightService grtRightService =(GrtRightService)SpringUtils.getSpringBean(<span class="string">"grtRightService"</span>);</span><br><span class="line"> List&lt;GrtMenuVO&gt; lstMenuVo=<span class="keyword">null</span>;</span><br><span class="line"> <span class="keyword">try</span>&#123;</span><br><span class="line">   lstMenuVo = grtRightService.getPermissionRootMenus();</span><br><span class="line">   <span class="keyword">if</span>(lstMenuVo ==<span class="keyword">null</span> || lstMenuVo.size()==<span class="number">0</span>)&#123;</span><br><span class="line">	   out.println(<span class="string">"&lt;script type='text/javascript'&gt;parent.window.location ='./common/error/errorinfo.html';&lt;/script&gt;"</span>);</span><br><span class="line">	   <span class="keyword">return</span>;</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">   e.printStackTrace();</span><br><span class="line"> &#125;</span><br><span class="line">  String skin = (String)request.getSession().getAttribute(<span class="string">"ISOFTSTONESKIN"</span>);</span><br><span class="line">  String rootPath = request.getContextPath();</span><br><span class="line">  String companyId = userDetails.getCompanyId();</span><br><span class="line">  String[] companyIds =userDetails.getCompanyIds();</span><br><span class="line">  String[] companyCnms =userDetails.getCompanyCnms();</span><br><span class="line">%&gt;</span><br></pre></td></tr></table></figure></p>
+<p>17行的skin 中是从session中取值，如果session没有set此处使用会产生空指针，从而导致页面部分资源加载不出来。向上查了一下代码，在session中存放ISOFTSTONESKIN的地方是登陆首页时存放，跳转到目标页面后获取的。查看了下源码ISOFTSTONESKIN的值也是设置的默认值，当时考虑了下并没有考虑到什么场景会导致session中的ISOFTSTONESKIN失效，就在代码中对该变量重新赋值了下。<strong>（其实在这个场景时就已经初步能看出来一些问题，既session丢失问题）</strong></p>
+<h3 id="3-2"><a href="#3-2" class="headerlink" title="3.2"></a>3.2</h3><p>因为考虑到是因为CAS登陆导致的使用cas-client jar包产生的CPU使用率问题，考虑了下，决定先将核心模块从cas登陆中拿出，启用spring security验证登陆。<br>applicationContext.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">import</span> <span class="attr">resource</span>=<span class="string">"applicationContext-spring-security.xml"</span>/&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- &lt;import resource="applicationContext-spring-security-cas-ns.xml"/&gt; 启用单点登录时使用些配置文件--&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>重新启动后，CPU使用率正常，header等几个从session取值的页面因为设置了默认值，也暂时没有出现空指针问题。但是出现了使用不到几分钟，就会跳转到登陆页面，提示重新登陆。<strong>(操作的页面没有嵌入别的系统页面，不存在跨系统登陆问题)</strong><br>看了眼核心session失效时间<br>web.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">session-config</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">session-timeout</span>&gt;</span>300<span class="tag">&lt;/<span class="name">session-timeout</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">session-config</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>顺便看了下CAS的 Ticket超时时间<br>ticketExpirationPolicies.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"grantingTicketExpirationPolicy"</span> <span class="attr">class</span>=<span class="string">"org.jasig.cas.ticket.support.TimeoutExpirationPolicy"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span>  <span class="attr">value</span>=<span class="string">"7200000"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>CAS的session超时时间<br>web.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">session-config</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">session-timeout</span>&gt;</span>300<span class="tag">&lt;/<span class="name">session-timeout</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">session-config</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>核心系统客户端的session失效时间设置的半小时，cas的session失效时间是半小时，ticket的票据失效时间是两小时。移除了CAS的认证后半小时内操作是不会登出的，但是实际场景操作过程中就出现跳转到登陆页面的情况。<strong>（session方面的问题愈发明显，但是急于将问题解决，与真相一次次擦肩而过）</strong></p>
+<h3 id="3-3"><a href="#3-3" class="headerlink" title="3.3"></a>3.3</h3><p>此时怀疑是网络负载方面的问题，因为系统切换了IPV6考虑到会产生的影响，决定将核心系统加入CAS验证，并且前端节点只开一个处理请求，进行观察。（因负责网络的同事当时不在，只是初步怀疑是IPV6的影响，后续经过确认只改造了公司官网，其余系统并未改造。）<br>开单节点运行了一上午发现CPU稳定，页面加载也再没有出现加载异常，开双节点时就会出现加载异常的情况。由此找到问题原因是负载均衡将客户端X请求转发到某台实例A的时候，由于未知原因将网络请求转发至另一服务器B。导致本应该存在于session的值直接访问另一台服务器时该值并不存在，因为客户端浏览器未关闭的原因，ticket会存在于header头中,转发请求至新的服务时，校验并没有登陆便会去CAS认证一次,但是并不会要求用户重新登陆。<br>负载是由citrix进行硬件方面的负载，它与Nginx软件负载功能类似，只是功能更加强劲，其中大部分的负载策略是一致的。查看了下负载策略使用的是least_conn最小连接数，会话保持时间为两分钟。该策略使用了很长时间都没有问题，考虑到使用iphash会导致服务分部不均，所以未做改动，仅将连接的会话时间修改为了30分钟，同session过期时间保持同步。<strong>（会话时间既将用户请求负载至某一IP，若在会话时间内如果有操作，则会话保持，若没有操作则会话断开，重新请求时将重新对其进行转发）</strong></p>
+<h2 id="4-问题总结"><a href="#4-问题总结" class="headerlink" title="4.问题总结"></a>4.问题总结</h2><p>至此问题已经找到了，对于其中相关问题进行分析梳理。</p>
+<ol>
+<li>因为执行某些操作或者在页面中静止导致两分钟内没有与后台进行交互，再次操作时因为citrix使用最小连接数的策略会将新的请求负载至另一台服务器。</li>
+<li>该服务器取出sessionID校验是否通过了登陆验证，浏览器Cookie中并没有缓存该台服务器的sessionID，验证失败，此时重定向请求至CAS服务，因CAS服务只有单台并且该浏览器已经通过了认证，此时访问通过Cookie直接认证通过，跳转到了目标页面。（此时还存在一个场景就是CAS的session也过期了，跳转到单点登录地址，带着ticket参数去验证用户，如果单点登录验证到ticket没过期，就不会去登录页面，但是会刷新当前页，因为从单点登录地址重定向到了当前页面地址。所以使用时的感觉就是长时间不操作时，点击页面元素会出现刷新页面的情况。）</li>
+<li>因为在登陆页面中缓存在session中的一些默认值，重新登陆后直接跳转到了目标页面所以并没有缓存，jsp此时加载时就产生了资源丢失，后台报错空指针的情况。</li>
+<li>而因为负载频繁的将请求转发，也导致出现了类似大规模登陆的场景（多次去CAS认证，认证通过将session缓存）因为CAS-Client.jar缓存使用的数据结构是HashMap，并且移除和添加缓存操作都没有加锁，导致HashMap出现扩容死循环问题。</li>
+</ol>
+<h2 id="5-浏览器访问过程"><a href="#5-浏览器访问过程" class="headerlink" title="5.浏览器访问过程"></a>5.浏览器访问过程</h2><p>详细流程：<a href="https://4ark.me/post/b6c7c0a2.html" target="_blank" rel="noopener">https://4ark.me/post/b6c7c0a2.html</a><br>流程图：<br><img src="https://ftp.bmp.ovh/imgs/2019/12/d1ecc658b38ca606.jpg" alt="浏览器访问流程"><br>cas：<a href="https://www.cnblogs.com/notDog/p/5276643.html" target="_blank" rel="noopener">https://www.cnblogs.com/notDog/p/5276643.html</a><br><a href="http://www.voidcn.com/article/p-waqcmlak-bqr.html" target="_blank" rel="noopener">http://www.voidcn.com/article/p-waqcmlak-bqr.html</a></p>
+<h2 id="6-内容扩展"><a href="#6-内容扩展" class="headerlink" title="6.内容扩展"></a>6.内容扩展</h2><h3 id="IPV6与IPV4区别：https-blog-51cto-com-7658423-1339259"><a href="#IPV6与IPV4区别：https-blog-51cto-com-7658423-1339259" class="headerlink" title="IPV6与IPV4区别：https://blog.51cto.com/7658423/1339259"></a>IPV6与IPV4区别：<a href="https://blog.51cto.com/7658423/1339259" target="_blank" rel="noopener">https://blog.51cto.com/7658423/1339259</a></h3><h3 id="负载策略"><a href="#负载策略" class="headerlink" title="负载策略"></a>负载策略</h3><ul>
+<li>轮询策略（轮询加权/round-robin）：加权轮询带有优先级，按照设置的权值分配请求比例。</li>
+<li>ip hash ：针对IP地址hash决定下一请求转发至哪一服务（负载不均问题，使用一致性hash）</li>
+<li>最少连接（least_conn) ：下一个请求将被分派到活动连接数量最少的服务器</li>
+<li>url hash</li>
+<li>随机Random</li>
+<li>最短响应时间LRT ：通过ping等方式探测，请求分配给响应时间最短的服务。</li>
+</ul>
+<h3 id="虚拟IP"><a href="#虚拟IP" class="headerlink" title="虚拟IP"></a>虚拟IP</h3><p>使用一个未分配给真实主机的IP，与真实主机IP，热备主机IP加起来一共三个IP。在以太网中IP地址只是逻辑地址，真正传输的是MAC地址，而每台设备中都有一个ARP缓存，缓存中用来存储同一网络内IP地址和MAC地址对应关系，在向其他主机发送数据时会先从缓存中查询目标IP所对应的MAC地址，拿到MAC地址后向主机发送数据。<br>例如缓存内容：<br>主机A：192.168.0.3 at ec:f4:bb:49:s4:44<br>主机B：192.168.0.4 at ec:f4:bb:49:s5:64<br>虚拟Ip：192.168.0.5 at ec:f4:bb:49:s4:44<br>其中A，B为真实主机，对外提供服务的是A，B为热备，如果A宕机了那么通过心跳检测到A已经发生故障，此时主机B会将自己的ARP缓存发送出去，让路由器修改路由表，告知虚拟地址由A指向B。<br>更新后的缓存内容：<br>主机A：192.168.0.3 at ec:f4:bb:49:s4:44<br>主机B：192.168.0.4 at ec:f4:bb:49:s5:64<br>虚拟Ip：192.168.0.5 at ec:f4:bb:49:s5:64<br>此时再次访问虚拟IP时，机器B会变成主服务器，A降级为热备服务器。这就完成了主从切换，这个过程称之为<strong>IP漂移</strong>。<br>参考：<a href="http://xiaobaoqiu.github.io/blog/2015/04/02/xu-ni-iphe-ippiao-yi/" target="_blank" rel="noopener">http://xiaobaoqiu.github.io/blog/2015/04/02/xu-ni-iphe-ippiao-yi/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/11/27/Docker-学习二-容器基本操作/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2336,241 +2583,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/05/SpringCloud学习一-服务注册和发现/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     943 字
-	</span>
-	<span title="阅读时长">
-     3 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/05/SpringCloud学习一-服务注册和发现/" itemprop="url">SpringCloud学习一-服务注册和发现</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-05T22:37:55+08:00">
-                2019-10-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringCloud/eureka/" itemprop="url" rel="index">
-                    <span itemprop="name">eureka</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/05/SpringCloud学习一-服务注册和发现/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/05/SpringCloud学习一-服务注册和发现/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  943
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="注册中心-Eureka"><a href="#注册中心-Eureka" class="headerlink" title="注册中心-Eureka"></a>注册中心-Eureka</h2><p>参考资料<br><a href="https://blog.csdn.net/forezp/article/details/81040925" target="_blank" rel="noopener">史上最简单的 SpringCloud 教程 | 第一篇： 服务的注册与发现Eureka(Finchley版本)</a></p>
-<p>Eureka 自我保护机制：<br>某时刻微服务不可用，Eureka不会立刻清理，依旧保存该微服务的信息。</p>
-<p> 在spring cloud中，除了可以使用eureka作为注册中心外，还可以通过配置的方式使用zookeeper作为注册中心。既然这样，该如何选择？<br>   著名的CAP理论指出，一个分布式系统不可能同时满足C(一致性)、A(可用性)和P(分区容错性)。由于分区容错性在是分布式系统中必须要保证的，因此我们只能在A和C之间进行权衡。在此Zookeeper保证的是CP, 而Eureka则是AP。</p>
-<ol start="2">
-<li>Zookeeper保证CP<br> 当向注册中心查询服务列表时，我们可以容忍注册中心返回的是几分钟以前的注册信息，但不能接受服务直接down掉不可用。也就是说，服务注册功能对可用性的要求要高于一致性。但是zk会出现这样一种情况，当master节点因为网络故障与其他节点失去联系时，剩余节点会重新进行leader选举。问题在于，选举leader的时间太长，30 ~ 120s, 且选举期间整个zk集群都是不可用的，这就导致在选举期间注册服务瘫痪。在云部署的环境下，因网络问题使得zk集群失去master节点是较大概率会发生的事，虽然服务能够最终恢复，但是漫长的选举时间导致的注册长期不可用是不能容忍的。</li>
-<li>Eureka保证AP<br> Eureka看明白了这一点，因此在设计时就优先保证可用性。Eureka各个节点都是平等的，几个节点挂掉不会影响正常节点的工作，剩余的节点依然可以提供注册和查询服务。而Eureka的客户端在向某个Eureka注册或如果发现连接失败，则会自动切换至其它节点，只要有一台Eureka还在，就能保证注册服务可用(保证可用性)，只不过查到的信息可能不是最新的(不保证强一致性)。除此之外，Eureka还有一种自我保护机制，如果在15分钟内超过85%的节点都没有正常的心跳，那么Eureka就认为客户端与注册中心出现了网络故障，此时会出现以下几种情况： <ol>
-<li>Eureka不再从注册列表中移除因为长时间没收到心跳而应该过期的服务 </li>
-<li>Eureka仍然能够接受新服务的注册和查询请求，但是不会被同步到其它节点上(即保证当前节点依然可用) </li>
-<li>当网络稳定时，当前实例新的注册信息会被同步到其它节点中<br>因此， Eureka可以很好的应对因网络故障导致部分节点失去联系的情况，而不会像zookeeper那样使整个注册服务瘫痪。<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="1-pom文件引入依赖"><a href="#1-pom文件引入依赖" class="headerlink" title="1.pom文件引入依赖"></a>1.pom文件引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-</ol>
-<h3 id="2-启动类"><a href="#2-启动类" class="headerlink" title="2. 启动类"></a>2. 启动类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableEurekaServer</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EurekaServerApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run( EurekaServerApplication.class, args );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3-配置文件"><a href="#3-配置文件" class="headerlink" title="3.配置文件"></a>3.配置文件</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8761</span>   <span class="comment">#端口</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  instance:</span></span><br><span class="line"><span class="attr">    hostname:</span> <span class="string">localhost</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    registerWithEureka:</span> <span class="literal">false</span>    <span class="comment"># 禁止自己注册</span></span><br><span class="line"><span class="attr">    fetchRegistry:</span> <span class="literal">false</span>       </span><br><span class="line"><span class="attr">    serviceUrl:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://$&#123;eureka.instance.hostname&#125;:$&#123;server.port&#125;/eureka/</span>   <span class="comment">#服务地址</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">eurka-server</span>   <span class="comment"># 服务名称</span></span><br><span class="line"><span class="attr"> instance:</span></span><br><span class="line"><span class="attr">    instance-id:</span> <span class="string">eurekaclient8762</span>   <span class="comment">#显示别名</span></span><br><span class="line"><span class="attr">    prefer-ip-address:</span> <span class="literal">true</span> <span class="comment">#访问路径显示ip地址</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2624,7 +2636,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2635,7 +2647,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
