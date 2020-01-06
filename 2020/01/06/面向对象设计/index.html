@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="设计模式,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="拿到一个需求时应该怎么做？  明确需求 基础分析 了解最佳实践 测试用例 预计工期 约定接口定义 编写用户手册和文档，示例代码  如何进行面对象对象设计 职责划分进而区分有哪些类 将功能点罗列出来，职责相近属性类似归为同一类 找到功能相近，操作同样属性的可能归到一个类 复杂需求按照模块拆分，然后再找类   定义类的属性和方法 需求中的名词作为候选属性，动词作为候选方法 并不是所有的名词都需要作为类">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面向对象设计">
+<meta property="og:url" content="http://iamlfc.top/2020/01/06/面向对象设计/index.html">
+<meta property="og:site_name" content="邪恶小代码">
+<meta property="og:description" content="拿到一个需求时应该怎么做？  明确需求 基础分析 了解最佳实践 测试用例 预计工期 约定接口定义 编写用户手册和文档，示例代码  如何进行面对象对象设计 职责划分进而区分有哪些类 将功能点罗列出来，职责相近属性类似归为同一类 找到功能相近，操作同样属性的可能归到一个类 复杂需求按照模块拆分，然后再找类   定义类的属性和方法 需求中的名词作为候选属性，动词作为候选方法 并不是所有的名词都需要作为类">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-06T12:59:57.115Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="面向对象设计">
+<meta name="twitter:description" content="拿到一个需求时应该怎么做？  明确需求 基础分析 了解最佳实践 测试用例 预计工期 约定接口定义 编写用户手册和文档，示例代码  如何进行面对象对象设计 职责划分进而区分有哪些类 将功能点罗列出来，职责相近属性类似归为同一类 找到功能相近，操作同样属性的可能归到一个类 复杂需求按照模块拆分，然后再找类   定义类的属性和方法 需求中的名词作为候选属性，动词作为候选方法 并不是所有的名词都需要作为类">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://iamlfc.top/2020/01/06/面向对象设计/">
+
+
+
+
+
+  <title>面向对象设计 | 邪恶小代码</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">邪恶小代码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2020/01/06/面向对象设计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     2.6k 字
+	</span>
+	<span title="阅读时长">
+     9 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">面向对象设计</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-06T20:56:50+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/06/面向对象设计/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/06/面向对象设计/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>拿到一个需求时应该怎么做？</p>
+<ul>
+<li>明确需求</li>
+<li>基础分析</li>
+<li>了解最佳实践</li>
+<li>测试用例</li>
+<li>预计工期</li>
+<li>约定接口定义</li>
+<li>编写用户手册和文档，示例代码</li>
+</ul>
+<h2 id="如何进行面对象对象设计"><a href="#如何进行面对象对象设计" class="headerlink" title="如何进行面对象对象设计"></a>如何进行面对象对象设计</h2><ul>
+<li>职责划分进而区分有哪些类<ul>
+<li>将功能点罗列出来，职责相近属性类似归为同一类</li>
+<li>找到功能相近，操作同样属性的可能归到一个类</li>
+<li>复杂需求按照模块拆分，然后再找类</li>
+</ul>
+</li>
+<li>定义类的属性和方法<ul>
+<li>需求中的名词作为候选属性，动词作为候选方法</li>
+<li>并不是所有的名词都需要作为类的属性，不属于这个类的可以通过传参来构造</li>
+</ul>
+</li>
+<li>定义类和类的关系（以下为UML中定义的类关系）<ul>
+<li>泛化<ul>
+<li>简单理解为继承关系</li>
+</ul>
+</li>
+<li>实现<ul>
+<li>一般指接口和实现类之间的关系 </li>
+</ul>
+</li>
+<li>聚合<ul>
+<li>包含关系 ，A类对象包含B类对象，B类对象生命周期不依赖A类对象生命周期，如课程和学生的关系</li>
+</ul>
+</li>
+<li>组合<ul>
+<li>包含关系。A类对象包含B类对象，B 类对象生命周期依赖A类对象生命周期，B类对象不可单独存在，比如鸟和翅膀的关系。</li>
+</ul>
+</li>
+<li>关联<ul>
+<li>非常弱的关系，包含聚合和组合两种关系。如果B类对象是A类对象的成员变量，那B类和A类就是关联关系。</li>
+</ul>
+</li>
+<li>依赖<ul>
+<li>比关联关系更弱的关系，包含关联关系。只要B类对象和A类对象有任何使用关系都称他们有依赖关系。 </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>类组装起来并提供入口<ul>
+<li>独立系统为main函数</li>
+<li>web应用就是一组给外部调用的API接口</li>
+</ul>
+</li>
+</ul>
+<h2 id="分析示例"><a href="#分析示例" class="headerlink" title="分析示例"></a>分析示例</h2><p>下面用一个接口鉴权进行示例分析。</p>
+<h3 id="一、需求分析"><a href="#一、需求分析" class="headerlink" title="一、需求分析"></a>一、需求分析</h3><h4 id="1-基础分析"><a href="#1-基础分析" class="headerlink" title="1.基础分析"></a>1.基础分析</h4><p>对于鉴权最简单的解决方案就是通过用户名密码来做认证，给每一个调用服务的调用方派发一个应用名和一个对应的密码/秘钥。调用方每次请求时携带自己的AppID和秘钥。服务端接收接口请求后解析出AppID和密码跟存储在服务端的账号密码比对，如果一致说明认证成功，允许接口调用请求；否则拒绝接口调用请求。</p>
+<h4 id="2-分析优化"><a href="#2-分析优化" class="headerlink" title="2. 分析优化"></a>2. 分析优化</h4><p>由于使用上面的方式需要明文传输密码，密码很容易被截获，是不安全的。那么对密码加密是否就安全了呢？实际上这样也是不安全的，因为加密后的AppID和密码照样可以被黑客截获，黑客可以携带这个加密之后的密码以及对应的AppID伪装成已经认证的系统来访问服务端接口。这就是典型的[重放攻击][1]。<br>上面讲到了在设计功能时需了解下相关功能的最佳实践，而关于接口鉴权主要有JWT （适用安全不太敏感的应用）和OAuth2（授权的开放网络标准协议），刚刚这个问题，可以借助OAuth的验证思路来解决。调用方在进行接口请求的时候，将请求接口的URl、AppID、密码拼接到一块然后进行加密，生成一个token。调用方进行接口请求时将这个token及AppID等不敏感的参数信息,随URL一块传递给服务端。服务端接收请求后，根据AppID从数据库取出对应的密码，通过同样的Token生成算法，生成另一个token。用这个新生成的token跟调用方传递过来的toekn对比。如果一致则允许接口调用请求；否则，拒绝接口调用。</p>
+<h4 id="3-再分析"><a href="#3-再分析" class="headerlink" title="3.再分析"></a>3.再分析</h4><p>这样设计还是存在重放攻击的风险，还是不够安全。每个URL拼接AppID、密码生成的token都是固定的。未认证系统截获URL、token和AppID之后，还是可以通过重放攻击的方式，伪装成认证系统调用这个URL对应的接口。<br>此时可以引入一个随机变量，让每一次接口请求生产的token都不一样。这里可以使用时间戳来作为随机变量。原来token是对URL、AppID密码三者进行加密生成的，现在将密码、AppID、时间戳随URL一并传递给服务端。<br>服务端接收数据后，可以根据当前时间和传递过来的时间戳，是否在一定时间窗口内（比如1分钟），如果超过1分钟，则判定token过期，拒绝接口请求。</p>
+<h4 id="4-分析再优化"><a href="#4-分析再优化" class="headerlink" title="4.分析再优化"></a>4.分析再优化</h4><p>这里可能会有疑问，加了时间校验还是不够安全，未认证系统还是可以在一分钟的token失效窗口内通过截获请求、重放攻击调用服务端接口。<br>虽然这个方案还有漏洞但是实现起来比较简单，并且也不会过度影响接口本身的性能，攻与防之间本来就没有绝对的安全。我们能做的就是尽量提高攻击的成本，所以这个方案算算比较折中合理的了。<br>但是此处还有一个问题是，因为加密方式有可能使用的是通用的加密方式比如md5、SHA（不可逆加密），Base64(可逆加密)等，如果使用了可逆的加密算法黑客在截获了请求后还是可以通过尝试使用通用的加密方式来获取用户名和密码。并且上面的认证流程并不需要客户端传递真正的密码，只需要和服务端认证时token一致就可以了，所以此时我们可以使用用户的密码作为[盐][2]对URL、AppID、时间戳进行加密。服务端接收请求后取出服务端存储的密码按照同样的方式使用密码作为秘钥进行加密对token进行验证。<br>另外用户每次进行请求都要访问数据库获取用户密码，该操作过于费时，因此最好将其配置到内存数据中，如配置文件中，启动时加载到内存中或者Redis,Zookeeper等。</p>
+<h4 id="5-最终需求确定"><a href="#5-最终需求确定" class="headerlink" title="5.最终需求确定"></a>5.最终需求确定</h4><ul>
+<li>调用方进行接口请求时将URL、AppID、时间戳拼接到一起，通过根据密码通过加密算法生成toekn，并且将token、AppID、时间戳、拼接在URL中，一并发送到服务端。</li>
+<li>服务端接收请求后，从请求中拆解出token、AppID、时间戳。</li>
+<li>服务端先校验传递过来的时间戳跟当前时间是否在token的失效窗口内。如果已经超过失效时间，就算鉴权失败，拒绝接口调用请求。</li>
+<li>如果token验证没有过期失效，服务端再从春初中取出AppID对应的密码，通过同样的toekn生成算法，生成另外一个token，与调用发传递过来的toekn进行匹配；如果一致则鉴权成功，允许接口调用，否则拒绝接口调用。</li>
+</ul>
+<h3 id="二、类的划分"><a href="#二、类的划分" class="headerlink" title="二、类的划分"></a>二、类的划分</h3><p> 根据需求将需求拆解成功能点进行罗列：</p>
+<ol>
+<li>把URL、AppID、时间戳拼接为一个字符串；</li>
+<li>对字符串进行加密生成token；</li>
+<li>将toekn、AppID、时间戳拼到URL中，形成新的URL；</li>
+<li>解析URL得到toekn、AppID、时间戳等信息；</li>
+<li>存储中取出AppID和对应的密码；</li>
+<li>验证toekn是否过期；</li>
+<li>验证toekn是否匹配；</li>
+</ol>
+<p>其中1、2、6、7都是跟toekn有关；5是操作AppID和密码；3、4在处理URL，所以此处可粗略的拆分为3个核心类：Token、Url、CredentialStorage。Token实现1、2、6、7操作；Url负责3、4操作、CredentialStorage负责5这个操作。</p>
+<h3 id="三、属性方法"><a href="#三、属性方法" class="headerlink" title="三、属性方法"></a>三、属性方法</h3><p>Token类相关功能点有四个：</p>
+<ol>
+<li>把URL、AppID、时间戳拼接为一个字符串；</li>
+<li>对字符串通过加密算法加密生成 token；</li>
+<li>根据时间戳判断 token 是否过期失效；</li>
+<li>验证两个 token 是否匹配。</li>
+</ol>
+<p>根据功能点涉及名词作为候选实行，动词作为候选方法，进行筛选。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">AuthToken类</span><br><span class="line">属性</span><br><span class="line"> private final static long TIME_OUT_VALUE = 1 * 60 * 1000; //1min</span><br><span class="line">private long createTime;</span><br><span class="line">private long expiredTimeInterval = TIME_OUT_VALUE;</span><br><span class="line">private String token;</span><br><span class="line">构造函数</span><br><span class="line">public AuthToken(String token, long createTime) ;</span><br><span class="line">public AuthToken(String token, long createTime，long expiredTimeInterval) ;</span><br><span class="line">函数</span><br><span class="line">public boolean isExpired()；//时间校验</span><br><span class="line">public String getToken()；//获取token</span><br><span class="line">public static AuthToken generate(String originalUrl, long createTime, String userID,String pwd )；//生成token</span><br><span class="line">public boolean match(AuthToken authToken)；//token比对</span><br></pre></td></tr></table></figure></p>
+<p>从业务模型上说，不应该属于这个类的属性和方法，不应该放到这个类里。比如URL、AppID、时间戳这几个名词，此处将它们作为方法参数。<br>在此之外还需要挖掘没有出现在功能点描述中的属性，如createTime，expireTimeInterval，用作tokenn超时判断。</p>
+<h4 id="Url类相关功能点"><a href="#Url类相关功能点" class="headerlink" title="Url类相关功能点"></a>Url类相关功能点</h4><ol>
+<li>将token、AppID、时间戳拼接到URL形成新的URL；</li>
+<li>解析URL得到toekn、AppID、时间戳等信息；</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">属性</span><br><span class="line">private String originalUrl;</span><br><span class="line">private String appId;</span><br><span class="line">private long timestamp;</span><br><span class="line">private String token;</span><br><span class="line">构造函数</span><br><span class="line"> public ApiRequest(String originalUrl, String appId, long timestamp, String token) ；</span><br><span class="line">函数</span><br><span class="line">public static ApiRequest buildFromUrl(String url)；</span><br><span class="line">public String getUrl()；</span><br><span class="line">public String getToken()；</span><br><span class="line">public long getTimestamp()；</span><br><span class="line">public String getUrl()；</span><br></pre></td></tr></table></figure>
+<h4 id="CredentialStorage-类相关功能点"><a href="#CredentialStorage-类相关功能点" class="headerlink" title="CredentialStorage 类相关功能点"></a>CredentialStorage 类相关功能点</h4><ol>
+<li>从存储中获取AppID和对应的密码</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CredentialStorage接口</span><br><span class="line">public String getPasswordByAppId(String appId)；</span><br></pre></td></tr></table></figure>
+<h3 id="四、交互关系"><a href="#四、交互关系" class="headerlink" title="四、交互关系"></a>四、交互关系</h3><p>将类组装起来提供执行入口，利用UML中的依赖组合关系进行设计。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ApiAuthenticator</span> </span>&#123; </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">auth</span><span class="params">(String url)</span></span>; </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">auth</span><span class="params">(ApiRequest apiRequest)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultApiAuthenticatorImpl</span> <span class="keyword">implements</span> <span class="title">ApiAuthenticator</span> </span>&#123; </span><br><span class="line"><span class="keyword">private</span> CredentialStorage credentialStorage; </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">DefaultApiAuthenticator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.credentialStorage = <span class="keyword">new</span> MysqlCredentialStorage(); </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">DefaultApiAuthenticator</span><span class="params">(CredentialStorage credentialStorage)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">this</span>.credentialStorage = credentialStorage;</span><br><span class="line">&#125; </span><br><span class="line"><span class="meta">@Override</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">auth</span><span class="params">(String url)</span> </span>&#123;</span><br><span class="line">    ApiRequest apiRequest = ApiRequest.buildFromUrl(url); auth(apiRequest);</span><br><span class="line">&#125; </span><br><span class="line"><span class="meta">@Override</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">auth</span><span class="params">(ApiRequest apiRequest)</span> </span>&#123;</span><br><span class="line">    String appId = apiRequest.getAppId(); String token = apiRequest.getToken(); </span><br><span class="line">    <span class="keyword">long</span> timestamp = apiRequest.getTimestamp(); </span><br><span class="line">    String originalUrl = apiRequest.getOriginalUrl(); AuthToken     clientAuthToken = <span class="keyword">new</span> AuthToken(token, timestamp); </span><br><span class="line">    <span class="keyword">if</span> (clientAuthToken.isExpired()) &#123; </span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Token is expired."</span>); </span><br><span class="line">    &#125; </span><br><span class="line">    String password = credentialStorage.getPasswordByAppId(appId);</span><br><span class="line">    AuthToken serverAuthToken = AuthToken.generate(originalUrl, appId, pwd);</span><br><span class="line">    <span class="keyword">if</span> (!serverAuthToken.match(clientAuthToken)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Token verfication failed."</span>); </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="五、入口"><a href="#五、入口" class="headerlink" title="五、入口"></a>五、入口</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String req = <span class="string">"doLogin?"</span></span><br><span class="line">            + <span class="string">"AppID=tom"</span></span><br><span class="line">            + <span class="string">"&amp;Token=xxty6vVxQDuW6r2by9xR29kZRk4="</span></span><br><span class="line">            + <span class="string">"&amp;Timestamp=1578306433558"</span>;</span><br><span class="line"></span><br><span class="line">    ApiAuthenticator authencator = <span class="keyword">new</span> DefaultApiAuthenticatorImpl();</span><br><span class="line">    authencator.auth(req);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码地址：<a href="https://github.com/cmevolve/carryOn/tree/master/AuthforToken" target="_blank" rel="noopener">https://github.com/cmevolve/carryOn/tree/master/AuthforToken</a><br>  [1]: <a href="https://baike.baidu.com/item/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB" target="_blank" rel="noopener">https://baike.baidu.com/item/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB</a><br>  [2]: <a href="https://zh.wikipedia.org/wiki/%E7%9B%90_%28%E5%AF%86%E7%A0%81%E5%AD%A6%29" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E7%9B%90_%28%E5%AF%86%E7%A0%81%E5%AD%A6%29</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/04/因使用错误的时间转换导致跨年的时间BUG/" rel="next" title="因使用错误的时间转换导致跨年的时间BUG">
+                <i class="fa fa-chevron-left"></i> 因使用错误的时间转换导致跨年的时间BUG
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDQyNC8yMDk1Ng=="></div>
+    </div>
+
+
+  
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/nini.png" alt="李斯大炮">
+            
+              <p class="site-author-name" itemprop="name">李斯大炮</p>
+              <p class="site-description motion-element" itemprop="description">我从不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现更广阔的人生，那样的自由才是珍贵的、有价值的。我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/cmevolve/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lisidapao@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/lisidapao?t=1" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.baidu.com" title="基情资词" target="_blank">基情资词</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+			<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28138493&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何进行面对象对象设计"><span class="nav-number">1.</span> <span class="nav-text">如何进行面对象对象设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析示例"><span class="nav-number">2.</span> <span class="nav-text">分析示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、需求分析"><span class="nav-number">2.1.</span> <span class="nav-text">一、需求分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-基础分析"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.基础分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-分析优化"><span class="nav-number">2.1.2.</span> <span class="nav-text">2. 分析优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-再分析"><span class="nav-number">2.1.3.</span> <span class="nav-text">3.再分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-分析再优化"><span class="nav-number">2.1.4.</span> <span class="nav-text">4.分析再优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-最终需求确定"><span class="nav-number">2.1.5.</span> <span class="nav-text">5.最终需求确定</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、类的划分"><span class="nav-number">2.2.</span> <span class="nav-text">二、类的划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、属性方法"><span class="nav-number">2.3.</span> <span class="nav-text">三、属性方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Url类相关功能点"><span class="nav-number">2.3.1.</span> <span class="nav-text">Url类相关功能点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CredentialStorage-类相关功能点"><span class="nav-number">2.3.2.</span> <span class="nav-text">CredentialStorage 类相关功能点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、交互关系"><span class="nav-number">2.4.</span> <span class="nav-text">四、交互关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、入口"><span class="nav-number">2.5.</span> <span class="nav-text">五、入口</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李斯大炮</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://iamlfc.top/2020/01/06/面向对象设计/';
+          this.page.identifier = '2020/01/06/面向对象设计/';
+          this.page.title = '面向对象设计';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

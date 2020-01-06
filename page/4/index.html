@@ -284,6 +284,419 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/05/26/SSO-单点登陆/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     918 字
+	</span>
+	<span title="阅读时长">
+     3 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/26/SSO-单点登陆/" itemprop="url">SSO 单点登陆</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-26T23:56:14+08:00">
+                2019-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/26/SSO-单点登陆/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/26/SSO-单点登陆/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  918
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p>在一个企业发展的过程中，用到的系统会慢慢增多，使用人员在多个系统中操作时需要登录各个系统，而且可能每个系统账号都不一样，这对使用人员来说很不方便，于是就产生了单点登录，在一个系统登录其他的系统就不用登陆。</p>
+<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><p>在做单点登录之前先来回顾下单系统登录的操作，首先进入系统登录页面，填写登录信息提交表单，系统后台对账号密码进行验证，验证通过就会建立Session ，然后把sessionid通过cookie发送给浏览器，下次再请求系统时cookie会跟着发送过去，此时就已经知道该账号已经登陆了。</p>
+<h3 id="那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？"><a href="#那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？" class="headerlink" title="那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？"></a>那么既然系统A已经登录认证过了，是不是再请求别的系统B时也就认证通过了呢？</h3><p>首先要解决的是session共享问题，系统A认证登录过后在服务器中建立了一个session对应的当前会话，并把sessionId放到了cookie中返回给了浏览器，系统B显然是没有系统A的session的，此时可以使用Redis 把session缓存其中多个系统都共用。 <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f399vjwgj30gz07aaaa.jpg" alt="avatar"><br>session的问题解决了那么前端的cookie呢？浏览器请求系统A获得的cookie 是不能跨域请求到系统中B的。<br>cookie不能跨域，那么我们可以把这两个系统放到同一域名下，分为不同的二级域名。比如<a href="http://www.abc.OA.com" target="_blank" rel="noopener">www.abc.OA.com</a> 和<a href="http://www.abc.HR.com" target="_blank" rel="noopener">www.abc.HR.com</a>  它们的父级域名 <a href="http://www.abc.com。" target="_blank" rel="noopener">www.abc.com。</a></p>
+<h3 id="但是考虑到多个系统架构不同，语言也可能不同，共享session-有点麻烦，且如果是不同域呢？有没有更好的方式呢？"><a href="#但是考虑到多个系统架构不同，语言也可能不同，共享session-有点麻烦，且如果是不同域呢？有没有更好的方式呢？" class="headerlink" title="但是考虑到多个系统架构不同，语言也可能不同，共享session 有点麻烦，且如果是不同域呢？有没有更好的方式呢？"></a>但是考虑到多个系统架构不同，语言也可能不同，共享session 有点麻烦，且如果是不同域呢？有没有更好的方式呢？</h3><p>此时引入正题，就是由耶鲁大学提出的CAS（Central Authentication Service）一个著名的SSO解决方案。<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f3l64301j30cz09htat.jpg" alt="avatar"><br>流程如下：</p>
+<ol>
+<li>用户访问A系统，验证此用户未登陆。</li>
+<li>重定向至cas，cas中也没有登陆，返回登陆页面</li>
+<li>填写用户名、密码，cas进行认证后，产生一个Ticket（随机字符串认证用的）将登录状态写入cas的session，返回给浏览器cas下的Cookie，并将将Ticket放入URL中返回（如：<a href="http://www.a.com/pageA?ticket=123）" target="_blank" rel="noopener">www.a.com/pageA?ticket=123）</a></li>
+<li>浏览器被重定向请求系统A，系统A拿着ticket去cas验证是否是伪造的，cas认证通过，在cas中注册系统A创建全局会话，并通知系统A验证通过。</li>
+<li>系统A建立session，返回给浏览器系统A的cookie，并把浏览器请求的页面返回。</li>
+<li>再次访问A系统另一个受限页面时因为浏览器中已携带该域cookie，则直接返回资源给浏览器。<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f497tyzdj30jh0hm758.jpg" alt="avatar"></li>
+</ol>
+<p>验证后系统B登陆流程如下：<br> <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g3f4lplmitj30l80ipgmp.jpg" alt="avatar"></p>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p> <strong>CAS的SSO实现方式可简化理解为：1个Cookie和N个Session。CAS Server创建cookie，在所有应用认证时使用，各应用通过创建各自的Session来标识用户是否已登录。</strong></p>
+<p> ST（Service Ticket）<br> 1、  ST只能使用一次<br>CAS协议规定，无论 Service Ticket验证是否成功， CAS Server都会清除服务端缓存中的该Ticket，从而可以确保一个Service Ticket不被使用两次。</p>
+<p>2、  ST在一段时间内失效<br>CAS规定ST只能存活一定的时间，然后CAS Server会让它失效。默认有效时间为5分钟。</p>
+<p>3、  ST是基于随机数生成的<br>ST必须足够随机，如果ST生成规则被猜出，Hacker就等于绕过CAS认证，直接访问对应的服务。</p>
+<p>码农翻身读后感</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/05/26/hexo搭建个人博客/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     1.2k 字
+	</span>
+	<span title="阅读时长">
+     5 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/26/hexo搭建个人博客/" itemprop="url">hexo搭建个人博客</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-26T11:15:15+08:00">
+                2019-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/26/hexo搭建个人博客/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/26/hexo搭建个人博客/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.2k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="什么是Hexo"><a href="#什么是Hexo" class="headerlink" title="什么是Hexo ?"></a>什么是Hexo ?</h2><p>Hexo是一款基于Node.js的静态博客框架，依赖少易于安装使用，可以方便的生成静态网页托管在GitHub和Heroku上，是搭建博客的首选框架。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h3><p><a href="https://github.com/" target="_blank" rel="noopener">Github 官网</a><br><a href="https://pages.github.com/" target="_blank" rel="noopener">Github Pages</a><br><a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo 官网</a><br><a href="https://nodejs.org/en/" target="_blank" rel="noopener">Node.js 官网</a><br><a href="https://git-scm.com/" target="_blank" rel="noopener">Git 官网</a></p>
+<h3 id="相关教程"><a href="#相关教程" class="headerlink" title="相关教程"></a>相关教程</h3><p><a href="https://wsgzao.github.io/post/hexo-guide/" target="_blank" rel="noopener">使用 GitHub 和 Hexo 搭建免费静态 Blog</a><br><a href="https://www.jianshu.com/p/f4dce0e76886" target="_blank" rel="noopener">简书 搭建个人博客</a><br><a href="https://zhuanlan.zhihu.com/p/26625249" target="_blank" rel="noopener">知乎</a><br><a href="http://theme-next.iissnan.com/theme-settings.html" target="_blank" rel="noopener">主题配置</a></p>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><p>依照上面的连接把准备工作做完了之后来使用下面命令开始博客之旅。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo -g #安装Hexo</span><br><span class="line">npm update hexo -g #升级 </span><br><span class="line">hexo init #初始化博客</span><br><span class="line">命令简写</span><br><span class="line">hexo n "我的博客" == hexo new "我的博客" #新建文章</span><br><span class="line">hexo g == hexo generate #生成</span><br><span class="line">hexo s == hexo server #启动服务预览</span><br><span class="line">hexo d == hexo deploy #部署</span><br><span class="line">hexo server #Hexo会监视文件变动并自动更新，无须重启服务器</span><br><span class="line">hexo server -s #静态模式</span><br><span class="line">hexo server -p 5000 #更改端口</span><br><span class="line">hexo server -i 192.168.1.1 #自定义 IP</span><br><span class="line">hexo clean #清除缓存，若是网页正常情况下可以忽略这条命令</span><br></pre></td></tr></table></figure>
+<h3 id="Markdown-格式"><a href="#Markdown-格式" class="headerlink" title="Markdown 格式"></a>Markdown 格式</h3><hr>
+<h4 id="添加标签"><a href="#添加标签" class="headerlink" title="添加标签"></a>添加标签</h4><p>title: jQuery对表单的操作及更多应用<br>date: 2017-05-26 12:12:57<br>categories: </p>
+<ul>
+<li>web前端<br>tags:</li>
+<li>jQuery</li>
+<li>表格</li>
+<li>表单验证<br>设置以后点击对应的标签均可连接到当前文章内。</li>
+</ul>
+<h4 id="添加文章分类"><a href="#添加文章分类" class="headerlink" title="添加文章分类"></a>添加文章分类</h4><p>title: jQuery对表单的操作及更多应用<br>date: 2017-05-26 12:12:57<br>categories: </p>
+<ul>
+<li>web前端<br>如果在 web前端下方添加-xx 不会产生两个分类，会产生层级的分类，嵌套在上一级分类下。<h4 id="个性化定制"><a href="#个性化定制" class="headerlink" title="个性化定制"></a>个性化定制</h4>添加网易云音乐<br>打开网页版的网易云音乐，选择喜欢的音乐，点击生成外链播放器 复制外链的代码<br>修改 blog\themes\next\layout_macro的sidebar.swig文件，添加刚刚复制的外链代码</li>
+</ul>
+<p>设置背景<br>把你挑选的背景图片命名为：background.jpg，放在blog\themes\next\source\images里，在blog\themes\next\source\css_custom文件的custom.styl首部添加：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>:<span class="built_in">url</span>(/images/background.jpg);</span><br><span class="line">  <span class="attribute">background-attachment</span>: fixed;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>background-attachment: fixed;是固定背景图片。</p>
+<p>###踩过的坑<br><strong>域名失效问题</strong><br>每次在执行命令hexo g -d （先生成文件再部署）时，都会使设置好的域名失效。<br>因此需要在生成静态资源的目录（blog/public）底下新建CNAME文件（无后缀名）在其中配置上域名即可。</p>
+<p><strong>添加评论，页面不显示</strong><br>关于评论，我选择的是来必力思密达的插件，在配置时Next主题文档提示只需要在主题配置gentie_productKey 配置上来必力的id即可。<br>但是在实际操作时发现页面并没有显示评论窗口，在查看配置文件时（next\layout_partials\comments.swig）发现，加载思密达的插件逻辑是如果没有多说，多言或等等等且gentie_productKey不为空则加载插件，考虑到可能中间可能有哪个评论的配置没有注释掉而没有加载，这里直接偷懒把判断加载思密达插件的逻辑放到了判断的前面，hexo clean、hexo g -d 至此评论区显示成功。<br>配置文件如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">if</span> page.comments %&#125;</span><br><span class="line"></span><br><span class="line">  &#123;% <span class="keyword">if</span> (theme.duoshuo and theme.duoshuo.shortname) or theme.duoshuo_shortname %&#125;</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"comments"</span> id=<span class="string">"comments"</span>&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"ds-thread"</span> data-thread-key=<span class="string">"&#123;&#123; page.path &#125;&#125;"</span></span><br><span class="line">           data-title=<span class="string">"&#123;&#123; page.title &#125;&#125;"</span> data-url=<span class="string">"&#123;&#123; page.permalink &#125;&#125;"</span>&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt;</span><br><span class="line">	</span><br><span class="line">  &#123;% elseif theme.livere_uid %&#125;</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"comments"</span> id=<span class="string">"comments"</span>&gt;</span><br><span class="line">      &lt;div id=<span class="string">"lv-container"</span> data-id=<span class="string">"city"</span> data-uid=<span class="string">"&#123;&#123; theme.livere_uid &#125;&#125;"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  &#123;% elseif theme.facebook_sdk.enable and theme.facebook_comments_plugin.enable %&#125;</span></span><br><span class="line"><span class="regexp">    &lt;div class="comments" id="comments"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;div class="fb-comments"</span></span><br><span class="line"><span class="regexp">           data-href="&#123;&#123; page.permalink &#125;&#125;"</span></span><br><span class="line"><span class="regexp">           data-numposts="&#123;&#123; theme.facebook_comments_plugin.num_of_posts &#125;&#125;"</span></span><br><span class="line"><span class="regexp">           data-width="&#123;&#123; theme.facebook_comments_plugin.width &#125;&#125;"</span></span><br><span class="line"><span class="regexp">           data-colorscheme="&#123;&#123; theme.facebook_comments_plugin.scheme &#125;&#125;"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  &#123;% elseif theme.vkontakte_api.enable and theme.vkontakte_api.comments %&#125;</span></span><br><span class="line"><span class="regexp">    &lt;div class="comments" id="comments"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;div id="vk_comments"&gt;&lt;/</span>div&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  &#123;% elseif theme.disqus.enable %&#125;</span></span><br><span class="line"><span class="regexp">    &lt;div class="comments" id="comments"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;div id="disqus_thread"&gt;</span></span><br><span class="line"><span class="regexp">        &lt;noscript&gt;</span></span><br><span class="line"><span class="regexp">          Please enable JavaScript to view the</span></span><br><span class="line"><span class="regexp">          &lt;a href="https:/</span><span class="regexp">/disqus.com/</span>?ref_noscript<span class="string">"&gt;comments powered by Disqus.&lt;/a&gt;</span></span><br><span class="line"><span class="string">        &lt;/noscript&gt;</span></span><br><span class="line"><span class="string">      &lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  &#123;% elseif theme.hypercomments_id %&#125;</span></span><br><span class="line"><span class="string">    &lt;div class="</span>comments<span class="string">" id="</span>comments<span class="string">"&gt;</span></span><br><span class="line"><span class="string">      &lt;div id="</span>hypercomments_widget<span class="string">"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  &#123;% elseif theme.youyan_uid %&#125;</span></span><br><span class="line"><span class="string">    &lt;div class="</span>comments<span class="string">" id="</span>comments<span class="string">"&gt;</span></span><br><span class="line"><span class="string">      &lt;div id="</span>uyan_frame<span class="string">"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">	</span></span><br><span class="line"><span class="string">  &#123;% elseif theme.changyan.appid and theme.changyan.appkey %&#125;</span></span><br><span class="line"><span class="string">    &lt;div class="</span>comments<span class="string">" id="</span>comments<span class="string">"&gt;</span></span><br><span class="line"><span class="string">      &lt;div id="</span>SOHUCS<span class="string">"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  &#123;% elseif theme.gitment.enable %&#125;</span></span><br><span class="line"><span class="string">    &lt;div class="</span>comments<span class="string">" id="</span>comments<span class="string">"&gt;</span></span><br><span class="line"><span class="string">      &#123;% if theme.gitment.lazy %&#125;</span></span><br><span class="line"><span class="string">        &lt;div onclick="</span>showGitment()<span class="string">" id="</span>gitment-display-button<span class="string">"&gt;&#123;&#123; __('gitmentbutton') &#125;&#125;&lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;div id="</span>gitment-container<span class="string">" style="</span>display:none<span class="string">"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">      &#123;% else %&#125;</span></span><br><span class="line"><span class="string">        &lt;div id="</span>gitment-container<span class="string">"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">      &#123;% endif %&#125;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  &#123;% elseif theme.valine.appid and theme.valine.appkey %&#125;</span></span><br><span class="line"><span class="string">    &lt;div class="</span>comments<span class="string">" id="</span>comments<span class="string">"&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">  &#123;% endif %&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;% endif %&#125;</span></span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/05/21/散列表（中）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -735,7 +1148,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -757,7 +1170,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -830,7 +1243,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

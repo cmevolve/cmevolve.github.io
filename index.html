@@ -284,6 +284,437 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2020/01/06/面向对象设计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     2.6k 字
+	</span>
+	<span title="阅读时长">
+     9 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/06/面向对象设计/" itemprop="url">面向对象设计</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-06T20:56:50+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/06/面向对象设计/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/06/面向对象设计/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>拿到一个需求时应该怎么做？</p>
+<ul>
+<li>明确需求</li>
+<li>基础分析</li>
+<li>了解最佳实践</li>
+<li>测试用例</li>
+<li>预计工期</li>
+<li>约定接口定义</li>
+<li>编写用户手册和文档，示例代码</li>
+</ul>
+<h2 id="如何进行面对象对象设计"><a href="#如何进行面对象对象设计" class="headerlink" title="如何进行面对象对象设计"></a>如何进行面对象对象设计</h2><ul>
+<li>职责划分进而区分有哪些类<ul>
+<li>将功能点罗列出来，职责相近属性类似归为同一类</li>
+<li>找到功能相近，操作同样属性的可能归到一个类</li>
+<li>复杂需求按照模块拆分，然后再找类</li>
+</ul>
+</li>
+<li>定义类的属性和方法<ul>
+<li>需求中的名词作为候选属性，动词作为候选方法</li>
+<li>并不是所有的名词都需要作为类的属性，不属于这个类的可以通过传参来构造</li>
+</ul>
+</li>
+<li>定义类和类的关系（以下为UML中定义的类关系）<ul>
+<li>泛化<ul>
+<li>简单理解为继承关系</li>
+</ul>
+</li>
+<li>实现<ul>
+<li>一般指接口和实现类之间的关系 </li>
+</ul>
+</li>
+<li>聚合<ul>
+<li>包含关系 ，A类对象包含B类对象，B类对象生命周期不依赖A类对象生命周期，如课程和学生的关系</li>
+</ul>
+</li>
+<li>组合<ul>
+<li>包含关系。A类对象包含B类对象，B 类对象生命周期依赖A类对象生命周期，B类对象不可单独存在，比如鸟和翅膀的关系。</li>
+</ul>
+</li>
+<li>关联<ul>
+<li>非常弱的关系，包含聚合和组合两种关系。如果B类对象是A类对象的成员变量，那B类和A类就是关联关系。</li>
+</ul>
+</li>
+<li>依赖<ul>
+<li>比关联关系更弱的关系，包含关联关系。只要B类对象和A类对象有任何使用关系都称他们有依赖关系。 </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>类组装起来并提供入口<ul>
+<li>独立系统为main函数</li>
+<li>web应用就是一组给外部调用的API接口</li>
+</ul>
+</li>
+</ul>
+<h2 id="分析示例"><a href="#分析示例" class="headerlink" title="分析示例"></a>分析示例</h2><p>下面用一个接口鉴权进行示例分析。</p>
+<h3 id="一、需求分析"><a href="#一、需求分析" class="headerlink" title="一、需求分析"></a>一、需求分析</h3><h4 id="1-基础分析"><a href="#1-基础分析" class="headerlink" title="1.基础分析"></a>1.基础分析</h4><p>对于鉴权最简单的解决方案就是通过用户名密码来做认证，给每一个调用服务的调用方派发一个应用名和一个对应的密码/秘钥。调用方每次请求时携带自己的AppID和秘钥。服务端接收接口请求后解析出AppID和密码跟存储在服务端的账号密码比对，如果一致说明认证成功，允许接口调用请求；否则拒绝接口调用请求。</p>
+<h4 id="2-分析优化"><a href="#2-分析优化" class="headerlink" title="2. 分析优化"></a>2. 分析优化</h4><p>由于使用上面的方式需要明文传输密码，密码很容易被截获，是不安全的。那么对密码加密是否就安全了呢？实际上这样也是不安全的，因为加密后的AppID和密码照样可以被黑客截获，黑客可以携带这个加密之后的密码以及对应的AppID伪装成已经认证的系统来访问服务端接口。这就是典型的[重放攻击][1]。<br>上面讲到了在设计功能时需了解下相关功能的最佳实践，而关于接口鉴权主要有JWT （适用安全不太敏感的应用）和OAuth2（授权的开放网络标准协议），刚刚这个问题，可以借助OAuth的验证思路来解决。调用方在进行接口请求的时候，将请求接口的URl、AppID、密码拼接到一块然后进行加密，生成一个token。调用方进行接口请求时将这个token及AppID等不敏感的参数信息,随URL一块传递给服务端。服务端接收请求后，根据AppID从数据库取出对应的密码，通过同样的Token生成算法，生成另一个token。用这个新生成的token跟调用方传递过来的toekn对比。如果一致则允许接口调用请求；否则，拒绝接口调用。</p>
+<h4 id="3-再分析"><a href="#3-再分析" class="headerlink" title="3.再分析"></a>3.再分析</h4><p>这样设计还是存在重放攻击的风险，还是不够安全。每个URL拼接AppID、密码生成的token都是固定的。未认证系统截获URL、token和AppID之后，还是可以通过重放攻击的方式，伪装成认证系统调用这个URL对应的接口。<br>此时可以引入一个随机变量，让每一次接口请求生产的token都不一样。这里可以使用时间戳来作为随机变量。原来token是对URL、AppID密码三者进行加密生成的，现在将密码、AppID、时间戳随URL一并传递给服务端。<br>服务端接收数据后，可以根据当前时间和传递过来的时间戳，是否在一定时间窗口内（比如1分钟），如果超过1分钟，则判定token过期，拒绝接口请求。</p>
+<h4 id="4-分析再优化"><a href="#4-分析再优化" class="headerlink" title="4.分析再优化"></a>4.分析再优化</h4><p>这里可能会有疑问，加了时间校验还是不够安全，未认证系统还是可以在一分钟的token失效窗口内通过截获请求、重放攻击调用服务端接口。<br>虽然这个方案还有漏洞但是实现起来比较简单，并且也不会过度影响接口本身的性能，攻与防之间本来就没有绝对的安全。我们能做的就是尽量提高攻击的成本，所以这个方案算算比较折中合理的了。<br>但是此处还有一个问题是，因为加密方式有可能使用的是通用的加密方式比如md5、SHA（不可逆加密），Base64(可逆加密)等，如果使用了可逆的加密算法黑客在截获了请求后还是可以通过尝试使用通用的加密方式来获取用户名和密码。并且上面的认证流程并不需要客户端传递真正的密码，只需要和服务端认证时token一致就可以了，所以此时我们可以使用用户的密码作为[盐][2]对URL、AppID、时间戳进行加密。服务端接收请求后取出服务端存储的密码按照同样的方式使用密码作为秘钥进行加密对token进行验证。<br>另外用户每次进行请求都要访问数据库获取用户密码，该操作过于费时，因此最好将其配置到内存数据中，如配置文件中，启动时加载到内存中或者Redis,Zookeeper等。</p>
+<h4 id="5-最终需求确定"><a href="#5-最终需求确定" class="headerlink" title="5.最终需求确定"></a>5.最终需求确定</h4><ul>
+<li>调用方进行接口请求时将URL、AppID、时间戳拼接到一起，通过根据密码通过加密算法生成toekn，并且将token、AppID、时间戳、拼接在URL中，一并发送到服务端。</li>
+<li>服务端接收请求后，从请求中拆解出token、AppID、时间戳。</li>
+<li>服务端先校验传递过来的时间戳跟当前时间是否在token的失效窗口内。如果已经超过失效时间，就算鉴权失败，拒绝接口调用请求。</li>
+<li>如果token验证没有过期失效，服务端再从春初中取出AppID对应的密码，通过同样的toekn生成算法，生成另外一个token，与调用发传递过来的toekn进行匹配；如果一致则鉴权成功，允许接口调用，否则拒绝接口调用。</li>
+</ul>
+<h3 id="二、类的划分"><a href="#二、类的划分" class="headerlink" title="二、类的划分"></a>二、类的划分</h3><p> 根据需求将需求拆解成功能点进行罗列：</p>
+<ol>
+<li>把URL、AppID、时间戳拼接为一个字符串；</li>
+<li>对字符串进行加密生成token；</li>
+<li>将toekn、AppID、时间戳拼到URL中，形成新的URL；</li>
+<li>解析URL得到toekn、AppID、时间戳等信息；</li>
+<li>存储中取出AppID和对应的密码；</li>
+<li>验证toekn是否过期；</li>
+<li>验证toekn是否匹配；</li>
+</ol>
+<p>其中1、2、6、7都是跟toekn有关；5是操作AppID和密码；3、4在处理URL，所以此处可粗略的拆分为3个核心类：Token、Url、CredentialStorage。Token实现1、2、6、7操作；Url负责3、4操作、CredentialStorage负责5这个操作。</p>
+<h3 id="三、属性方法"><a href="#三、属性方法" class="headerlink" title="三、属性方法"></a>三、属性方法</h3><p>Token类相关功能点有四个：</p>
+<ol>
+<li>把URL、AppID、时间戳拼接为一个字符串；</li>
+<li>对字符串通过加密算法加密生成 token；</li>
+<li>根据时间戳判断 token 是否过期失效；</li>
+<li>验证两个 token 是否匹配。</li>
+</ol>
+<p>根据功能点涉及名词作为候选实行，动词作为候选方法，进行筛选。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">AuthToken类</span><br><span class="line">属性</span><br><span class="line"> private final static long TIME_OUT_VALUE = 1 * 60 * 1000; //1min</span><br><span class="line">private long createTime;</span><br><span class="line">private long expiredTimeInterval = TIME_OUT_VALUE;</span><br><span class="line">private String token;</span><br><span class="line">构造函数</span><br><span class="line">public AuthToken(String token, long createTime) ;</span><br><span class="line">public AuthToken(String token, long createTime，long expiredTimeInterval) ;</span><br><span class="line">函数</span><br><span class="line">public boolean isExpired()；//时间校验</span><br><span class="line">public String getToken()；//获取token</span><br><span class="line">public static AuthToken generate(String originalUrl, long createTime, String userID,String pwd )；//生成token</span><br><span class="line">public boolean match(AuthToken authToken)；//token比对</span><br></pre></td></tr></table></figure></p>
+<p>从业务模型上说，不应该属于这个类的属性和方法，不应该放到这个类里。比如URL、AppID、时间戳这几个名词，此处将它们作为方法参数。<br>在此之外还需要挖掘没有出现在功能点描述中的属性，如createTime，expireTimeInterval，用作tokenn超时判断。</p>
+<h4 id="Url类相关功能点"><a href="#Url类相关功能点" class="headerlink" title="Url类相关功能点"></a>Url类相关功能点</h4><ol>
+<li>将token、AppID、时间戳拼接到URL形成新的URL；</li>
+<li>解析URL得到toekn、AppID、时间戳等信息；</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">属性</span><br><span class="line">private String originalUrl;</span><br><span class="line">private String appId;</span><br><span class="line">private long timestamp;</span><br><span class="line">private String token;</span><br><span class="line">构造函数</span><br><span class="line"> public ApiRequest(String originalUrl, String appId, long timestamp, String token) ；</span><br><span class="line">函数</span><br><span class="line">public static ApiRequest buildFromUrl(String url)；</span><br><span class="line">public String getUrl()；</span><br><span class="line">public String getToken()；</span><br><span class="line">public long getTimestamp()；</span><br><span class="line">public String getUrl()；</span><br></pre></td></tr></table></figure>
+<h4 id="CredentialStorage-类相关功能点"><a href="#CredentialStorage-类相关功能点" class="headerlink" title="CredentialStorage 类相关功能点"></a>CredentialStorage 类相关功能点</h4><ol>
+<li>从存储中获取AppID和对应的密码</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CredentialStorage接口</span><br><span class="line">public String getPasswordByAppId(String appId)；</span><br></pre></td></tr></table></figure>
+<h3 id="四、交互关系"><a href="#四、交互关系" class="headerlink" title="四、交互关系"></a>四、交互关系</h3><p>将类组装起来提供执行入口，利用UML中的依赖组合关系进行设计。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ApiAuthenticator</span> </span>&#123; </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">auth</span><span class="params">(String url)</span></span>; </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">auth</span><span class="params">(ApiRequest apiRequest)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultApiAuthenticatorImpl</span> <span class="keyword">implements</span> <span class="title">ApiAuthenticator</span> </span>&#123; </span><br><span class="line"><span class="keyword">private</span> CredentialStorage credentialStorage; </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">DefaultApiAuthenticator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.credentialStorage = <span class="keyword">new</span> MysqlCredentialStorage(); </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">DefaultApiAuthenticator</span><span class="params">(CredentialStorage credentialStorage)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">this</span>.credentialStorage = credentialStorage;</span><br><span class="line">&#125; </span><br><span class="line"><span class="meta">@Override</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">auth</span><span class="params">(String url)</span> </span>&#123;</span><br><span class="line">    ApiRequest apiRequest = ApiRequest.buildFromUrl(url); auth(apiRequest);</span><br><span class="line">&#125; </span><br><span class="line"><span class="meta">@Override</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">auth</span><span class="params">(ApiRequest apiRequest)</span> </span>&#123;</span><br><span class="line">    String appId = apiRequest.getAppId(); String token = apiRequest.getToken(); </span><br><span class="line">    <span class="keyword">long</span> timestamp = apiRequest.getTimestamp(); </span><br><span class="line">    String originalUrl = apiRequest.getOriginalUrl(); AuthToken     clientAuthToken = <span class="keyword">new</span> AuthToken(token, timestamp); </span><br><span class="line">    <span class="keyword">if</span> (clientAuthToken.isExpired()) &#123; </span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Token is expired."</span>); </span><br><span class="line">    &#125; </span><br><span class="line">    String password = credentialStorage.getPasswordByAppId(appId);</span><br><span class="line">    AuthToken serverAuthToken = AuthToken.generate(originalUrl, appId, pwd);</span><br><span class="line">    <span class="keyword">if</span> (!serverAuthToken.match(clientAuthToken)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Token verfication failed."</span>); </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="五、入口"><a href="#五、入口" class="headerlink" title="五、入口"></a>五、入口</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String req = <span class="string">"doLogin?"</span></span><br><span class="line">            + <span class="string">"AppID=tom"</span></span><br><span class="line">            + <span class="string">"&amp;Token=xxty6vVxQDuW6r2by9xR29kZRk4="</span></span><br><span class="line">            + <span class="string">"&amp;Timestamp=1578306433558"</span>;</span><br><span class="line"></span><br><span class="line">    ApiAuthenticator authencator = <span class="keyword">new</span> DefaultApiAuthenticatorImpl();</span><br><span class="line">    authencator.auth(req);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码地址：<a href="https://github.com/cmevolve/carryOn/tree/master/AuthforToken" target="_blank" rel="noopener">https://github.com/cmevolve/carryOn/tree/master/AuthforToken</a><br>  [1]: <a href="https://baike.baidu.com/item/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB" target="_blank" rel="noopener">https://baike.baidu.com/item/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB</a><br>  [2]: <a href="https://zh.wikipedia.org/wiki/%E7%9B%90_%28%E5%AF%86%E7%A0%81%E5%AD%A6%29" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E7%9B%90_%28%E5%AF%86%E7%A0%81%E5%AD%A6%29</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2020/01/04/因使用错误的时间转换导致跨年的时间BUG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     207 字
+	</span>
+	<span title="阅读时长">
+     1 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/04/因使用错误的时间转换导致跨年的时间BUG/" itemprop="url">因使用错误的时间转换导致跨年的时间BUG</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-04T21:01:42+08:00">
+                2020-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/04/因使用错误的时间转换导致跨年的时间BUG/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/04/因使用错误的时间转换导致跨年的时间BUG/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  207
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>跨年了闲着无事逛社区的时候发现有好多人在修复BUG，关于YYYY-MM-dd的使用而出现的问题，因此实验一番进行记录防止入坑。</p>
+<h2 id="BUG代码"><a href="#BUG代码" class="headerlink" title="BUG代码"></a>BUG代码</h2><p>运行环境JDK1.8<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SimpleDateFormat sf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"YYYY-MM-dd"</span>);</span><br><span class="line">SimpleDateFormat sf1 = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd"</span>);</span><br><span class="line">Calendar calendar1 = Calendar.getInstance();</span><br><span class="line">calendar1.add(Calendar.DATE, -<span class="number">4</span>);</span><br><span class="line">System.out.println(sf.format(calendar1.getTime()));</span><br><span class="line">System.out.println(sf1.format(calendar1.getTime()));</span><br><span class="line">--执行结果</span><br><span class="line"><span class="number">2020</span>-<span class="number">12</span>-<span class="number">29</span></span><br><span class="line"><span class="number">2019</span>-<span class="number">12</span>-<span class="number">29</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="BUG原因"><a href="#BUG原因" class="headerlink" title="BUG原因"></a>BUG原因</h2><p>YYYY 是 Week-based-year<br>Week-based-year意思是当天所在的周属于的年份，一周从周日开始，周六结束，只要本周跨年，那么这周就算入下一年，例如2019.12.29 是周日，而周三就是跨年了，所以此时29，30，31日使用YYYY获取的时间都是下一年的时间2020年，而使用yyyy就会显示正常的时间2019。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/12/12/负载均衡策略问题导致服务宕机（记一次生产问题）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2114,475 +2545,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/08/SpringCloud学习三-zuul网关搭建/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     365 字
-	</span>
-	<span title="阅读时长">
-     1 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/08/SpringCloud学习三-zuul网关搭建/" itemprop="url">SpringCloud学习三-zuul网关搭建</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-08T23:20:56+08:00">
-                2019-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringCloud/Zuul/" itemprop="url" rel="index">
-                    <span itemprop="name">Zuul</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/08/SpringCloud学习三-zuul网关搭建/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/08/SpringCloud学习三-zuul网关搭建/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  365
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>由于最后技术选型使用的是GateWay，所以zuul只是搭建的基本功能。</p>
-<h2 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h2><h3 id="1-依赖"><a href="#1-依赖" class="headerlink" title="1.依赖"></a>1.依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties&gt;</span><br><span class="line">     &lt;java.version&gt;1.8&lt;/java.version&gt;</span><br><span class="line">     &lt;spring-cloud.version&gt;Dalston.SR1&lt;/spring-cloud.version&gt;</span><br><span class="line"> &lt;/properties&gt;</span><br><span class="line"></span><br><span class="line"> &lt;dependencies&gt;</span><br><span class="line">     &lt;dependency&gt;</span><br><span class="line">         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">         &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</span><br><span class="line">     &lt;/dependency&gt;</span><br><span class="line">     &lt;dependency&gt;</span><br><span class="line">         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">         &lt;artifactId&gt;spring-cloud-starter-zuul&lt;/artifactId&gt;</span><br><span class="line">     &lt;/dependency&gt;</span><br><span class="line">     &lt;dependency&gt;</span><br><span class="line">         &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">         &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line">     &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">     &lt;dependency&gt;</span><br><span class="line">         &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">         &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</span><br><span class="line">         &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">     &lt;/dependency&gt;</span><br><span class="line"> &lt;/dependencies&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="2-配置文件"><a href="#2-配置文件" class="headerlink" title="2.配置文件"></a>2.配置文件</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8762</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">zuul-server</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    service-url:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://localhost:8761/eureka/</span></span><br><span class="line"><span class="attr">zuul:</span></span><br><span class="line"><span class="attr">  routes:</span></span><br><span class="line"><span class="attr">    api-a:</span></span><br><span class="line"><span class="attr">      path:</span> <span class="string">/api-a/**</span></span><br><span class="line"><span class="attr">      serviceId:</span> <span class="string">law-server</span></span><br></pre></td></tr></table></figure>
-<h3 id="3-启动类"><a href="#3-启动类" class="headerlink" title="3.启动类"></a>3.启动类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableZuulProxy</span></span><br><span class="line"><span class="meta">@EnableEurekaClient</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceZuulApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(ServiceZuulApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="4-测试"><a href="#4-测试" class="headerlink" title="4.测试"></a>4.测试</h3><p>启动两个服务law-server端口分别是8888 和9999<br>访问 <a href="http://localhost:8762/api-a/hi?name=zuul" target="_blank" rel="noopener">http://localhost:8762/api-a/hi?name=zuul</a> 两次，服务端返回数据如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hi zuul, I am from port: 8888</span><br><span class="line">Hi zuul, I am from port: 9999</span><br></pre></td></tr></table></figure></p>
-<p>这说明Zuul 起到了 路由 的作用。如果某个 服务 存在 多个实例，Zuul 会结合 Ribbon 做 负载均衡，将请求 均分并路由 到不同的 服务实例。<br>更多zuul相关配置参考文章：<a href="https://juejin.im/post/5c52d858e51d4532e963d51b" target="_blank" rel="noopener">Spring Cloud实战系列(五) - 服务网关Zuul</a><br><a href="http://www.ityouknow.com/springcloud/2017/06/01/gateway-service-zuul.html" target="_blank" rel="noopener">http://www.ityouknow.com/springcloud/2017/06/01/gateway-service-zuul.html</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/07/SpringCloud学习二-网关技术选型/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     920 字
-	</span>
-	<span title="阅读时长">
-     3 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/07/SpringCloud学习二-网关技术选型/" itemprop="url">SpringCloud学习二-网关技术选型</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-07T22:22:00+08:00">
-                2019-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringCloud/Zuul/" itemprop="url" rel="index">
-                    <span itemprop="name">Zuul</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringCloud/Zuul/GateWay/" itemprop="url" rel="index">
-                    <span itemprop="name">GateWay</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/07/SpringCloud学习二-网关技术选型/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/07/SpringCloud学习二-网关技术选型/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  920
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="什么是网关？"><a href="#什么是网关？" class="headerlink" title="什么是网关？"></a>什么是网关？</h2><p>Eureka用于服务的注册和发现，在发现服务后外部的客户端请求如何访问到服务呢？在微服务中，后端服务一般不会直接对外开放，而是通过一个API网关根据请求的url路由到对应的服务中去。就像家里的路由器一样在服务和客户端之间作为中转，来保护内部的服务，也可以将请求进行负载均衡。</p>
-<p><strong><a href="https://imgchr.com/i/uhgahn" target="_blank" rel="noopener">网关的基本功能如下：</a></strong><br><img src="https://i.loli.net/2019/10/08/qcDbaLrpKSXROVn.png" alt="网关基本功能.png"></p>
-<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p>网关相当于微服务世界的大门，可以说是微服务中的核心组件，那么网关的选择又有哪些呢？</p>
-<h3 id="Gateway-VS-Zuul"><a href="#Gateway-VS-Zuul" class="headerlink" title="Gateway VS Zuul"></a>Gateway VS Zuul</h3><p>Spring Cloud Gateway 是 Spring Cloud 微服务平台的一个子项目，属于 Spring 开源社区，依赖名叫：spring-cloud-starter-gateway。<br><a href="https://spring.io/projects/spring-cloud-gateway" target="_blank" rel="noopener">https://spring.io/projects/spring-cloud-gateway</a></p>
-<p>Zuul 是 Netflix 公司的开源项目，Spring Cloud 在 Netflix 项目中也已经集成了 Zuul，依赖名叫：spring-cloud-starter-netflix-zuul。<br><a href="https://link.zhihu.com/?target=https%3A//github.com/Netflix/zuul" target="_blank" rel="noopener">https://link.zhihu.com/?target=https%3A//github.com/Netflix/zuul</a></p>
-<h4 id="功能点："><a href="#功能点：" class="headerlink" title="功能点："></a>功能点：</h4><p>身份认证和安全: 识别每一个资源的验证要求，并拒绝那些不符的请求<br>审查与监控：在边缘位置追踪有意义的数据和统计结果，从而带来精确的生产视图。<br>动态路由：动态将请求路由到不同后端集群<br>压力测试：逐渐增加指向集群的流量，以了解性能<br>负载分配：为每一种负载类型分配对应容量，并弃用超出限定值的请求<br>静态响应处理：边缘位置进行响应，避免转发到内部集群<br>多区域弹性：跨域AWS Region进行请求路由，旨在实现ELB(ElasticLoad Balancing)使用多样化</p>
-<p>对比：<br>Zuul构建于 Servlet 2.5，兼容 3.x，使用的是阻塞式的 API，不支持长连接，比如 websockets。（替代方案：<a href="http://webfuse.cn/2017/11/15/%E5%9C%A8SpringCloud%20Zuul%E4%B8%AD%E4%BD%BF%E7%94%A8WebSockets/" target="_blank" rel="noopener">Zuul 支持websockets方案</a>）</p>
-<p>Spring Cloud Gateway构建于 Spring 5+，基于 Spring Boot 2.x 响应式的、非阻塞式的 API。同时，它支持 websockets，和 Spring 框架紧密集成，开发体验相对来说十分不错。<strong>（在后续开发中发现因其基于webflux 整合shiro时与Servlet整合方式不一致，此处需注意）</strong></p>
-<h4 id="如何选择？"><a href="#如何选择？" class="headerlink" title="如何选择？"></a>如何选择？</h4><p>Netflix 早就发布了最新的 Zuul 2.x，但 Spring Cloud一直没有整合计划，在此场景下spring推出了自己的服务网关Spring Cloud Gateway，作为亲儿子在后续版本的更新上比较zuul应该是更有优势的。</p>
-<h3 id="网关过滤器"><a href="#网关过滤器" class="headerlink" title="网关过滤器"></a><a href="https://imgchr.com/i/uhf3Cj" target="_blank" rel="noopener">网关过滤器</a></h3><p>过滤器可以说是网关的核心组件了，其中过滤器主要的过滤类型有如下几种。<br><img src="https://i.loli.net/2019/10/08/zHYMpFs4xhuZPVG.png" alt="过滤器类型.png"></p>
-<p>Zuul过滤器配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">filterType：返回一个字符串代表过滤器的类型，在zuul中定义了四种不同生命周期的过滤器类型，具体如下：</span><br><span class="line">pre：路由之前</span><br><span class="line">routing：路由之时</span><br><span class="line">post： 路由之后</span><br><span class="line">error：发送错误调用</span><br><span class="line">filterOrder：过滤的顺序</span><br><span class="line">shouldFilter：这里可以写逻辑判断，是否要过滤，本文true,永远过滤。</span><br><span class="line">run：过滤器的具体逻辑。可用很复杂，包括查sql，nosql去判断该请求到底有没有权限访问。</span><br><span class="line">原文链接：https://blog.csdn.net/forezp/article/details/81041012</span><br></pre></td></tr></table></figure></p>
-<p>GateWay过滤器配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GateWay的过滤器类型没有Zuul丰富，只有pre 和 post 两种tilter方式.</span><br><span class="line">客户端的请求先经过“pre”类型的filter,然后将请求转发到具体的业务服务,收到业务服务响应后，在经过“post” 类型filter处理，返回给客户端。</span><br><span class="line"></span><br><span class="line">与Zuul不同的地方是，GateWay的filter除了单个路由的filter外还有针对所有路由的global GateWay filter。</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2636,7 +2598,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2658,7 +2620,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2731,7 +2693,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
