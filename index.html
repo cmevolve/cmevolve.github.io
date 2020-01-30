@@ -284,6 +284,673 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2020/01/30/Docker学习六-操作系统使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     1.6k 字
+	</span>
+	<span title="阅读时长">
+     6 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/30/Docker学习六-操作系统使用/" itemprop="url">Docker学习六 (操作系统使用)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-30T22:53:46+08:00">
+                2020-01-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker镜像/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker镜像</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/30/Docker学习六-操作系统使用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/30/Docker学习六-操作系统使用/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>利用docker安装和使用BusyBox、Alphine、Debian/Ubuntu、CentOS/Fedora等操作系统</p>
+<h2 id="一、系统列表"><a href="#一、系统列表" class="headerlink" title="一、系统列表"></a>一、系统列表</h2><h3 id="官方镜像大小比较"><a href="#官方镜像大小比较" class="headerlink" title="官方镜像大小比较"></a>官方镜像大小比较</h3><p><table><br>   <tr><br>      <td>REPOSITORY</td><br>      <td>TAG </td><br>      <td>IMAGE ID</td><br>      <td>VIRTUAL SIZE</td><br>   </tr><br>   <tr><br>      <td>alpine</td><br>      <td>latest </td><br>      <td>e7d92cdc71fe</td><br>      <td>5.59MB</td><br>   </tr><br>    <tr><br>      <td>debian</td><br>      <td>latest </td><br>      <td>b5d2d9b1597b</td><br>      <td>114MB</td><br>   </tr><br>    <tr><br>      <td>busybox</td><br>      <td>latest </td><br>      <td>6d5fcfe5ff17</td><br>      <td>1.22MB</td><br>   </tr><br>    <tr><br>      <td>ubuntu</td><br>      <td>latest </td><br>      <td>775349758637</td><br>      <td>64MB</td><br>   </tr><br>   <tr><br>      <td>centos</td><br>      <td>latest </td><br>      <td>470671670cac</td><br>      <td>237MB</td><br>   </tr><br></table></p>
+<h3 id="BusyBox"><a href="#BusyBox" class="headerlink" title="BusyBox"></a>BusyBox</h3><blockquote>
+<p>BusyBox是一个集成了一百多个最常用Linux命令和工具（如cat、echo、grep、mount、telnet等）的精简工具箱，它只有几MB的大小，很方便进行各种快速验证，被誉为“Linux系统的瑞士军刀”。BusyBox可运行于多款POSIX环境的操作系统中，如Linux（包括Android）、Hurd、FreeBSD等。</p>
+</blockquote>
+<p>下载镜像，镜像大小仅为1.22MB<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull busybox:latest</span><br></pre></td></tr></table></figure></p>
+<p>启动一个 busybox 容器，并在容器内查看挂载信息，如下所示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run  –it busybox </span><br><span class="line">mount</span><br></pre></td></tr></table></figure></p>
+<h3 id="Alpine"><a href="#Alpine" class="headerlink" title="Alpine"></a>Alpine</h3><blockquote>
+<p>Alpine 操作系统是一个面向安全的轻型Linux发行版。它不同于通常的Linux发行版，Alpine采用了musllibc和BusyBox以减小系统的体积和运行时资源消耗，但功能上比BusyBox又完善得多，因此得到开源社区越来越多的青睐。在保持瘦身的同时，Alpine还提供了自己的包管理工具apk，可以通过<a href="https://pkgs.alpinelinux.org/packages查询包信息，也可以通过apk" target="_blank" rel="noopener">https://pkgs.alpinelinux.org/packages查询包信息，也可以通过apk</a> 命令直接查询和安装各种软件。</p>
+</blockquote>
+<p>下载镜像，镜像大小 5MB 左右<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run alpine ;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Debian"><a href="#Debian" class="headerlink" title="Debian"></a>Debian</h3><blockquote>
+<p>Debian是由GPL和其他自由软件许可协议授权的自由软件组成的操作系统，由DebianProject组织维护。Debian计划是一个独立、分散的组织，由3000个志愿者组成，接受世界多个非盈利组织的资金支持，Software in the Public Interest提供支持并持有商标作为保护机构。Debian以其坚守 Unix和自由软件的精神，以及给予用户的众多选择而闻名。现在Debian 包括了超过25000个软件包并支持12个计算机系统结构。</p>
+</blockquote>
+<p>下载镜像，镜像大小 114MB<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search debian</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Ubuntu基于Debian发行版和GNOME桌面环境，与Debian的不同在于它每6个月会发布一个新版本（即每年的四月与十月），每2年发布一个LTS长期支持版本。<br>普通的桌面版可以获得发布后18个月内的支持，标为LTS（长期支持）的桌面版可以获得更长时间的支持。例如，Ubuntu 8.04 LTS（代号Hardy Heron），其桌面应用系列可以获得为期3年的技术支持，服务器版可以获得为期5年的技术支持[16]。而自Ubuntu 12.04 LTS开始，桌面版和服务器版均可获得为期5年的技术支持。2013年3月有消息指出，Ubuntu计划在4月25日Ubuntu13.04发布后，将非LTS版本的支持时间自18个月缩短至9个月，并采用滚动发布模式，允许开发者在不升级整个发行版的情况下升级单个核心包。<br>Ubuntu的目标在于为一般用户提供一个最新同时又相当稳定，主要以自由软件建构而成的操作系统。Ubuntu当前具有庞大的社群力量支持，用户可以方便地从社群获得帮助。</p>
+</blockquote>
+<p>搜索被收藏10次以上的镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search -s 10 ubuntu</span><br></pre></td></tr></table></figure></p>
+<p>下载镜像并启动容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -ti ubuntu:14.04 /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p>当试图直接使用 apt-get 安装一个软件的时候，会提示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">E： Unable to locate package：</span><br></pre></td></tr></table></figure></p>
+<p>这并非系统不支持apt-get命令。Docker镜像在制作时为了精简清除了 apt仓库信息，因此需要先执行 apt-get update 命令来更新仓库信息。更新信息后即可成功通过 apt-get 命令来安装软件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br></pre></td></tr></table></figure></p>
+<p>安装curl工具：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install curl -y</span><br></pre></td></tr></table></figure></p>
+<h3 id="CentOS-Fedora"><a href="#CentOS-Fedora" class="headerlink" title="CentOS/Fedora"></a>CentOS/Fedora</h3><p>CentOS和Fedora都是基于Redhat的常见Linux分支。CentOS是目前企业级服务器的常用操作系统；Fedora则主要面向个人桌面用户。</p>
+<blockquote>
+<p>CentOS（Community Enterprise Operating System，社区企业操作系统）是基于Red Hat Enterprise Linux 源代码编译而成的。由于 CentOS与Redhat Linux源于相同的代码基础，所以很多成本敏感且需要高稳定的公司就使用CentOS 来替代商业版 Red Hat Enterprise Linux。CentOS自身不包含闭源软件。</p>
+</blockquote>
+<p>下载镜像并启动容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it centos bash</span><br></pre></td></tr></table></figure></p>
+<h3 id="Fedora"><a href="#Fedora" class="headerlink" title="Fedora"></a>Fedora</h3><blockquote>
+<p>Fedora是由Fedora Project 社区开发，红帽公司赞助的 Linux 发行版。它的目标是创建一套新颖、多功能并且自由和开源的操作系统。对用户而言，Fedora是一套功能完备的、可以更新的免费操作系统，而对赞助商 Red Hat而言，它是许多新技术的测试平台，被认为可用的技术最终会加入到 Red Hat Enterprise Linux中</p>
+</blockquote>
+<p>下载镜像并启动容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it fedora bash</span><br></pre></td></tr></table></figure></p>
+<h2 id="二、镜像添加SSH服务"><a href="#二、镜像添加SSH服务" class="headerlink" title="二、镜像添加SSH服务"></a>二、镜像添加SSH服务</h2><p>之前使用了一些进入容器的方法，比如attach、exec等命令，但是这些命令没办法远程管理容器。所以如果需要远程管理就需要使用SSH。</p>
+<h3 id="1-准备"><a href="#1-准备" class="headerlink" title="1.准备"></a>1.准备</h3><p>使用ubuntu镜像创建一个容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 10022:22 -it ubuntu /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p>更新apt<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get update;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-安装并配置SSH服务"><a href="#2-安装并配置SSH服务" class="headerlink" title="2.安装并配置SSH服务"></a>2.安装并配置SSH服务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install openssh-server –y;</span><br></pre></td></tr></table></figure>
+<p>如果需要正常启动 SSH 服务，则目录/ var/run/sshd 必须存在。手动创建它，并启动 SSH 服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /var/run/sshd</span><br><span class="line"> /usr/sbin/sshd -D &amp;</span><br></pre></td></tr></table></figure></p>
+<p>安装netstat<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install net-tools</span><br></pre></td></tr></table></figure></p>
+<p>此时查看容器的22端口（SSH默认监听端口）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@b01f068b0cff:/# netstat -tunlp</span><br><span class="line">Active Internet connections (only servers)</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    </span><br><span class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      3845/sshd           </span><br><span class="line">tcp6       0      0 :::22                   :::*                    LISTEN      3845/sshd</span><br></pre></td></tr></table></figure></p>
+<p>重设密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">passwd</span><br><span class="line">  新密码</span><br><span class="line">  确认新密码</span><br><span class="line">#如提示没有passwd这个命令行使用yum install passwd安装</span><br></pre></td></tr></table></figure></p>
+<p>修改SSH配置文件以下选项，去掉#注释，将四个选项启用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>RSAAuthentication yes #启用 RSA 认证</li>
+<li>PubkeyAuthentication yes #启用公钥私钥配对认证方式</li>
+<li>AuthorizedKeysFile .ssh/authorized_keys #公钥文件路径（和上面生成的文件同）</li>
+<li>PermitRootLogin yes #root能使用ssh登录</li>
+</ul>
+<p>此时在宿主机上或者别的主机上可使用ssh连接容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh 192.168.1.23 -p 10022</span><br></pre></td></tr></table></figure></p>
+<p>创建自动启动SSH服务的可执行文件run.sh<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /run.sh</span><br><span class="line">#内容如下</span><br><span class="line">#!/bin/bash</span><br><span class="line">/usr/sbin/sshd -D</span><br></pre></td></tr></table></figure></p>
+<p>添加可执行权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x run.sh</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-保存并使用镜像"><a href="#3-保存并使用镜像" class="headerlink" title="3.保存并使用镜像"></a>3.保存并使用镜像</h3><p>退出容器保存镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">exit;</span><br><span class="line">docker commit saf3fsd9 sshd:ubuntu</span><br></pre></td></tr></table></figure></p>
+<p>启动新镜像启动容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 10022:22 -d sshd:ubuntu /run.sh</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2020/01/30/Docker-学习五-Mysql多实例安装/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     1.2k 字
+	</span>
+	<span title="阅读时长">
+     5 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/30/Docker-学习五-Mysql多实例安装/" itemprop="url">Docker-学习五(Mysql多实例安装)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-30T20:50:14+08:00">
+                2020-01-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker镜像/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker镜像</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/30/Docker-学习五-Mysql多实例安装/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/30/Docker-学习五-Mysql多实例安装/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.2k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、数据卷准备"><a href="#一、数据卷准备" class="headerlink" title="一、数据卷准备"></a>一、数据卷准备</h2><h3 id="1-创建数据卷"><a href="#1-创建数据卷" class="headerlink" title="1.创建数据卷"></a>1.创建数据卷</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker volume create mysql_dbdata</span><br><span class="line">docker volume ls # 查看</span><br><span class="line">docker volume inspect mysql_dbdata</span><br></pre></td></tr></table></figure>
+<p>删除数据卷<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker rm -v &lt;container_id&gt; # 删除容器及关联</span><br><span class="line"><span class="meta">$</span> docker volume rm &lt;volume_name&gt; # 删除数据卷</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-创建数据卷容器"><a href="#2-创建数据卷容器" class="headerlink" title="2.创建数据卷容器"></a>2.创建数据卷容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -v mysql_dbdata:/var/lib/mysql/ --name mysql_dbdata ubuntu</span><br></pre></td></tr></table></figure>
+<p>默认-v 挂载的是匿名数据卷，可先创建数据卷指定名称，再挂载到宿主机本地目录。  <strong>“:”前为数据卷名称，后面为宿主机地址。</strong>（这点与数据卷挂载时不一致，<strong>数据卷挂载”:”前面是宿主机本地地址，后面是容器内地址</strong>。）<br>默认执行权限是RW，若想设置只读需添加:ro<br>例如：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -v mysql_dbdata:/var/lib/mysql/:ro --name mysql_dbdata ubuntu</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-创建容器来挂载mysql-dbdata的数据。"><a href="#3-创建容器来挂载mysql-dbdata的数据。" class="headerlink" title="3.创建容器来挂载mysql_dbdata的数据。"></a>3.创建容器来挂载mysql_dbdata的数据。</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --volumes-from mysql_dbdata --name db1 ubuntu</span><br><span class="line">docker run -it --volumes-from mysql_dbdata --name db2 ubuntu</span><br></pre></td></tr></table></figure>
+<p>db1和db2 都挂载同一个数据卷到相同的/var/lib/mysql/ 目录。三个容器任何一方在该目录下的写入，其他容器都可以看到。</p>
+<h2 id="二、容器启动"><a href="#二、容器启动" class="headerlink" title="二、容器启动"></a>二、容器启动</h2><h3 id="1-启动mysql容器并挂载数据卷容器"><a href="#1-启动mysql容器并挂载数据卷容器" class="headerlink" title="1.启动mysql容器并挂载数据卷容器"></a>1.启动mysql容器并挂载数据卷容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 23333:3306 --name db_mysql_1 -v $(PWD)/my.cnf:/etc/mysql/my.cnf  --volumes-from db1 -e MYSQL_USER="lfc" -e MYSQL_ROOT_PASSWORD=123456 mysql/mysql-server</span><br></pre></td></tr></table></figure>
+<h3 id="2-宿主机查看容器日志"><a href="#2-宿主机查看容器日志" class="headerlink" title="2.宿主机查看容器日志"></a>2.宿主机查看容器日志</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#实时查看docker容器日志</span><br><span class="line">$ sudo docker logs -f -t --tail 行数 容器名</span><br><span class="line">#例：实时查看docker容器名为s12的最后10行日志</span><br><span class="line">$ sudo docker logs -f -t --tail 10 s12</span><br></pre></td></tr></table></figure>
+<h2 id="三、数据迁移备份"><a href="#三、数据迁移备份" class="headerlink" title="三、数据迁移备份"></a>三、数据迁移备份</h2><h3 id="1-备份数据"><a href="#1-备份数据" class="headerlink" title="1.备份数据"></a>1.备份数据</h3><p>（–volumes-from mysql_dbdata）新建容器挂载该容器卷<br>（-v $(pwd):/backup）并且将宿主机当前目录挂载到新容器backup下。<br>（tar cvf /backup/backup.tar /var/lib/mysql）将容器数据卷内数据打包至backup下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name backup_copy --volumes-from mysql_dbdata -v $(pwd):/backup ubuntu tar cvf /backup/backup.tar /var/lib/mysql</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-数据恢复"><a href="#2-数据恢复" class="headerlink" title="2.数据恢复"></a>2.数据恢复</h3><p>新建数据卷容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -v /var/lib/mysql --name mysql_dbdata2 ubuntu /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p>另创建一个容器挂载mysql_dbdata2 的容器并使用untar将备份文件解压到挂载的容器卷中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name copydata --volumes-from mysql_dbdata2 -v $(pwd):/backup busybox tar xvf /backup/backup.tar</span><br></pre></td></tr></table></figure></p>
+<h3 id="四、加载新实例"><a href="#四、加载新实例" class="headerlink" title="四、加载新实例"></a>四、加载新实例</h3><h3 id="1-新建实例加载mysql-dbdata2数据卷容器"><a href="#1-新建实例加载mysql-dbdata2数据卷容器" class="headerlink" title="1.新建实例加载mysql_dbdata2数据卷容器"></a>1.新建实例加载mysql_dbdata2数据卷容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 24444:3306 --name db_mysql_1 -v $(PWD)/my.cnf:/etc/mysql/my.cnf  --volumes-from mysql_dbdata2 -e MYSQL_USER="lfc" -e MYSQL_ROOT_PASSWORD=123456 mysql/mysql-server</span><br></pre></td></tr></table></figure>
+<h2 id="五、Mysql使用"><a href="#五、Mysql使用" class="headerlink" title="五、Mysql使用"></a>五、Mysql使用</h2><h3 id="1-基本操作"><a href="#1-基本操作" class="headerlink" title="1.基本操作"></a>1.基本操作</h3><table><br>   <tr><br>      <td>操作</td><br>      <td>SQL </td><br>   </tr><br>   <tr><br>      <td>查询所有数据库    </td><br>      <td>show databases;</td><br>   </tr><br>   <tr><br>      <td>查看活跃连接    </td><br>      <td>show processlist;</td><br>   </tr><br>    <tr><br>      <td>创建数据库</td><br>      <td>create database blog default character set utf8;</td><br>   </tr><br>    <tr><br>      <td>查看数据库的默认字符集</td><br>      <td>show create database blog;</td><br>   </tr><br>   <tr><br>      <td>删除数据库</td><br>      <td>drop database blog;</td><br>   </tr><br>   <tr><br>      <td>修改数据库</td><br>      <td>alter database blog default character set gbk;</td><br>   </tr><br>   <tr><br>      <td>选择数据库</td><br>      <td>use blog;</td><br>   </tr><br>   <tr><br>      <td>看所有表</td><br>      <td>show tables;</td><br>   </tr><br>   <tr><br>      <td>创建表</td><br>      <td>create table student(sid int,sname varchar(20));</td><br>   </tr><br>   <tr><br>      <td>查看表结构</td><br>      <td>desc student;</td><br>   </tr><br>    <tr><br>      <td>删除表</td><br>      <td>drop table student;</td><br>   </tr><br>    <tr><br>      <td>添加字段</td><br>      <td>alter table student add sgender varchar(2);<br></td><br>   </tr><br>    <tr><br>      <td>删除字段</td><br>      <td>alter table student drop sgender;</td><br>   </tr><br>    <tr><br>      <td>修改字段类型</td><br>      <td>alter table student modify sgender varchar(100);</td><br>   </tr><br>    <tr><br>      <td>修改字段名称</td><br>      <td>alter table student change sgender gender varchar(2);</td><br>   </tr><br>    <tr><br>      <td>修改表名称</td><br>      <td>alter table student rename to teacher;</td><br>   </tr><br></table>
+
+
+<h3 id="2-问题汇总"><a href="#2-问题汇总" class="headerlink" title="2.问题汇总"></a>2.问题汇总</h3><h4 id="1-ERROR-1130"><a href="#1-ERROR-1130" class="headerlink" title="1.ERROR 1130"></a>1.ERROR 1130</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR 1130: Host &apos;192.168.1.3&apos; is not allowed to connect to this</span><br></pre></td></tr></table></figure>
+<p>mysql不允许远程登录，需使用命令行对其进行设置，具体方法有两种，授权法和改表法。</p>
+<h5 id="1-使用root权限登录"><a href="#1-使用root权限登录" class="headerlink" title="1.使用root权限登录"></a>1.使用root权限登录</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
+<h5 id="2-改表法"><a href="#2-改表法" class="headerlink" title="2.改表法"></a>2.改表法</h5><p>使用localhost的主机登录，登入后更改mysql数据库中user表里的host项，”localhost”更改成”%”。% 号为所有，也可改成某固定IP。<br>命令<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> mysql;</span><br><span class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> host = <span class="string">'%'</span> <span class="keyword">where</span> <span class="keyword">user</span> = <span class="string">'root'</span>;</span><br><span class="line"><span class="keyword">select</span> host, <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure></p>
+<h5 id="3-授权法"><a href="#3-授权法" class="headerlink" title="3.授权法"></a>3.授权法</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">'lfc'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'123456'</span> <span class="keyword">PASSWORD</span> <span class="keyword">EXPIRE</span> <span class="keyword">NEVER</span>; </span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">'lfc'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">WITH</span> mysql_native_password <span class="keyword">BY</span> <span class="string">'123456'</span>;</span><br></pre></td></tr></table></figure>
+<p>mysql8.0之后进行了修改，授权和创建用户是分开设置的。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">'lfc'</span>@<span class="string">'%'</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">'123456'</span>;</span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">ALL</span> <span class="keyword">PRIVILEGES</span> <span class="keyword">on</span> *.* <span class="keyword">TO</span> <span class="string">'lfc'</span>@<span class="string">'%'</span> ; <span class="comment"># 前面的*是指定数据库，后面的*指定的是表。</span></span><br></pre></td></tr></table></figure></p>
+<p>创建账户:create user ‘用户名‘@’访问主机’ identified by ‘密码’;<br>赋予权限:grant 权限列表 on 数据库 to ‘用户名‘@’访问主机’ ;(修改权限时在后面加with grant option)</p>
+<h4 id="2-Error-Code-1044"><a href="#2-Error-Code-1044" class="headerlink" title="2.Error Code: 1044."></a>2.Error Code: 1044.</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error Code: 1044. Access denied for user &apos;root&apos;@&apos;%&apos; to database</span><br></pre></td></tr></table></figure>
+<p>授权的权限没有打开： Grant_priv is set to N for root@%. 修复下<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">user</span> <span class="keyword">SET</span> Grant_priv=<span class="string">'Y'</span>, Super_priv=<span class="string">'Y'</span> <span class="keyword">WHERE</span> <span class="keyword">User</span>=<span class="string">'lfc'</span>;</span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>; <span class="comment">#刷新</span></span><br></pre></td></tr></table></figure></p>
+<p>MySQL 常见数据类型<br>在 MySQL 中常见的数据类型如下：</p>
+<blockquote>
+<p>1) 整数类型 包括 TINYINT、SMALLINT、MEDIUMINT、INT、BIGINT，浮点数类型 FLOAT 和<br>DOUBLE，定点数类型 DECIMAL。 2) 日期/时间类型 包括 YEAR、TIME、DATE、DATETIME 和<br>TIMESTAMP。 3) 字符串类型 包括 CHAR、VARCHAR、BINARY、VARBINARY、BLOB、TEXT、ENUM 和<br>SET 等。 4) 二进制类型 包括 BIT、BINARY、VARBINARY、TINYBLOB、BLOB、MEDIUMBLOB 和<br>LONGBLOB。</p>
+</blockquote>
+<h5 id="时区问题"><a href="#时区问题" class="headerlink" title="时区问题"></a>时区问题</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select now(); #查看mysql系统时间。和当前时间做对比</span><br><span class="line">set global time_zone = &apos;+8:00&apos;; #设置时区更改为东八区</span><br><span class="line">flush privileges;  #刷新权限</span><br></pre></td></tr></table></figure>
+<p>然后退出后重新登录就可以了.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2020/01/28/Docker-学习四-数据管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     1.1k 字
+	</span>
+	<span title="阅读时长">
+     4 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/28/Docker-学习四-数据管理/" itemprop="url">Docker-学习四(数据管理)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-28T22:10:58+08:00">
+                2020-01-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker镜像/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker镜像</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/28/Docker-学习四-数据管理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/28/Docker-学习四-数据管理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.1k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="内容提要"><a href="#内容提要" class="headerlink" title="内容提要"></a>内容提要</h2><p>利用数据卷对数据进行持久化，备份，恢复，及多个容器数据共享，实现数据的迁移等。<br><strong>数据管理的两种方式：</strong></p>
+<ul>
+<li>数据卷（Data Volumes）：容器内数据直接映射到本地主机环境；</li>
+<li>数据卷容器（Data Volume Containers）：使用特定容器维护数据卷。</li>
+</ul>
+<h2 id="数据卷"><a href="#数据卷" class="headerlink" title="数据卷"></a>数据卷</h2><p>数据卷是一个可供容器使用的特殊目录，它将主机操作系统目录直接映射进容器，类似于 Linux中的mount操作。(就是将一个设备（<em>U盘/SD卡等</em>）挂接到一个已存在的目录上。访问这个目录就是访问该存储设备)。</p>
+<ul>
+<li>可以在容器之间共享和重用；</li>
+<li>对数据卷内数据的修改会马上生效，无论是容器内操作的还是容器操作的；</li>
+<li>数据卷的操作不会影响镜像，解耦应用和数据；</li>
+<li>卷会一直存在直到没有容器使用才可卸载。</li>
+</ul>
+<h3 id="1-容器内创建数据卷"><a href="#1-容器内创建数据卷" class="headerlink" title="1.容器内创建数据卷"></a>1.容器内创建数据卷</h3><p>启动容器时使用-v标记在容器内创建数据卷，多次使用可以创建多个数据卷。<br><strong>使用training/webapp 镜像创建一个 web容器，并创建一个数据卷挂载到容器的/webapp 目录：</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -P --name web -v /webapp  training/webapp python app.py</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-挂载主机目录作为数据卷（推荐）"><a href="#2-挂载主机目录作为数据卷（推荐）" class="headerlink" title="2.挂载主机目录作为数据卷（推荐）"></a>2.挂载主机目录作为数据卷（推荐）</h3><p>使用-v参数也可以挂载本地已有的目录到容器中作为数据卷。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -P --name web -v /src/webapp:/opt/webapp training/webapp python app.py</span><br></pre></td></tr></table></figure></p>
+<p>加载主机的/ src/webapp 目录到容器的/ opt/webapp 目录，本地目录的路径必须是绝对路径，如果目录不存在Docker会自动创建。<br>Docker 挂载数据卷的默认权限是读写（rw），用户也可以通过 ro 指定为<br>只读：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -P --name web -v /src/webapp:/opt/webapp:ro  training/webapp python app.py</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-挂载一个本地主机文件作为数据卷（不推荐）"><a href="#3-挂载一个本地主机文件作为数据卷（不推荐）" class="headerlink" title="3.挂载一个本地主机文件作为数据卷（不推荐）"></a>3.挂载一个本地主机文件作为数据卷（不推荐）</h3><p>-v标记也可以从主机挂载单个文件到容器作为数据卷<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --rm -it -v ~/.bash_history:/.bash_history ubuntu /bin/bash</span><br></pre></td></tr></table></figure></p>
+<h2 id="数据卷容器"><a href="#数据卷容器" class="headerlink" title="数据卷容器"></a>数据卷容器</h2><p>数据卷容器也是一个容器，它的目的是用来提供数据卷供其他容器挂载。</p>
+<p>1.创建数据卷容器dbdata，并创建一个数据卷挂载到/dbadata<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -v /dbdata --name dbdata ubuntu</span><br></pre></td></tr></table></figure></p>
+<p>2.在其他容器中使用–volumes-from 来挂载 dbdata容器中的数据卷，例如创建db1和db2两个容器，并从dbdata 容器挂载数据卷<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --volumes-from dbdata --name db1 ubuntu</span><br><span class="line">docker run -it --volumes-from dbdata --name db2 ubuntu</span><br></pre></td></tr></table></figure></p>
+<p>容器 db1和db2 都挂载同一个数据卷到相同的/ dbdata 目录。三个容器任何一方在该目录下的写入，其他容器都可以看到。<br><strong>可以多次使用–volumes-from参数来从多个容器挂载多个数据卷。还可以从其他已经挂载了容器卷的容器来挂载数据卷。</strong><br><strong>注：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">使用--volumes-from 参数所挂载数据卷的容器自身并不需要保持在运行状</span><br><span class="line">态。</span><br><span class="line">如果删除了挂载的容器，数据卷不会自动删除。必须删除最后一个挂载它的容器时显式使用docker rm-v 来指定同时删除关联的容器。</span><br></pre></td></tr></table></figure></p>
+<h3 id="利用数据卷容器来迁移数据"><a href="#利用数据卷容器来迁移数据" class="headerlink" title="利用数据卷容器来迁移数据"></a>利用数据卷容器来迁移数据</h3><h4 id="1-备份"><a href="#1-备份" class="headerlink" title="1.备份"></a>1.备份</h4><p>使用下面命令备份dbdata数据卷容器内的数据卷<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --volumes-from dbdata -v $(pwd):/backup --name worker ubuntu tar  cvf /backup/backup.tar /dbdata</span><br></pre></td></tr></table></figure></p>
+<p>首先利用 ubuntu 镜像创建了一个容器worker。使用–volumes-from dbdata 参数来让worker容器挂载dbdata容器的数据卷（即dbdata数据卷）；使用-v$(pwd):/backup参数来挂载本地的当前目录到worker容器的/backup 目录。<br>worker 容器启动后，使用了 tar cvf/backup/backup.tar/dbdata命令来将/dbdata下内容备份为容器内的/backup/backup.tar，即宿主主机当前目录下的backup.tar。</p>
+<h4 id="2-数据恢复"><a href="#2-数据恢复" class="headerlink" title="2.数据恢复"></a>2.数据恢复</h4><p>如果要将数据恢复到一个容器，可以按照下面的步骤操作。首先创建一个带有数据卷的容器dbdata2<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -v /dbdata --name dbdata2 ubuntu /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p>然后创建另一个新的容器，挂载dbdata2的容器，并解压备份文件到所挂载的容器卷中<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --volumes-from dbdata2 -v $(pwd):/backup busybox tar xvf /backup/backup.tar</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2020/01/27/Docker-学习三-Docker仓库/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1831,632 +2498,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/11/25/Docker-学习一（镜像基本操作）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     2k 字
-	</span>
-	<span title="阅读时长">
-     8 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/25/Docker-学习一（镜像基本操作）/" itemprop="url">Docker-学习一（镜像基本操作）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-25T23:33:19+08:00">
-                2019-11-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Docker镜像/" itemprop="url" rel="index">
-                    <span itemprop="name">Docker镜像</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/11/25/Docker-学习一（镜像基本操作）/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/25/Docker-学习一（镜像基本操作）/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  8
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="内容提要"><a href="#内容提要" class="headerlink" title="内容提要"></a>内容提要</h1><p>docker镜像相关操作，包括获取，查看，搜索，删除，创建，存出和载入，上传等。</p>
-<h2 id="1-启动"><a href="#1-启动" class="headerlink" title="1.启动"></a>1.启动</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">servie start docker</span><br></pre></td></tr></table></figure>
-<p>为了避免每次使用docker命令都要用特权身份<br>将当前用户加入docker用户组<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker USER_NAME</span><br></pre></td></tr></table></figure></p>
-<h2 id="2-获取镜像"><a href="#2-获取镜像" class="headerlink" title="2.获取镜像"></a>2.获取镜像</h2><p>可以使用<strong>docker pull NAME[：TAG]</strong>直接从DockerHub镜像源下载镜像。NAME是镜像仓库名称，TAG是镜像标签（版本信息），例如获取一个Ubuntu14.04系统基本镜像<br>如果不显式指定TAG，则默认会选择latest 标签,这会下载仓库中最新版本的镜像（<em>最新镜像一般非稳定版本</em>）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pulling from library/ubuntu</span><br></pre></td></tr></table></figure></p>
-<p>非官方的仓库下载，则需要在仓库名称前指定完整的仓库地址。<br>例如从网易蜂巢的镜像源来下载ubuntu： 14.04 镜像，可以使用如下命令，此<br>时下载的镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull hub.c.163.com/public/ubuntu：14.04</span><br></pre></td></tr></table></figure></p>
-<h3 id="子命令详解"><a href="#子命令详解" class="headerlink" title="子命令详解"></a>子命令详解</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-a，--all-tags=true| false：是否获取仓库中的所有镜像，默认为否。</span><br></pre></td></tr></table></figure>
-<h2 id="3-镜像操作"><a href="#3-镜像操作" class="headerlink" title="3.镜像操作"></a>3.镜像操作</h2><h3 id="1-安装Nginx-并启动"><a href="#1-安装Nginx-并启动" class="headerlink" title="1.安装Nginx 并启动"></a>1.安装Nginx 并启动</h3><p>pull镜像，并启动 -d后台启动 -p宿主机端口映射容器端口。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -d -p 80:80 --restart=always nginx:latest</span><br></pre></td></tr></table></figure></p>
-<p>此时访问即可80端口即可。</p>
-<h3 id="2-images列出镜像"><a href="#2-images列出镜像" class="headerlink" title="2.images列出镜像"></a>2.images列出镜像</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2019/11/24/eA2lS7NiG5qEugj.png" alt="dockerImages.png"><br>在列出的信息中，可以看到的信息：</p>
-<ul>
-<li>来自于哪个仓库，比如 ubuntu 仓库用来保存 ubuntu 系列的基础镜像；</li>
-<li>镜像的标签信息，比如14.04、latest用来标注不同的版本信息。</li>
-<li>镜像的ID（唯一标识镜像）如oracle11g与registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g镜像ID相同证明实际上指向的是同一镜像。</li>
-<li>创建时间，说明镜像最后的更新时间；</li>
-<li>镜像大小</li>
-</ul>
-<p><strong>镜像ID信息十分重要，它标识了镜像。在使用时前若干个字符串来代替完整ID.<br>TAG 信息用来标记来自同一个仓库的不同镜像。通过TAG信息来区分发行版本。</strong></p>
-<h4 id="子命令详解-1"><a href="#子命令详解-1" class="headerlink" title="子命令详解"></a>子命令详解</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-a，--all=true| false：列出所有的镜像文件（包括临时文件），默认为否；</span><br><span class="line">--digests=true| false：列出镜像的数字摘要值，默认为否</span><br><span class="line">-f，--filter=[]：过滤列出的镜像，如 dangling=true 只显示没有被使用</span><br><span class="line">的镜像；也可指定带有特定标注的镜像等</span><br><span class="line">--format=&quot;TEMPLATE&quot;：控制输出格式，如.ID代表 ID信息，.Repository代表仓库信息等；</span><br><span class="line">-no-trunc=true| false：对输出结果中太长的部分是否进行截断，如镜像的ID 信息，默认为是</span><br><span class="line">-q，--quiet=true|false：仅输出ID信息，默认为否。</span><br><span class="line">更多子命令选项还可以通过 man docker-images 来查看</span><br></pre></td></tr></table></figure>
-<h3 id="3-使用tag-命令添加镜像标签"><a href="#3-使用tag-命令添加镜像标签" class="headerlink" title="3.使用tag 命令添加镜像标签"></a>3.使用tag 命令添加镜像标签</h3><p>为了方便在后续工作中使用特定镜像，还可以使用 docker tag命令来为本地镜像任意添加新的标签。例如添加一个新的oracle镜像标签<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g oracle11g:latest</span><br></pre></td></tr></table></figure></p>
-<p>也可以指定镜像ID来修改其标签<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag 5sbdf471761  test/oracle11g:latest</span><br></pre></td></tr></table></figure></p>
-<h3 id="4-使用inspect-命令查看详细信息"><a href="#4-使用inspect-命令查看详细信息" class="headerlink" title="4.使用inspect 命令查看详细信息"></a>4.使用inspect 命令查看详细信息</h3><p>使用<strong>docker inspect</strong> 命令可以获取该镜像的详细信息，包括制作者、架构、各层的数字摘要等<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"Id"</span>: <span class="string">"sha256:4152a960875253728e0ba43da37d023e4626c43a268ca0a9c6083119542119fb"</span>,</span><br><span class="line">        <span class="attr">"RepoTags"</span>: [</span><br><span class="line">            <span class="string">"nginx:latest"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"RepoDigests"</span>: [</span><br><span class="line">            <span class="string">"nginx@sha256:9916837e6b165e967e2beb5a586b1c980084d08eb3b3d7f79178a0c79426d880"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"Parent"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"Comment"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"Created"</span>: <span class="string">"2019-11-20T01:15:47.501397881Z"</span>,</span><br><span class="line">        <span class="attr">"Container"</span>: <span class="string">"b976da4ad5a3f13d191cfedd87ab06bc7b3bf0d5eb37876fa091c3aaae572056"</span>,</span><br><span class="line">        <span class="attr">"ContainerConfig"</span>: &#123;</span><br><span class="line">            <span class="attr">"Hostname"</span>: <span class="string">"b976da4ad5a3"</span>,</span><br><span class="line">            <span class="attr">"Domainname"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"User"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"AttachStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStdout"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStderr"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"ExposedPorts"</span>: &#123;</span><br><span class="line">                <span class="attr">"80/tcp"</span>: &#123;&#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"Tty"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"OpenStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"StdinOnce"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"Env"</span>: [</span><br><span class="line">                <span class="string">"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span>,</span><br><span class="line">                <span class="string">"NGINX_VERSION=1.17.6"</span>,</span><br><span class="line">                <span class="string">"NJS_VERSION=0.3.7"</span>,</span><br><span class="line">                <span class="string">"PKG_RELEASE=1~buster"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"Cmd"</span>: [</span><br><span class="line">                <span class="string">"/bin/sh"</span>,</span><br><span class="line">                <span class="string">"-c"</span>,</span><br><span class="line">                <span class="string">"#(nop) "</span>,</span><br><span class="line">                <span class="string">"CMD [\"nginx\" \"-g\" \"daemon off;\"]"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"ArgsEscaped"</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">"Image"</span>: <span class="string">"sha256:d96abf34b30211ae8cdb9700ff30dddb3b45ed410bb159fe562ea428b6280851"</span>,</span><br><span class="line">            <span class="attr">"Volumes"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"WorkingDir"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"Entrypoint"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"OnBuild"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"Labels"</span>: &#123;</span><br><span class="line">                <span class="attr">"maintainer"</span>: <span class="string">"NGINX Docker Maintainers &lt;docker-maint@nginx.com&gt;"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"StopSignal"</span>: <span class="string">"SIGTERM"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"DockerVersion"</span>: <span class="string">"18.06.1-ce"</span>,</span><br><span class="line">        <span class="attr">"Author"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"Config"</span>: &#123;</span><br><span class="line">            <span class="attr">"Hostname"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"Domainname"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"User"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"AttachStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStdout"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStderr"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"ExposedPorts"</span>: &#123;</span><br><span class="line">                <span class="attr">"80/tcp"</span>: &#123;&#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"Tty"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"OpenStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"StdinOnce"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"Env"</span>: [</span><br><span class="line">                <span class="string">"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span>,</span><br><span class="line">                <span class="string">"NGINX_VERSION=1.17.6"</span>,</span><br><span class="line">                <span class="string">"NJS_VERSION=0.3.7"</span>,</span><br><span class="line">                <span class="string">"PKG_RELEASE=1~buster"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"Cmd"</span>: [</span><br><span class="line">                <span class="string">"nginx"</span>,</span><br><span class="line">                <span class="string">"-g"</span>,</span><br><span class="line">                <span class="string">"daemon off;"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"ArgsEscaped"</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">"Image"</span>: <span class="string">"sha256:d96abf34b30211ae8cdb9700ff30dddb3b45ed410bb159fe562ea428b6280851"</span>,</span><br><span class="line">            <span class="attr">"Volumes"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"WorkingDir"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"Entrypoint"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"OnBuild"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"Labels"</span>: &#123;</span><br><span class="line">                <span class="attr">"maintainer"</span>: <span class="string">"NGINX Docker Maintainers &lt;docker-maint@nginx.com&gt;"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"StopSignal"</span>: <span class="string">"SIGTERM"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"Architecture"</span>: <span class="string">"amd64"</span>,</span><br><span class="line">        <span class="attr">"Os"</span>: <span class="string">"linux"</span>,</span><br><span class="line">        <span class="attr">"Size"</span>: <span class="number">126346569</span>,</span><br><span class="line">        <span class="attr">"VirtualSize"</span>: <span class="number">126346569</span>,</span><br><span class="line">        <span class="attr">"GraphDriver"</span>: &#123;</span><br><span class="line">            <span class="attr">"Data"</span>: &#123;</span><br><span class="line">                <span class="attr">"LowerDir"</span>: <span class="string">"/var/lib/docker/overlay2/da7346d91a599e73e4d394bb85a467ac618131460f846683aaa596c779b1ea07/diff:/var/lib/docker/overlay2/5c3cf4f87fe4f7f16433918981eb3471b5bc2b23eea1c0883db2d3561b73dd47/diff"</span>,</span><br><span class="line">                <span class="attr">"MergedDir"</span>: <span class="string">"/var/lib/docker/overlay2/6168e5e9a57d684f9c5809e6e4722c73bc2434326d39e90cfcdefe0a1b84999d/merged"</span>,</span><br><span class="line">                <span class="attr">"UpperDir"</span>: <span class="string">"/var/lib/docker/overlay2/6168e5e9a57d684f9c5809e6e4722c73bc2434326d39e90cfcdefe0a1b84999d/diff"</span>,</span><br><span class="line">                <span class="attr">"WorkDir"</span>: <span class="string">"/var/lib/docker/overlay2/6168e5e9a57d684f9c5809e6e4722c73bc2434326d39e90cfcdefe0a1b84999d/work"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"Name"</span>: <span class="string">"overlay2"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"RootFS"</span>: &#123;</span><br><span class="line">            <span class="attr">"Type"</span>: <span class="string">"layers"</span>,</span><br><span class="line">            <span class="attr">"Layers"</span>: [</span><br><span class="line">                <span class="string">"sha256:b67d19e65ef653823ed62a5835399c610a40e8205c16f839c5cc567954fcf594"</span>,</span><br><span class="line">                <span class="string">"sha256:de1b802e9897894b1f7e78346beda84dce9ba1c5514f3d479d40bb553bc623f8"</span>,</span><br><span class="line">                <span class="string">"sha256:c2d3130eb3f6afd3ad600119c363e84f33b0d05837de48adf7b638bc66403397"</span></span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"Metadata"</span>: &#123;</span><br><span class="line">            <span class="attr">"LastTagTime"</span>: <span class="string">"0001-01-01T00:00:00Z"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
-<p>返回的是一个json格式的信息，如果要获取其中一项内容可使用-f来指定<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker inspect -f &#123;&#123;".Architecture"&#125;&#125;</span><br><span class="line">amd64</span><br></pre></td></tr></table></figure></p>
-<h3 id="5-使用history-命令查看镜像历史"><a href="#5-使用history-命令查看镜像历史" class="headerlink" title="5.使用history 命令查看镜像历史"></a>5.使用history 命令查看镜像历史</h3><p>例如，查看ubuntu： 14.04 镜像的创建过程，可以使用如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker history ubuntu:14.04 -- no-trunc</span><br></pre></td></tr></table></figure></p>
-<p>过长的命令会被自动截断，可以使用– no-trunc 选项来输出完整命令。</p>
-<h3 id="6-搜寻镜像"><a href="#6-搜寻镜像" class="headerlink" title="6.搜寻镜像"></a>6.搜寻镜像</h3><p>查找远端仓库镜像，默认搜索官方仓库镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search --automated -s 10 redis</span><br></pre></td></tr></table></figure></p>
-<p>上述命令：查找自动创建评价为10+带redis关键字的镜像<br><img src="https://i.loli.net/2019/11/25/fZMsUl7kmcoe3T8.png" alt="dockerSearch.png"></p>
-<h3 id="7-删除镜像"><a href="#7-删除镜像" class="headerlink" title="7.删除镜像"></a>7.删除镜像</h3><h4 id="1-使用标签删除"><a href="#1-使用标签删除" class="headerlink" title="1.使用标签删除"></a>1.使用标签删除</h4><p>命令格式为 docker rmi IMAGE[IMAGE…]，其中IMAGE可以为标签或ID<br>例如删除redis：latest镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi redis:latest</span><br></pre></td></tr></table></figure></p>
-<p>当多个标签指向同一镜像文件时，rmi命令只删除该镜像的指定标签。当只有一个镜像标签时使用命令时需注意，此时会删除镜像文件。</p>
-<h4 id="2-使用镜像ID删除"><a href="#2-使用镜像ID删除" class="headerlink" title="2.使用镜像ID删除"></a>2.使用镜像ID删除</h4><p>当使用docker rmi 后面跟上了镜像的ID,此时会先删除所有指向该镜像的标签，然后删除镜像。<strong>但是当该镜像创造的容器还存在时，镜像是无法被删除的。</strong><br>如果想强行删除镜像可以使用 -f 参数强制删除一个存在容器依赖的镜像。<strong>但是不推荐这么使用</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi -f redis:4.0</span><br></pre></td></tr></table></figure></p>
-<p><strong>正确做法是先找到依赖该镜像的容器依次删除，然后再执行docker rm 命令删除镜像。</strong></p>
-<h3 id="8-创建镜像"><a href="#8-创建镜像" class="headerlink" title="8.创建镜像"></a>8.创建镜像</h3><p>创建镜像的方法主要有三种：基于已有镜像的容器创建、基于本地模板<br>导入、基于 Dockerfile 创建。（Dockerfile 方法后续补充）</p>
-<h4 id="1-基于已有镜像的容器创建"><a href="#1-基于已有镜像的容器创建" class="headerlink" title="1. 基于已有镜像的容器创建"></a>1. 基于已有镜像的容器创建</h4><p>在原有镜像中进行改动后提交,其中51a551dea4f7为容器ID.<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit -m'Add a new file' -a "lfc" 51a551dea4f7 test:0.1</span><br></pre></td></tr></table></figure></p>
-<p><strong>子命令</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">·-a，--author=&quot;&quot;：作者信息；</span><br><span class="line">·- c，--change=[]：提交的时候执行 Dockerfile指令，包括CMD|</span><br><span class="line">ENTRYPOINT|ENV|EXPOSE|LABEL|ONBUILD|USER|VOLUME|WORKDIR</span><br><span class="line">等；</span><br><span class="line">·-m，--message=&quot;&quot;：提交消息；</span><br><span class="line">·- p，--pause=true：提交时暂停容器运行。</span><br></pre></td></tr></table></figure></p>
-<h4 id="2-基于本地模板导入"><a href="#2-基于本地模板导入" class="headerlink" title="2. 基于本地模板导入"></a>2. 基于本地模板导入</h4><p>使用镜像模版来创建，OPENVZ模板的下载地址为<a href="http://openvz.org/Download/templates/precreated。" target="_blank" rel="noopener">http://openvz.org/Download/templates/precreated。</a><br>命令格式为<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker import[OPTIONS]file|URL| [REPOSITORY[:TAG]]</span><br></pre></td></tr></table></figure></p>
-<p>例如下载Ubuntu模版压缩包，之后用命令导入<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat ubuntu-14.04-x86_64-minimal.tar.gz | docker import - ubuntu:14.04</span><br></pre></td></tr></table></figure></p>
-<h3 id="9-镜像导出和载入"><a href="#9-镜像导出和载入" class="headerlink" title="9.镜像导出和载入"></a>9.镜像导出和载入</h3><h4 id="1-镜像导出"><a href="#1-镜像导出" class="headerlink" title="1.镜像导出"></a>1.镜像导出</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker save -o ubuntu_14.04.tar ubuntu:14.04</span><br><span class="line">或 docker  save nginx &gt;/tmp/nginx.tar.gz</span><br></pre></td></tr></table></figure>
-<p>导出本地Ubuntu镜像为文件Ubuntu14，04.tar</p>
-<h4 id="2-镜像载入"><a href="#2-镜像载入" class="headerlink" title="2.镜像载入"></a>2.镜像载入</h4><p>可以使用docker load将导出的tar文件导入到本地镜像库，例如<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker load --input ubuntu_14.04.tar</span><br><span class="line">或：</span><br><span class="line">docker load &lt; ubuntu_14.04.tar</span><br></pre></td></tr></table></figure></p>
-<h3 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h3><p>另外 docker load 和 docker import都可以导入一个镜像存储文件， <strong>区别：<br>docker import：丢弃了所有的历史记录和元数据信息，仅保存容器当时的快照状态。在导入的时候可以重新制定标签等元数据信息。<br>docker load：将保存完整记录，体积较大。</strong></p>
-<h3 id="10-上传镜像"><a href="#10-上传镜像" class="headerlink" title="10.上传镜像"></a>10.上传镜像</h3><p>使用docker push 命令上传镜像到仓库，默认上传到docker hub官方仓库。<br>命令格式：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push NAME[:TAG] | [REGISTRY_HOST[:REGISTRY_PORT]/]NAME[:TAG]</span><br></pre></td></tr></table></figure></p>
-<p>例如将test镜像添加新的标签user/test:latest 然后用docker push 上传镜像。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker tag test:latest user/test:latest</span><br><span class="line">docker push user/test:latest</span><br></pre></td></tr></table></figure></p>
-<p>参考资料：Docker技术入门与实战</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/11/21/Ubuntu-安装VNC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     358 字
-	</span>
-	<span title="阅读时长">
-     1 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/21/Ubuntu-安装VNC/" itemprop="url">Ubuntu 安装VNC</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-21T23:44:11+08:00">
-                2019-11-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/11/21/Ubuntu-安装VNC/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/21/Ubuntu-安装VNC/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  358
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>最近在用Windows 连接 Ubuntu的PC时想使用下图形化界面，因为之前玩树莓派用过VNC因此将为PC安装VNC 来进行图形传输。</p>
-<p>准备工作：<br>windows安装VNC-Viewer 或者相关工具，Linux 安装vncserver.</p>
-<h1 id="1-安装"><a href="#1-安装" class="headerlink" title="1.安装"></a>1.安装</h1><h2 id="1-1更新源和系统"><a href="#1-1更新源和系统" class="headerlink" title="1.1更新源和系统"></a>1.1更新源和系统</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt upgrade -y</span><br></pre></td></tr></table></figure>
-<h2 id="1-2安装桌面"><a href="#1-2安装桌面" class="headerlink" title="1.2安装桌面"></a>1.2安装桌面</h2><p>mate 桌面较为精简且不会出现显示不全的问题，选择其中一个安装即可。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">apt install ubuntu-desktop, gnome-panel # Gnome桌面</span><br><span class="line">apt install kubuntu-full  # KDE桌面</span><br><span class="line"><span class="meta">#</span> Mate桌面 （推荐）</span><br><span class="line"><span class="meta">#</span> 仅安装核心组件</span><br><span class="line">apt install ntp</span><br><span class="line">apt install ubuntu-mate-core</span><br><span class="line"><span class="meta">#</span> 完整安装</span><br><span class="line">apt install ubuntu-mate-core ubuntu-mate-desktop</span><br></pre></td></tr></table></figure></p>
-<h1 id="2-基本操作"><a href="#2-基本操作" class="headerlink" title="2.基本操作"></a>2.基本操作</h1><p>安装 VNC server<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install vnc4server -y</span><br></pre></td></tr></table></figure></p>
-<p>第一次启动需要配置密码<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver (或vnc4server)</span><br></pre></td></tr></table></figure></p>
-<p>打开会话<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver :1</span><br></pre></td></tr></table></figure></p>
-<p>关闭会话<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver -kill :1</span><br></pre></td></tr></table></figure></p>
-<p> 设置分辨率<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver -geometry 1920x1080 :1</span><br></pre></td></tr></table></figure></p>
-<h1 id="3-文件配置"><a href="#3-文件配置" class="headerlink" title="3.文件配置"></a>3.文件配置</h1><p>vim /root/.vnc<br>添加配置：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line"> </span><br><span class="line"><span class="meta">#</span> Uncomment the following two lines for normal desktop:</span><br><span class="line"><span class="meta">#</span> unset SESSION_MANAGER</span><br><span class="line"><span class="meta">#</span> exec /etc/X11/xinit/xinitrc</span><br><span class="line">[ -x /etc/vnc/xstartup ] &amp;&amp; exec /etc/vnc/xstartup</span><br><span class="line">[ -r $HOME/.Xresources ] &amp;&amp; xrdb $HOME/.Xresources</span><br><span class="line">xsetroot -solid grey </span><br><span class="line">vncconfig -iconic &amp;</span><br><span class="line"><span class="meta">#</span> x-terminal-emulator -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &amp;</span><br><span class="line">        </span><br><span class="line">mate-session &amp;</span><br></pre></td></tr></table></figure></p>
-<p>其他桌面配置：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gnome-panel &amp;</span><br><span class="line">gnome-settings-daemon &amp;</span><br><span class="line">metacity &amp;</span><br><span class="line">nautilus &amp;</span><br></pre></td></tr></table></figure></p>
-<p>#4.开机启动<br>首先输入 crontab 命令,显示如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Select an editor. To change later, run ‘select-editor’.</span><br><span class="line">1. /bin/ed</span><br><span class="line">2. /bin/nano &lt;---- easiest 3. /usr/bin/vim.basic 4. /usr/bin/vim.tiny Choose 1-4 [2]:</span><br></pre></td></tr></table></figure></p>
-<p>在末尾添加命令,设置开机启动<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@reboot /usr/bin/vncserver :1</span><br></pre></td></tr></table></figure></p>
-<p>重启服务<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/11/20/接口的幂等性设计/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     2.6k 字
-	</span>
-	<span title="阅读时长">
-     10 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/20/接口的幂等性设计/" itemprop="url">接口的幂等性设计</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T00:06:06+08:00">
-                2019-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/11/20/接口的幂等性设计/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/20/接口的幂等性设计/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.6k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  10
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-概念"><a href="#1-概念" class="headerlink" title="1.概念"></a>1.概念</h1><blockquote>
-<p>幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。<br>在编程中一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数。这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。例如，“setTrue()”函数就是一个幂等函数,无论多次执行，其结果都是一样的.更复杂的操作幂等保证是利用唯一交易号(流水号)实现.          ——————【维基百科】</p>
-</blockquote>
-<p>简单来说就是 <strong>一个操作如果执行多次，其产生的影响均与一次执行的影响相同。</strong></p>
-<h1 id="2-为什么要做幂等"><a href="#2-为什么要做幂等" class="headerlink" title="2.为什么要做幂等"></a>2.为什么要做幂等</h1><p>分布式场景：</p>
-<ul>
-<li>一个订单创建接口，在第一次调用时超时。</li>
-<li>订单创建时，要先减去库存，调用接口时发生了超时。</li>
-<li>订单开始支付，支付请求发出了之后，在到达微信支付前就发生超时。</li>
-<li>到达微信支付，但是支付交易失败，未返回，此时超时。</li>
-<li>到达微信支付且交易成功，未返回回执，此时超时。</li>
-<li>到达微信支付并且交易成功，返回了回执，客户端未接收到回执此时客户端超时。</li>
-<li>订单支付成功，调用订单状态更新接口，调用方发送了两条消息，一个是已创建，一个是已付款，如果先收到已付款消息后收到已创建。</li>
-</ul>
-<p><strong>幂等性在购物支付场景下显得尤为重要，我请求了多次是否会产生了多笔订单，是否引发了多次支付？</strong><br>为了解决这些问题，就必须保证API的幂等性，也就是接口可重复调用，接口最终结果是与一次调用时一致。（这里说的是数据一致性，不是返回结果一致性，如：已提交订单，再次提交提示请勿重复提交，但是数据结果与第一次调用时一致）</p>
-<h1 id="3-幂等如何实现"><a href="#3-幂等如何实现" class="headerlink" title="3.幂等如何实现"></a>3.幂等如何实现</h1><p>具体方案有：业务去重表（建立唯一索引）、悲观锁、乐观锁（版本控制、有限状态机验证）、Token（全局唯一标识）、分布式锁、select+insert、</p>
-<h2 id="3-1-Token-全局唯一标识"><a href="#3-1-Token-全局唯一标识" class="headerlink" title="3.1 Token(全局唯一标识)"></a>3.1 Token(全局唯一标识)</h2><p><img src="https://i.loli.net/2019/11/04/srAzcduVxBUCnZR.png" alt="流程 _1_.png"></p>
-<ul>
-<li>在数据提交前向服务申请token，token放到redis或者内存中（加入失效时间）；在提交时后台校验token，同时删除token，生成新的token返回。（<strong>此处校验token和删除token为原子性操作，，如果分为两步，存在并发问题。</strong>）</li>
-<li>全局唯一标识原理与之类似，根据操作类型和业务标识组合生成一个全局ID，执行操作前判断是否已存在该key，如果不存在则存储到系统中，存在则表示该方法已操作。（<strong>利用Redis的setnx命令。此命令同样是原子性操作，只有在key不存在的情况下，才能set成功。</strong>）</li>
-</ul>
-<h2 id="3-2-唯一索引"><a href="#3-2-唯一索引" class="headerlink" title="3.2 唯一索引"></a>3.2 唯一索引</h2><p>在CRUD中查询和删除（物理删除、逻辑删除）是天然的幂等的，既多次查询对数据与一次查询一致不会产生影响，删除也是无论是物理删除还是逻辑删除，都是根据条件进行删除无论执行几次造成的结果是一样的。<br>增加数据时如果不进行幂等会导致目标数据产生多条，此时建议将目标表增加唯一索引或者唯一组合索引防止脏数据，在重复进行执行时，插入失败时，重新查询数据此时已存在则成功返回。</p>
-<h2 id="3-3-数据库悲观锁"><a href="#3-3-数据库悲观锁" class="headerlink" title="3.3 数据库悲观锁"></a>3.3 数据库悲观锁</h2><p>获取数据时加锁<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> table_xxx <span class="keyword">where</span> <span class="keyword">id</span>=<span class="string">'xxx'</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure></p>
-<p><strong>使用时ID需要是主键或者唯一索引，在mysql中会导致锁表而不是行级锁。悲观锁使用一般同事务一起使用。</strong></p>
-<h2 id="3-4-数据库乐观锁"><a href="#3-4-数据库乐观锁" class="headerlink" title="3.4 数据库乐观锁"></a>3.4 数据库乐观锁</h2><p>乐观锁在更新数据时才会产生锁表，其他时间不锁表，所以对比悲观锁，乐观锁并发场景使用效率更高。<br>实现方式：<br>原理如图：同java CAS<br><img src="https://i.loli.net/2019/11/03/rLB2RXT4YS13Msq.png" alt="image.png"></p>
-<ol>
-<li><p>通过版本号或者状态条件实现</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> table_xxx <span class="keyword">set</span> <span class="keyword">name</span>=<span class="comment">#name#,version=version+1 where version=#version#  and id=#id#;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>通过条件限制</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> table_xxx <span class="keyword">set</span> avai_amount=avai_amount-<span class="comment">#subAmount# where avai_amount-#subAmount# &gt;= 0 and id=#id#;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>此场景适用于秒杀等库存场景，防止因并发出现库存-1场景。</p>
-<ol start="3">
-<li>任务相关的业务，肯定会涉及到状态机（状态变更），业务数据在不同情况下回发生变更，一般情况下存在有限状态机，如果状态机位于下一个状态，此时来了一个上一个状态的变更，此时不能变更，从而保证有限状态机的幂等。<br>例：订单创建为0，付款成功为2，付款失败为1在进行状态机更新时可以这样控制<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update table_xx set status=#status# where id=#id# and status&lt;#status#</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>如果此次操作成功该update返回结果为1条，若数据已被更新则返回结果为0条，可再次查询验证更新状态是否成功。</p>
-<h2 id="3-5-select-insert"><a href="#3-5-select-insert" class="headerlink" title="3.5 select + insert"></a>3.5 select + insert</h2><p>对并发不高的系统，为了支持幂等可以先查询下数据判断是否已经执行过，未执行则进行业务的处理。<strong>注：此种方法高并发场景切不可使用</strong></p>
-<h2 id="3-6-业务去重表"><a href="#3-6-业务去重表" class="headerlink" title="3.6 业务去重表"></a>3.6 业务去重表</h2><p>上面几种通过数据库进行幂等的方法有一个弊端，就是为了实现幂等性需要在业务表中加入一个无关的版本号或者状态，此时可将操作单独提取出来构建一个业务去重表，在业务表操作前对此表进行操作验证，利用数据库唯一索引特性保证唯一逻辑，唯一的序列号可以是一个字段，也可以是多字段的唯一性组合，在幂等验证通过后方可进行业务操作。<br>表结构:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> DUPLICATEREMOVAL(</span><br><span class="line">  c_id          VARCHAR2(<span class="number">32</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  c_serial_no   VARCHAR2(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  c_source_type VARCHAR2(<span class="number">255</span>),</span><br><span class="line">  c_status      VARCHAR2(<span class="number">64</span>),</span><br><span class="line">  c_remark      VARCHAR2(<span class="number">255</span>),</span><br><span class="line">  c_crt_cde     VARCHAR2(<span class="number">20</span>) ,</span><br><span class="line">  t_crt_tm      <span class="built_in">DATE</span> ,</span><br><span class="line">  c_upd_cde     VARCHAR2(<span class="number">20</span>),</span><br><span class="line">  t_upd_tm      <span class="built_in">DATE</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">-- Add comments to the table </span></span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">table</span> DUPLICATEREMOVAL</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'业务去重表'</span>;</span><br><span class="line"><span class="comment">-- Add comments to the columns </span></span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_id</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'业务标识'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_serial_no</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'唯一标识'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_source_type</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'资源类型'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_status</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'状态'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_remark</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'备注'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_crt_cde</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'创建人'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.t_crt_tm</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'创建时间'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_upd_cde</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'修改人'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.t_upd_tm</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'修改时间'</span>;</span><br><span class="line"><span class="comment">-- Create/Recreate primary, unique and foreign key constraints </span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> DUPLICATEREMOVAL</span><br><span class="line">  <span class="keyword">add</span> <span class="keyword">constraint</span> C_PK_SERIAL <span class="keyword">unique</span> (C_ID, C_SERIAL_NO);</span><br></pre></td></tr></table></figure></p>
-<h2 id="3-7-分布式锁"><a href="#3-7-分布式锁" class="headerlink" title="3.7 分布式锁"></a>3.7 分布式锁</h2><p>在分布式应用的时代背景下，跨系统的调用想满足锁的语义只能依赖于第三方的中间件，比如redis、zookeeper。<br><strong>实现点：某个流程要求不能并发执行，可以在执行之前根据业务上的唯一标识 获取分布式锁，其他流程执行时获取锁就会失败，也就是同一时间该流程只能有一个能执行成功，执行完后，释放分布式锁。</strong></p>
-<p>使用方式：<br><a href="http://doc.redisfans.com/string/set.html" target="_blank" rel="noopener">API文档</a><br>加锁：set key value px milliseconds nx<br>键不存在时才进行操作并设置键的过期时间，此命令是原子操作不会出现多线程问题。<br><img src="https://i.loli.net/2019/11/04/xMF3z4y7VKg5L2Q.png" alt="加锁流程.png"><br>释放锁：在释放锁时为了防止将别的线程加的锁误删可以在加锁时将线程id作为value，解锁时判断是否是当前锁，然后删除。但是判断和释放锁是两个独立的操作不具备原子性所以此处推荐使用del+lua脚本实现。<br><a href="https://ftp.bmp.ovh/imgs/2019/11/a79904d25d081716.png" target="_blank" rel="noopener">https://ftp.bmp.ovh/imgs/2019/11/a79904d25d081716.png</a><br><img src="https://s2.ax1x.com/2019/11/04/KzrM8S.png" alt="解锁流程.png"><br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String luaScript = <span class="string">"if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end"</span>;</span><br><span class="line">redisClient.eval(luaScript , Collections.singletonList(key), Collections.singletonList(threadId));</span><br></pre></td></tr></table></figure></p>
-<p>分布式锁参考：<a href="https://wudashan.cn/2017/10/23/Redis-Distributed-Lock-Implement/" target="_blank" rel="noopener">使用 px nx 加锁</a><br>扩展：<a href="https://blog.csdn.net/forezp/article/details/70305336" target="_blank" rel="noopener">redis官方支持的分布式锁redlock</a></p>
-<h1 id="4-基于redis实现分布式锁"><a href="#4-基于redis实现分布式锁" class="headerlink" title="4.基于redis实现分布式锁"></a>4.基于redis实现分布式锁</h1><h2 id="4-1-核心加锁代码："><a href="#4-1-核心加锁代码：" class="headerlink" title="4.1 核心加锁代码："></a>4.1 核心加锁代码：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//SET IF NOT EXIST key不存在时，set</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SET_IF_NOT_EXIST = <span class="string">"NX"</span>;</span><br><span class="line"><span class="comment">//expx 超时时间 单位毫秒  EX 单位 秒</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SET_WITH_EXPIRE_TIME = <span class="string">"PX"</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryGetDistributedLock</span><span class="params">( String lockKey, String requestId , <span class="keyword">int</span> expireTime)</span> </span>&#123;</span><br><span class="line">    Jedis jedis = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        jedis = getJedis();</span><br><span class="line">        String result = jedis.set(lockKey, requestId , SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);</span><br><span class="line">        <span class="keyword">if</span> (LOCK_SUCCESS.equals(result)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(<span class="string">"set key:&#123;&#125; value:&#123;&#125; error"</span>, lockKey, requestId , e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        close(jedis);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用NX PX 来保证插入值时的原子性<br>NX，意思是SET IF NOT EXIST，即当key不存在时，我们进行set操作；若key已经存在，则不做任何操作；<br>PX，意思是我们要给这个key加一个过期设置。<br><strong>错误使用：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">wrongGetLock1</span><span class="params">(Jedis jedis, String lockKey, String requestId, <span class="keyword">int</span> expireTime)</span> </span>&#123;</span><br><span class="line">    Long result = jedis.setnx(lockKey, requestId);</span><br><span class="line">    <span class="keyword">if</span> (result == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 若在这里程序突然崩溃，则无法设置过期时间，将发生死锁</span></span><br><span class="line">        jedis.expire(lockKey, expireTime);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上面的代码是将赋值的操作分为两步，先设置值，成功了再设置超时时间，但是如果在未设置超时时间前程序崩溃，此处会形成死锁。</p>
-<h2 id="4-2-解锁代码："><a href="#4-2-解锁代码：" class="headerlink" title="4.2 解锁代码："></a>4.2 解锁代码：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">releaseDistributedLock</span><span class="params">(Jedis jedis, String lockKey, String requestId)</span> </span>&#123;</span><br><span class="line">    String script = <span class="string">"if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end"</span>;</span><br><span class="line">    Object result = jedis.eval(script, Collections.singletonList(lockKey), Collections.singletonList(requestId));</span><br><span class="line">    <span class="keyword">if</span> (RELEASE_SUCCESS.equals(result)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用lua脚本将解锁时判断如果获取的key = 目标值则执行后续的操作，保证比较并操作行为的原子性。<br><strong>错误代码：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">wrongReleaseLock2</span><span class="params">(Jedis jedis, String lockKey, String requestId)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 判断加锁与解锁是不是同一个客户端</span></span><br><span class="line">    <span class="keyword">if</span> (requestId.equals(jedis.get(lockKey))) &#123;</span><br><span class="line">        <span class="comment">// 若在此时，这把锁突然不是这个客户端的，则会误解锁</span></span><br><span class="line">        jedis.del(lockKey);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>如果经过上面比较判断后，此时锁因为超时已经过期了，在执行后面的del命令时可能会删除别的进程（线程）加的锁。</p>
-<p>代码地址：<a href="https://github.com/cmevolve/InterfaceIdempotent" target="_blank" rel="noopener">https://github.com/cmevolve/InterfaceIdempotent</a><br>参考资料：<a href="https://wudashan.cn/2017/10/23/Redis-Distributed-Lock-Implement/" target="_blank" rel="noopener">https://wudashan.cn/2017/10/23/Redis-Distributed-Lock-Implement/</a></p>
-<h1 id="5-代码测试（工具扩展）"><a href="#5-代码测试（工具扩展）" class="headerlink" title="5.代码测试（工具扩展）"></a>5.代码测试（工具扩展）</h1><p>压力测试工具：<a href="https://www.cnblogs.com/stulzq/p/8971531.html" target="_blank" rel="noopener">JMeter</a><br>性能分析工具：<a href="http://www.ddooo.com/softdown/150941.htm#dltab" target="_blank" rel="noopener">JProfiler</a> <a href="https://segmentfault.com/a/1190000017795841" target="_blank" rel="noopener">基本使用手册</a><br><a href="https://mp.weixin.qq.com/s?__biz=MzU2MTI4MjI0MQ==&amp;mid=2247486515&amp;idx=1&amp;sn=fa09c3790d85a54683ec0208c077bbb6&amp;chksm=fc7a619dcb0de88b7ef2c27632f05d8414adeaa6721c6410df9cf2de7f268c38c725e549a33e&amp;mpshare=1&amp;scene=24&amp;srcid=1102HmJLce0mjnZn6WS0nmh7&amp;sharer_sharetime=1572669522564&amp;sharer_shareid=b85a2e91deba228c5ba2c72863129902&amp;key=3e754fdb358244867276411b1d091f79586fdaa28ae7a2d4dfbb4626ed502ee7fcb21ead7a462d3a3c79e7f374aea7a67334d07ec6821c599a948dbd439ad67e819093dbc397c033b7ca6683baea7fed&amp;ascene=14&amp;uin=NTUxNjkzNDU1&amp;devicetype=Windows%2010&amp;version=62070152&amp;lang=zh_CN&amp;pass_ticket=ZpgRpjustSAK02Y%2bDhuafqaYqoPFsLeDK4oj6v4MXd5W3fKHyTSYXIryKYAP6wD0" target="_blank" rel="noopener">Springboot+redis+注解+拦截器</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2510,7 +2551,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

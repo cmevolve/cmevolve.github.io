@@ -284,6 +284,632 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/11/25/Docker-学习一（镜像基本操作）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     2k 字
+	</span>
+	<span title="阅读时长">
+     8 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/25/Docker-学习一（镜像基本操作）/" itemprop="url">Docker-学习一（镜像基本操作）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-25T23:33:19+08:00">
+                2019-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker镜像/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker镜像</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/25/Docker-学习一（镜像基本操作）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/25/Docker-学习一（镜像基本操作）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="内容提要"><a href="#内容提要" class="headerlink" title="内容提要"></a>内容提要</h1><p>docker镜像相关操作，包括获取，查看，搜索，删除，创建，存出和载入，上传等。</p>
+<h2 id="1-启动"><a href="#1-启动" class="headerlink" title="1.启动"></a>1.启动</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">servie start docker</span><br></pre></td></tr></table></figure>
+<p>为了避免每次使用docker命令都要用特权身份<br>将当前用户加入docker用户组<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker USER_NAME</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-获取镜像"><a href="#2-获取镜像" class="headerlink" title="2.获取镜像"></a>2.获取镜像</h2><p>可以使用<strong>docker pull NAME[：TAG]</strong>直接从DockerHub镜像源下载镜像。NAME是镜像仓库名称，TAG是镜像标签（版本信息），例如获取一个Ubuntu14.04系统基本镜像<br>如果不显式指定TAG，则默认会选择latest 标签,这会下载仓库中最新版本的镜像（<em>最新镜像一般非稳定版本</em>）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pulling from library/ubuntu</span><br></pre></td></tr></table></figure></p>
+<p>非官方的仓库下载，则需要在仓库名称前指定完整的仓库地址。<br>例如从网易蜂巢的镜像源来下载ubuntu： 14.04 镜像，可以使用如下命令，此<br>时下载的镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull hub.c.163.com/public/ubuntu：14.04</span><br></pre></td></tr></table></figure></p>
+<h3 id="子命令详解"><a href="#子命令详解" class="headerlink" title="子命令详解"></a>子命令详解</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-a，--all-tags=true| false：是否获取仓库中的所有镜像，默认为否。</span><br></pre></td></tr></table></figure>
+<h2 id="3-镜像操作"><a href="#3-镜像操作" class="headerlink" title="3.镜像操作"></a>3.镜像操作</h2><h3 id="1-安装Nginx-并启动"><a href="#1-安装Nginx-并启动" class="headerlink" title="1.安装Nginx 并启动"></a>1.安装Nginx 并启动</h3><p>pull镜像，并启动 -d后台启动 -p宿主机端口映射容器端口。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -d -p 80:80 --restart=always nginx:latest</span><br></pre></td></tr></table></figure></p>
+<p>此时访问即可80端口即可。</p>
+<h3 id="2-images列出镜像"><a href="#2-images列出镜像" class="headerlink" title="2.images列出镜像"></a>2.images列出镜像</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2019/11/24/eA2lS7NiG5qEugj.png" alt="dockerImages.png"><br>在列出的信息中，可以看到的信息：</p>
+<ul>
+<li>来自于哪个仓库，比如 ubuntu 仓库用来保存 ubuntu 系列的基础镜像；</li>
+<li>镜像的标签信息，比如14.04、latest用来标注不同的版本信息。</li>
+<li>镜像的ID（唯一标识镜像）如oracle11g与registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g镜像ID相同证明实际上指向的是同一镜像。</li>
+<li>创建时间，说明镜像最后的更新时间；</li>
+<li>镜像大小</li>
+</ul>
+<p><strong>镜像ID信息十分重要，它标识了镜像。在使用时前若干个字符串来代替完整ID.<br>TAG 信息用来标记来自同一个仓库的不同镜像。通过TAG信息来区分发行版本。</strong></p>
+<h4 id="子命令详解-1"><a href="#子命令详解-1" class="headerlink" title="子命令详解"></a>子命令详解</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-a，--all=true| false：列出所有的镜像文件（包括临时文件），默认为否；</span><br><span class="line">--digests=true| false：列出镜像的数字摘要值，默认为否</span><br><span class="line">-f，--filter=[]：过滤列出的镜像，如 dangling=true 只显示没有被使用</span><br><span class="line">的镜像；也可指定带有特定标注的镜像等</span><br><span class="line">--format=&quot;TEMPLATE&quot;：控制输出格式，如.ID代表 ID信息，.Repository代表仓库信息等；</span><br><span class="line">-no-trunc=true| false：对输出结果中太长的部分是否进行截断，如镜像的ID 信息，默认为是</span><br><span class="line">-q，--quiet=true|false：仅输出ID信息，默认为否。</span><br><span class="line">更多子命令选项还可以通过 man docker-images 来查看</span><br></pre></td></tr></table></figure>
+<h3 id="3-使用tag-命令添加镜像标签"><a href="#3-使用tag-命令添加镜像标签" class="headerlink" title="3.使用tag 命令添加镜像标签"></a>3.使用tag 命令添加镜像标签</h3><p>为了方便在后续工作中使用特定镜像，还可以使用 docker tag命令来为本地镜像任意添加新的标签。例如添加一个新的oracle镜像标签<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g oracle11g:latest</span><br></pre></td></tr></table></figure></p>
+<p>也可以指定镜像ID来修改其标签<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag 5sbdf471761  test/oracle11g:latest</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-使用inspect-命令查看详细信息"><a href="#4-使用inspect-命令查看详细信息" class="headerlink" title="4.使用inspect 命令查看详细信息"></a>4.使用inspect 命令查看详细信息</h3><p>使用<strong>docker inspect</strong> 命令可以获取该镜像的详细信息，包括制作者、架构、各层的数字摘要等<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"Id"</span>: <span class="string">"sha256:4152a960875253728e0ba43da37d023e4626c43a268ca0a9c6083119542119fb"</span>,</span><br><span class="line">        <span class="attr">"RepoTags"</span>: [</span><br><span class="line">            <span class="string">"nginx:latest"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"RepoDigests"</span>: [</span><br><span class="line">            <span class="string">"nginx@sha256:9916837e6b165e967e2beb5a586b1c980084d08eb3b3d7f79178a0c79426d880"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"Parent"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"Comment"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"Created"</span>: <span class="string">"2019-11-20T01:15:47.501397881Z"</span>,</span><br><span class="line">        <span class="attr">"Container"</span>: <span class="string">"b976da4ad5a3f13d191cfedd87ab06bc7b3bf0d5eb37876fa091c3aaae572056"</span>,</span><br><span class="line">        <span class="attr">"ContainerConfig"</span>: &#123;</span><br><span class="line">            <span class="attr">"Hostname"</span>: <span class="string">"b976da4ad5a3"</span>,</span><br><span class="line">            <span class="attr">"Domainname"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"User"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"AttachStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStdout"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStderr"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"ExposedPorts"</span>: &#123;</span><br><span class="line">                <span class="attr">"80/tcp"</span>: &#123;&#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"Tty"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"OpenStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"StdinOnce"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"Env"</span>: [</span><br><span class="line">                <span class="string">"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span>,</span><br><span class="line">                <span class="string">"NGINX_VERSION=1.17.6"</span>,</span><br><span class="line">                <span class="string">"NJS_VERSION=0.3.7"</span>,</span><br><span class="line">                <span class="string">"PKG_RELEASE=1~buster"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"Cmd"</span>: [</span><br><span class="line">                <span class="string">"/bin/sh"</span>,</span><br><span class="line">                <span class="string">"-c"</span>,</span><br><span class="line">                <span class="string">"#(nop) "</span>,</span><br><span class="line">                <span class="string">"CMD [\"nginx\" \"-g\" \"daemon off;\"]"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"ArgsEscaped"</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">"Image"</span>: <span class="string">"sha256:d96abf34b30211ae8cdb9700ff30dddb3b45ed410bb159fe562ea428b6280851"</span>,</span><br><span class="line">            <span class="attr">"Volumes"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"WorkingDir"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"Entrypoint"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"OnBuild"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"Labels"</span>: &#123;</span><br><span class="line">                <span class="attr">"maintainer"</span>: <span class="string">"NGINX Docker Maintainers &lt;docker-maint@nginx.com&gt;"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"StopSignal"</span>: <span class="string">"SIGTERM"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"DockerVersion"</span>: <span class="string">"18.06.1-ce"</span>,</span><br><span class="line">        <span class="attr">"Author"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"Config"</span>: &#123;</span><br><span class="line">            <span class="attr">"Hostname"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"Domainname"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"User"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"AttachStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStdout"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"AttachStderr"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"ExposedPorts"</span>: &#123;</span><br><span class="line">                <span class="attr">"80/tcp"</span>: &#123;&#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"Tty"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"OpenStdin"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"StdinOnce"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"Env"</span>: [</span><br><span class="line">                <span class="string">"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span>,</span><br><span class="line">                <span class="string">"NGINX_VERSION=1.17.6"</span>,</span><br><span class="line">                <span class="string">"NJS_VERSION=0.3.7"</span>,</span><br><span class="line">                <span class="string">"PKG_RELEASE=1~buster"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"Cmd"</span>: [</span><br><span class="line">                <span class="string">"nginx"</span>,</span><br><span class="line">                <span class="string">"-g"</span>,</span><br><span class="line">                <span class="string">"daemon off;"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"ArgsEscaped"</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">"Image"</span>: <span class="string">"sha256:d96abf34b30211ae8cdb9700ff30dddb3b45ed410bb159fe562ea428b6280851"</span>,</span><br><span class="line">            <span class="attr">"Volumes"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"WorkingDir"</span>: <span class="string">""</span>,</span><br><span class="line">            <span class="attr">"Entrypoint"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"OnBuild"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"Labels"</span>: &#123;</span><br><span class="line">                <span class="attr">"maintainer"</span>: <span class="string">"NGINX Docker Maintainers &lt;docker-maint@nginx.com&gt;"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"StopSignal"</span>: <span class="string">"SIGTERM"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"Architecture"</span>: <span class="string">"amd64"</span>,</span><br><span class="line">        <span class="attr">"Os"</span>: <span class="string">"linux"</span>,</span><br><span class="line">        <span class="attr">"Size"</span>: <span class="number">126346569</span>,</span><br><span class="line">        <span class="attr">"VirtualSize"</span>: <span class="number">126346569</span>,</span><br><span class="line">        <span class="attr">"GraphDriver"</span>: &#123;</span><br><span class="line">            <span class="attr">"Data"</span>: &#123;</span><br><span class="line">                <span class="attr">"LowerDir"</span>: <span class="string">"/var/lib/docker/overlay2/da7346d91a599e73e4d394bb85a467ac618131460f846683aaa596c779b1ea07/diff:/var/lib/docker/overlay2/5c3cf4f87fe4f7f16433918981eb3471b5bc2b23eea1c0883db2d3561b73dd47/diff"</span>,</span><br><span class="line">                <span class="attr">"MergedDir"</span>: <span class="string">"/var/lib/docker/overlay2/6168e5e9a57d684f9c5809e6e4722c73bc2434326d39e90cfcdefe0a1b84999d/merged"</span>,</span><br><span class="line">                <span class="attr">"UpperDir"</span>: <span class="string">"/var/lib/docker/overlay2/6168e5e9a57d684f9c5809e6e4722c73bc2434326d39e90cfcdefe0a1b84999d/diff"</span>,</span><br><span class="line">                <span class="attr">"WorkDir"</span>: <span class="string">"/var/lib/docker/overlay2/6168e5e9a57d684f9c5809e6e4722c73bc2434326d39e90cfcdefe0a1b84999d/work"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"Name"</span>: <span class="string">"overlay2"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"RootFS"</span>: &#123;</span><br><span class="line">            <span class="attr">"Type"</span>: <span class="string">"layers"</span>,</span><br><span class="line">            <span class="attr">"Layers"</span>: [</span><br><span class="line">                <span class="string">"sha256:b67d19e65ef653823ed62a5835399c610a40e8205c16f839c5cc567954fcf594"</span>,</span><br><span class="line">                <span class="string">"sha256:de1b802e9897894b1f7e78346beda84dce9ba1c5514f3d479d40bb553bc623f8"</span>,</span><br><span class="line">                <span class="string">"sha256:c2d3130eb3f6afd3ad600119c363e84f33b0d05837de48adf7b638bc66403397"</span></span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"Metadata"</span>: &#123;</span><br><span class="line">            <span class="attr">"LastTagTime"</span>: <span class="string">"0001-01-01T00:00:00Z"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>返回的是一个json格式的信息，如果要获取其中一项内容可使用-f来指定<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker inspect -f &#123;&#123;".Architecture"&#125;&#125;</span><br><span class="line">amd64</span><br></pre></td></tr></table></figure></p>
+<h3 id="5-使用history-命令查看镜像历史"><a href="#5-使用history-命令查看镜像历史" class="headerlink" title="5.使用history 命令查看镜像历史"></a>5.使用history 命令查看镜像历史</h3><p>例如，查看ubuntu： 14.04 镜像的创建过程，可以使用如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker history ubuntu:14.04 -- no-trunc</span><br></pre></td></tr></table></figure></p>
+<p>过长的命令会被自动截断，可以使用– no-trunc 选项来输出完整命令。</p>
+<h3 id="6-搜寻镜像"><a href="#6-搜寻镜像" class="headerlink" title="6.搜寻镜像"></a>6.搜寻镜像</h3><p>查找远端仓库镜像，默认搜索官方仓库镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search --automated -s 10 redis</span><br></pre></td></tr></table></figure></p>
+<p>上述命令：查找自动创建评价为10+带redis关键字的镜像<br><img src="https://i.loli.net/2019/11/25/fZMsUl7kmcoe3T8.png" alt="dockerSearch.png"></p>
+<h3 id="7-删除镜像"><a href="#7-删除镜像" class="headerlink" title="7.删除镜像"></a>7.删除镜像</h3><h4 id="1-使用标签删除"><a href="#1-使用标签删除" class="headerlink" title="1.使用标签删除"></a>1.使用标签删除</h4><p>命令格式为 docker rmi IMAGE[IMAGE…]，其中IMAGE可以为标签或ID<br>例如删除redis：latest镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi redis:latest</span><br></pre></td></tr></table></figure></p>
+<p>当多个标签指向同一镜像文件时，rmi命令只删除该镜像的指定标签。当只有一个镜像标签时使用命令时需注意，此时会删除镜像文件。</p>
+<h4 id="2-使用镜像ID删除"><a href="#2-使用镜像ID删除" class="headerlink" title="2.使用镜像ID删除"></a>2.使用镜像ID删除</h4><p>当使用docker rmi 后面跟上了镜像的ID,此时会先删除所有指向该镜像的标签，然后删除镜像。<strong>但是当该镜像创造的容器还存在时，镜像是无法被删除的。</strong><br>如果想强行删除镜像可以使用 -f 参数强制删除一个存在容器依赖的镜像。<strong>但是不推荐这么使用</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi -f redis:4.0</span><br></pre></td></tr></table></figure></p>
+<p><strong>正确做法是先找到依赖该镜像的容器依次删除，然后再执行docker rm 命令删除镜像。</strong></p>
+<h3 id="8-创建镜像"><a href="#8-创建镜像" class="headerlink" title="8.创建镜像"></a>8.创建镜像</h3><p>创建镜像的方法主要有三种：基于已有镜像的容器创建、基于本地模板<br>导入、基于 Dockerfile 创建。（Dockerfile 方法后续补充）</p>
+<h4 id="1-基于已有镜像的容器创建"><a href="#1-基于已有镜像的容器创建" class="headerlink" title="1. 基于已有镜像的容器创建"></a>1. 基于已有镜像的容器创建</h4><p>在原有镜像中进行改动后提交,其中51a551dea4f7为容器ID.<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit -m'Add a new file' -a "lfc" 51a551dea4f7 test:0.1</span><br></pre></td></tr></table></figure></p>
+<p><strong>子命令</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">·-a，--author=&quot;&quot;：作者信息；</span><br><span class="line">·- c，--change=[]：提交的时候执行 Dockerfile指令，包括CMD|</span><br><span class="line">ENTRYPOINT|ENV|EXPOSE|LABEL|ONBUILD|USER|VOLUME|WORKDIR</span><br><span class="line">等；</span><br><span class="line">·-m，--message=&quot;&quot;：提交消息；</span><br><span class="line">·- p，--pause=true：提交时暂停容器运行。</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-基于本地模板导入"><a href="#2-基于本地模板导入" class="headerlink" title="2. 基于本地模板导入"></a>2. 基于本地模板导入</h4><p>使用镜像模版来创建，OPENVZ模板的下载地址为<a href="http://openvz.org/Download/templates/precreated。" target="_blank" rel="noopener">http://openvz.org/Download/templates/precreated。</a><br>命令格式为<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker import[OPTIONS]file|URL| [REPOSITORY[:TAG]]</span><br></pre></td></tr></table></figure></p>
+<p>例如下载Ubuntu模版压缩包，之后用命令导入<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat ubuntu-14.04-x86_64-minimal.tar.gz | docker import - ubuntu:14.04</span><br></pre></td></tr></table></figure></p>
+<h3 id="9-镜像导出和载入"><a href="#9-镜像导出和载入" class="headerlink" title="9.镜像导出和载入"></a>9.镜像导出和载入</h3><h4 id="1-镜像导出"><a href="#1-镜像导出" class="headerlink" title="1.镜像导出"></a>1.镜像导出</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker save -o ubuntu_14.04.tar ubuntu:14.04</span><br><span class="line">或 docker  save nginx &gt;/tmp/nginx.tar.gz</span><br></pre></td></tr></table></figure>
+<p>导出本地Ubuntu镜像为文件Ubuntu14，04.tar</p>
+<h4 id="2-镜像载入"><a href="#2-镜像载入" class="headerlink" title="2.镜像载入"></a>2.镜像载入</h4><p>可以使用docker load将导出的tar文件导入到本地镜像库，例如<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker load --input ubuntu_14.04.tar</span><br><span class="line">或：</span><br><span class="line">docker load &lt; ubuntu_14.04.tar</span><br></pre></td></tr></table></figure></p>
+<h3 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h3><p>另外 docker load 和 docker import都可以导入一个镜像存储文件， <strong>区别：<br>docker import：丢弃了所有的历史记录和元数据信息，仅保存容器当时的快照状态。在导入的时候可以重新制定标签等元数据信息。<br>docker load：将保存完整记录，体积较大。</strong></p>
+<h3 id="10-上传镜像"><a href="#10-上传镜像" class="headerlink" title="10.上传镜像"></a>10.上传镜像</h3><p>使用docker push 命令上传镜像到仓库，默认上传到docker hub官方仓库。<br>命令格式：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push NAME[:TAG] | [REGISTRY_HOST[:REGISTRY_PORT]/]NAME[:TAG]</span><br></pre></td></tr></table></figure></p>
+<p>例如将test镜像添加新的标签user/test:latest 然后用docker push 上传镜像。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker tag test:latest user/test:latest</span><br><span class="line">docker push user/test:latest</span><br></pre></td></tr></table></figure></p>
+<p>参考资料：Docker技术入门与实战</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/11/21/Ubuntu-安装VNC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     358 字
+	</span>
+	<span title="阅读时长">
+     1 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/21/Ubuntu-安装VNC/" itemprop="url">Ubuntu 安装VNC</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-21T23:44:11+08:00">
+                2019-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/21/Ubuntu-安装VNC/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/21/Ubuntu-安装VNC/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  358
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近在用Windows 连接 Ubuntu的PC时想使用下图形化界面，因为之前玩树莓派用过VNC因此将为PC安装VNC 来进行图形传输。</p>
+<p>准备工作：<br>windows安装VNC-Viewer 或者相关工具，Linux 安装vncserver.</p>
+<h1 id="1-安装"><a href="#1-安装" class="headerlink" title="1.安装"></a>1.安装</h1><h2 id="1-1更新源和系统"><a href="#1-1更新源和系统" class="headerlink" title="1.1更新源和系统"></a>1.1更新源和系统</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt upgrade -y</span><br></pre></td></tr></table></figure>
+<h2 id="1-2安装桌面"><a href="#1-2安装桌面" class="headerlink" title="1.2安装桌面"></a>1.2安装桌面</h2><p>mate 桌面较为精简且不会出现显示不全的问题，选择其中一个安装即可。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">apt install ubuntu-desktop, gnome-panel # Gnome桌面</span><br><span class="line">apt install kubuntu-full  # KDE桌面</span><br><span class="line"><span class="meta">#</span> Mate桌面 （推荐）</span><br><span class="line"><span class="meta">#</span> 仅安装核心组件</span><br><span class="line">apt install ntp</span><br><span class="line">apt install ubuntu-mate-core</span><br><span class="line"><span class="meta">#</span> 完整安装</span><br><span class="line">apt install ubuntu-mate-core ubuntu-mate-desktop</span><br></pre></td></tr></table></figure></p>
+<h1 id="2-基本操作"><a href="#2-基本操作" class="headerlink" title="2.基本操作"></a>2.基本操作</h1><p>安装 VNC server<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install vnc4server -y</span><br></pre></td></tr></table></figure></p>
+<p>第一次启动需要配置密码<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver (或vnc4server)</span><br></pre></td></tr></table></figure></p>
+<p>打开会话<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver :1</span><br></pre></td></tr></table></figure></p>
+<p>关闭会话<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver -kill :1</span><br></pre></td></tr></table></figure></p>
+<p> 设置分辨率<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver -geometry 1920x1080 :1</span><br></pre></td></tr></table></figure></p>
+<h1 id="3-文件配置"><a href="#3-文件配置" class="headerlink" title="3.文件配置"></a>3.文件配置</h1><p>vim /root/.vnc<br>添加配置：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line"> </span><br><span class="line"><span class="meta">#</span> Uncomment the following two lines for normal desktop:</span><br><span class="line"><span class="meta">#</span> unset SESSION_MANAGER</span><br><span class="line"><span class="meta">#</span> exec /etc/X11/xinit/xinitrc</span><br><span class="line">[ -x /etc/vnc/xstartup ] &amp;&amp; exec /etc/vnc/xstartup</span><br><span class="line">[ -r $HOME/.Xresources ] &amp;&amp; xrdb $HOME/.Xresources</span><br><span class="line">xsetroot -solid grey </span><br><span class="line">vncconfig -iconic &amp;</span><br><span class="line"><span class="meta">#</span> x-terminal-emulator -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &amp;</span><br><span class="line">        </span><br><span class="line">mate-session &amp;</span><br></pre></td></tr></table></figure></p>
+<p>其他桌面配置：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gnome-panel &amp;</span><br><span class="line">gnome-settings-daemon &amp;</span><br><span class="line">metacity &amp;</span><br><span class="line">nautilus &amp;</span><br></pre></td></tr></table></figure></p>
+<p>#4.开机启动<br>首先输入 crontab 命令,显示如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Select an editor. To change later, run ‘select-editor’.</span><br><span class="line">1. /bin/ed</span><br><span class="line">2. /bin/nano &lt;---- easiest 3. /usr/bin/vim.basic 4. /usr/bin/vim.tiny Choose 1-4 [2]:</span><br></pre></td></tr></table></figure></p>
+<p>在末尾添加命令,设置开机启动<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@reboot /usr/bin/vncserver :1</span><br></pre></td></tr></table></figure></p>
+<p>重启服务<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/11/20/接口的幂等性设计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     2.6k 字
+	</span>
+	<span title="阅读时长">
+     10 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/20/接口的幂等性设计/" itemprop="url">接口的幂等性设计</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T00:06:06+08:00">
+                2019-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/20/接口的幂等性设计/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/20/接口的幂等性设计/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-概念"><a href="#1-概念" class="headerlink" title="1.概念"></a>1.概念</h1><blockquote>
+<p>幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。<br>在编程中一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数。这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。例如，“setTrue()”函数就是一个幂等函数,无论多次执行，其结果都是一样的.更复杂的操作幂等保证是利用唯一交易号(流水号)实现.          ——————【维基百科】</p>
+</blockquote>
+<p>简单来说就是 <strong>一个操作如果执行多次，其产生的影响均与一次执行的影响相同。</strong></p>
+<h1 id="2-为什么要做幂等"><a href="#2-为什么要做幂等" class="headerlink" title="2.为什么要做幂等"></a>2.为什么要做幂等</h1><p>分布式场景：</p>
+<ul>
+<li>一个订单创建接口，在第一次调用时超时。</li>
+<li>订单创建时，要先减去库存，调用接口时发生了超时。</li>
+<li>订单开始支付，支付请求发出了之后，在到达微信支付前就发生超时。</li>
+<li>到达微信支付，但是支付交易失败，未返回，此时超时。</li>
+<li>到达微信支付且交易成功，未返回回执，此时超时。</li>
+<li>到达微信支付并且交易成功，返回了回执，客户端未接收到回执此时客户端超时。</li>
+<li>订单支付成功，调用订单状态更新接口，调用方发送了两条消息，一个是已创建，一个是已付款，如果先收到已付款消息后收到已创建。</li>
+</ul>
+<p><strong>幂等性在购物支付场景下显得尤为重要，我请求了多次是否会产生了多笔订单，是否引发了多次支付？</strong><br>为了解决这些问题，就必须保证API的幂等性，也就是接口可重复调用，接口最终结果是与一次调用时一致。（这里说的是数据一致性，不是返回结果一致性，如：已提交订单，再次提交提示请勿重复提交，但是数据结果与第一次调用时一致）</p>
+<h1 id="3-幂等如何实现"><a href="#3-幂等如何实现" class="headerlink" title="3.幂等如何实现"></a>3.幂等如何实现</h1><p>具体方案有：业务去重表（建立唯一索引）、悲观锁、乐观锁（版本控制、有限状态机验证）、Token（全局唯一标识）、分布式锁、select+insert、</p>
+<h2 id="3-1-Token-全局唯一标识"><a href="#3-1-Token-全局唯一标识" class="headerlink" title="3.1 Token(全局唯一标识)"></a>3.1 Token(全局唯一标识)</h2><p><img src="https://i.loli.net/2019/11/04/srAzcduVxBUCnZR.png" alt="流程 _1_.png"></p>
+<ul>
+<li>在数据提交前向服务申请token，token放到redis或者内存中（加入失效时间）；在提交时后台校验token，同时删除token，生成新的token返回。（<strong>此处校验token和删除token为原子性操作，，如果分为两步，存在并发问题。</strong>）</li>
+<li>全局唯一标识原理与之类似，根据操作类型和业务标识组合生成一个全局ID，执行操作前判断是否已存在该key，如果不存在则存储到系统中，存在则表示该方法已操作。（<strong>利用Redis的setnx命令。此命令同样是原子性操作，只有在key不存在的情况下，才能set成功。</strong>）</li>
+</ul>
+<h2 id="3-2-唯一索引"><a href="#3-2-唯一索引" class="headerlink" title="3.2 唯一索引"></a>3.2 唯一索引</h2><p>在CRUD中查询和删除（物理删除、逻辑删除）是天然的幂等的，既多次查询对数据与一次查询一致不会产生影响，删除也是无论是物理删除还是逻辑删除，都是根据条件进行删除无论执行几次造成的结果是一样的。<br>增加数据时如果不进行幂等会导致目标数据产生多条，此时建议将目标表增加唯一索引或者唯一组合索引防止脏数据，在重复进行执行时，插入失败时，重新查询数据此时已存在则成功返回。</p>
+<h2 id="3-3-数据库悲观锁"><a href="#3-3-数据库悲观锁" class="headerlink" title="3.3 数据库悲观锁"></a>3.3 数据库悲观锁</h2><p>获取数据时加锁<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> table_xxx <span class="keyword">where</span> <span class="keyword">id</span>=<span class="string">'xxx'</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用时ID需要是主键或者唯一索引，在mysql中会导致锁表而不是行级锁。悲观锁使用一般同事务一起使用。</strong></p>
+<h2 id="3-4-数据库乐观锁"><a href="#3-4-数据库乐观锁" class="headerlink" title="3.4 数据库乐观锁"></a>3.4 数据库乐观锁</h2><p>乐观锁在更新数据时才会产生锁表，其他时间不锁表，所以对比悲观锁，乐观锁并发场景使用效率更高。<br>实现方式：<br>原理如图：同java CAS<br><img src="https://i.loli.net/2019/11/03/rLB2RXT4YS13Msq.png" alt="image.png"></p>
+<ol>
+<li><p>通过版本号或者状态条件实现</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> table_xxx <span class="keyword">set</span> <span class="keyword">name</span>=<span class="comment">#name#,version=version+1 where version=#version#  and id=#id#;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过条件限制</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> table_xxx <span class="keyword">set</span> avai_amount=avai_amount-<span class="comment">#subAmount# where avai_amount-#subAmount# &gt;= 0 and id=#id#;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>此场景适用于秒杀等库存场景，防止因并发出现库存-1场景。</p>
+<ol start="3">
+<li>任务相关的业务，肯定会涉及到状态机（状态变更），业务数据在不同情况下回发生变更，一般情况下存在有限状态机，如果状态机位于下一个状态，此时来了一个上一个状态的变更，此时不能变更，从而保证有限状态机的幂等。<br>例：订单创建为0，付款成功为2，付款失败为1在进行状态机更新时可以这样控制<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update table_xx set status=#status# where id=#id# and status&lt;#status#</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果此次操作成功该update返回结果为1条，若数据已被更新则返回结果为0条，可再次查询验证更新状态是否成功。</p>
+<h2 id="3-5-select-insert"><a href="#3-5-select-insert" class="headerlink" title="3.5 select + insert"></a>3.5 select + insert</h2><p>对并发不高的系统，为了支持幂等可以先查询下数据判断是否已经执行过，未执行则进行业务的处理。<strong>注：此种方法高并发场景切不可使用</strong></p>
+<h2 id="3-6-业务去重表"><a href="#3-6-业务去重表" class="headerlink" title="3.6 业务去重表"></a>3.6 业务去重表</h2><p>上面几种通过数据库进行幂等的方法有一个弊端，就是为了实现幂等性需要在业务表中加入一个无关的版本号或者状态，此时可将操作单独提取出来构建一个业务去重表，在业务表操作前对此表进行操作验证，利用数据库唯一索引特性保证唯一逻辑，唯一的序列号可以是一个字段，也可以是多字段的唯一性组合，在幂等验证通过后方可进行业务操作。<br>表结构:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> DUPLICATEREMOVAL(</span><br><span class="line">  c_id          VARCHAR2(<span class="number">32</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  c_serial_no   VARCHAR2(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  c_source_type VARCHAR2(<span class="number">255</span>),</span><br><span class="line">  c_status      VARCHAR2(<span class="number">64</span>),</span><br><span class="line">  c_remark      VARCHAR2(<span class="number">255</span>),</span><br><span class="line">  c_crt_cde     VARCHAR2(<span class="number">20</span>) ,</span><br><span class="line">  t_crt_tm      <span class="built_in">DATE</span> ,</span><br><span class="line">  c_upd_cde     VARCHAR2(<span class="number">20</span>),</span><br><span class="line">  t_upd_tm      <span class="built_in">DATE</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">-- Add comments to the table </span></span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">table</span> DUPLICATEREMOVAL</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'业务去重表'</span>;</span><br><span class="line"><span class="comment">-- Add comments to the columns </span></span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_id</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'业务标识'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_serial_no</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'唯一标识'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_source_type</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'资源类型'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_status</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'状态'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_remark</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'备注'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_crt_cde</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'创建人'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.t_crt_tm</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'创建时间'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.c_upd_cde</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'修改人'</span>;</span><br><span class="line"><span class="keyword">comment</span> <span class="keyword">on</span> <span class="keyword">column</span> DUPLICATEREMOVAL.t_upd_tm</span><br><span class="line">  <span class="keyword">is</span> <span class="string">'修改时间'</span>;</span><br><span class="line"><span class="comment">-- Create/Recreate primary, unique and foreign key constraints </span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> DUPLICATEREMOVAL</span><br><span class="line">  <span class="keyword">add</span> <span class="keyword">constraint</span> C_PK_SERIAL <span class="keyword">unique</span> (C_ID, C_SERIAL_NO);</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-7-分布式锁"><a href="#3-7-分布式锁" class="headerlink" title="3.7 分布式锁"></a>3.7 分布式锁</h2><p>在分布式应用的时代背景下，跨系统的调用想满足锁的语义只能依赖于第三方的中间件，比如redis、zookeeper。<br><strong>实现点：某个流程要求不能并发执行，可以在执行之前根据业务上的唯一标识 获取分布式锁，其他流程执行时获取锁就会失败，也就是同一时间该流程只能有一个能执行成功，执行完后，释放分布式锁。</strong></p>
+<p>使用方式：<br><a href="http://doc.redisfans.com/string/set.html" target="_blank" rel="noopener">API文档</a><br>加锁：set key value px milliseconds nx<br>键不存在时才进行操作并设置键的过期时间，此命令是原子操作不会出现多线程问题。<br><img src="https://i.loli.net/2019/11/04/xMF3z4y7VKg5L2Q.png" alt="加锁流程.png"><br>释放锁：在释放锁时为了防止将别的线程加的锁误删可以在加锁时将线程id作为value，解锁时判断是否是当前锁，然后删除。但是判断和释放锁是两个独立的操作不具备原子性所以此处推荐使用del+lua脚本实现。<br><a href="https://ftp.bmp.ovh/imgs/2019/11/a79904d25d081716.png" target="_blank" rel="noopener">https://ftp.bmp.ovh/imgs/2019/11/a79904d25d081716.png</a><br><img src="https://s2.ax1x.com/2019/11/04/KzrM8S.png" alt="解锁流程.png"><br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String luaScript = <span class="string">"if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end"</span>;</span><br><span class="line">redisClient.eval(luaScript , Collections.singletonList(key), Collections.singletonList(threadId));</span><br></pre></td></tr></table></figure></p>
+<p>分布式锁参考：<a href="https://wudashan.cn/2017/10/23/Redis-Distributed-Lock-Implement/" target="_blank" rel="noopener">使用 px nx 加锁</a><br>扩展：<a href="https://blog.csdn.net/forezp/article/details/70305336" target="_blank" rel="noopener">redis官方支持的分布式锁redlock</a></p>
+<h1 id="4-基于redis实现分布式锁"><a href="#4-基于redis实现分布式锁" class="headerlink" title="4.基于redis实现分布式锁"></a>4.基于redis实现分布式锁</h1><h2 id="4-1-核心加锁代码："><a href="#4-1-核心加锁代码：" class="headerlink" title="4.1 核心加锁代码："></a>4.1 核心加锁代码：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//SET IF NOT EXIST key不存在时，set</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SET_IF_NOT_EXIST = <span class="string">"NX"</span>;</span><br><span class="line"><span class="comment">//expx 超时时间 单位毫秒  EX 单位 秒</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SET_WITH_EXPIRE_TIME = <span class="string">"PX"</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryGetDistributedLock</span><span class="params">( String lockKey, String requestId , <span class="keyword">int</span> expireTime)</span> </span>&#123;</span><br><span class="line">    Jedis jedis = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        jedis = getJedis();</span><br><span class="line">        String result = jedis.set(lockKey, requestId , SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);</span><br><span class="line">        <span class="keyword">if</span> (LOCK_SUCCESS.equals(result)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(<span class="string">"set key:&#123;&#125; value:&#123;&#125; error"</span>, lockKey, requestId , e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        close(jedis);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用NX PX 来保证插入值时的原子性<br>NX，意思是SET IF NOT EXIST，即当key不存在时，我们进行set操作；若key已经存在，则不做任何操作；<br>PX，意思是我们要给这个key加一个过期设置。<br><strong>错误使用：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">wrongGetLock1</span><span class="params">(Jedis jedis, String lockKey, String requestId, <span class="keyword">int</span> expireTime)</span> </span>&#123;</span><br><span class="line">    Long result = jedis.setnx(lockKey, requestId);</span><br><span class="line">    <span class="keyword">if</span> (result == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 若在这里程序突然崩溃，则无法设置过期时间，将发生死锁</span></span><br><span class="line">        jedis.expire(lockKey, expireTime);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码是将赋值的操作分为两步，先设置值，成功了再设置超时时间，但是如果在未设置超时时间前程序崩溃，此处会形成死锁。</p>
+<h2 id="4-2-解锁代码："><a href="#4-2-解锁代码：" class="headerlink" title="4.2 解锁代码："></a>4.2 解锁代码：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">releaseDistributedLock</span><span class="params">(Jedis jedis, String lockKey, String requestId)</span> </span>&#123;</span><br><span class="line">    String script = <span class="string">"if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end"</span>;</span><br><span class="line">    Object result = jedis.eval(script, Collections.singletonList(lockKey), Collections.singletonList(requestId));</span><br><span class="line">    <span class="keyword">if</span> (RELEASE_SUCCESS.equals(result)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用lua脚本将解锁时判断如果获取的key = 目标值则执行后续的操作，保证比较并操作行为的原子性。<br><strong>错误代码：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">wrongReleaseLock2</span><span class="params">(Jedis jedis, String lockKey, String requestId)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 判断加锁与解锁是不是同一个客户端</span></span><br><span class="line">    <span class="keyword">if</span> (requestId.equals(jedis.get(lockKey))) &#123;</span><br><span class="line">        <span class="comment">// 若在此时，这把锁突然不是这个客户端的，则会误解锁</span></span><br><span class="line">        jedis.del(lockKey);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果经过上面比较判断后，此时锁因为超时已经过期了，在执行后面的del命令时可能会删除别的进程（线程）加的锁。</p>
+<p>代码地址：<a href="https://github.com/cmevolve/InterfaceIdempotent" target="_blank" rel="noopener">https://github.com/cmevolve/InterfaceIdempotent</a><br>参考资料：<a href="https://wudashan.cn/2017/10/23/Redis-Distributed-Lock-Implement/" target="_blank" rel="noopener">https://wudashan.cn/2017/10/23/Redis-Distributed-Lock-Implement/</a></p>
+<h1 id="5-代码测试（工具扩展）"><a href="#5-代码测试（工具扩展）" class="headerlink" title="5.代码测试（工具扩展）"></a>5.代码测试（工具扩展）</h1><p>压力测试工具：<a href="https://www.cnblogs.com/stulzq/p/8971531.html" target="_blank" rel="noopener">JMeter</a><br>性能分析工具：<a href="http://www.ddooo.com/softdown/150941.htm#dltab" target="_blank" rel="noopener">JProfiler</a> <a href="https://segmentfault.com/a/1190000017795841" target="_blank" rel="noopener">基本使用手册</a><br><a href="https://mp.weixin.qq.com/s?__biz=MzU2MTI4MjI0MQ==&amp;mid=2247486515&amp;idx=1&amp;sn=fa09c3790d85a54683ec0208c077bbb6&amp;chksm=fc7a619dcb0de88b7ef2c27632f05d8414adeaa6721c6410df9cf2de7f268c38c725e549a33e&amp;mpshare=1&amp;scene=24&amp;srcid=1102HmJLce0mjnZn6WS0nmh7&amp;sharer_sharetime=1572669522564&amp;sharer_shareid=b85a2e91deba228c5ba2c72863129902&amp;key=3e754fdb358244867276411b1d091f79586fdaa28ae7a2d4dfbb4626ed502ee7fcb21ead7a462d3a3c79e7f374aea7a67334d07ec6821c599a948dbd439ad67e819093dbc397c033b7ca6683baea7fed&amp;ascene=14&amp;uin=NTUxNjkzNDU1&amp;devicetype=Windows%2010&amp;version=62070152&amp;lang=zh_CN&amp;pass_ticket=ZpgRpjustSAK02Y%2bDhuafqaYqoPFsLeDK4oj6v4MXd5W3fKHyTSYXIryKYAP6wD0" target="_blank" rel="noopener">Springboot+redis+注解+拦截器</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/10/SpringCloud学习五-GateWay网关/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1948,726 +2574,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/01/同一机器配置多个git账号的ssh秘钥/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     453 字
-	</span>
-	<span title="阅读时长">
-     1 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/01/同一机器配置多个git账号的ssh秘钥/" itemprop="url">同一机器配置多个git账号的ssh秘钥</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T23:00:34+08:00">
-                2019-10-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/01/同一机器配置多个git账号的ssh秘钥/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/01/同一机器配置多个git账号的ssh秘钥/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  453
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>个人电脑因工作需要需连接公司gitlab，但是生成的ssh已经连接了GitHub，并且工作的邮箱和个人邮箱也不是一致的，此时需要对不同的平台进行不同的配置。</p>
-<h2 id="1-生成ssh-key"><a href="#1-生成ssh-key" class="headerlink" title="1.生成ssh key"></a>1.生成ssh key</h2><p>打开git bash 输入以下命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;github-user1@163.com&quot;</span><br></pre></td></tr></table></figure></p>
-<p>第一个 ssh key 使用默认名字，三下回车，完成第一个默认的 ssh key。<br>在当前用户目录的 .ssh 目录下会生成 id_rsa 私钥文件和 id_rsa.pub 公钥文件，将 id_rsa.pub 公钥中的内容添加至 GitHub 云端中。<br>然后在 git bash 中输入以下命令测试该用户的 SSH 密钥是否有效：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure></p>
-<p>注明：该命令仅限于文件名为默认 id_rsa 的密钥</p>
-<h2 id="2-生成第二个ssh-key"><a href="#2-生成第二个ssh-key" class="headerlink" title="2.生成第二个ssh key"></a>2.生成第二个ssh key</h2><p>git bash 中输入以下命令，生成 gitlab的密钥，此时第二个 SSH Key 不能再使用默认的文件名id_rsa，否则会覆盖之前的密钥文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -f ~/.ssh/id_rsa_gitlab -C &quot;gitlab@qq.com&quot;</span><br></pre></td></tr></table></figure></p>
-<p>同样将生成的id_rsa_gitlab.pub内容添加至gitlab云端中。<br>测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@gitlab.com -i ~/.ssh/id_rsa_gitlab</span><br></pre></td></tr></table></figure></p>
-<h2 id="3-配置config文件"><a href="#3-配置config文件" class="headerlink" title="3.配置config文件"></a>3.配置config文件</h2><p> .ssh 目录下创建一个 config 文本文件，每个账号配置一个Host节点，主要配置项说明</p>
-<pre><code>Host    　    #　主机别名
-HostName　    #　服务器真实地址
-IdentityFile　#　私钥文件路径
-PreferredAuthentications　#　认证方式
-User　        #　用户名
-</code></pre><p>config 文件内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># ~/.ssh/config 配置多个git的ssh-key</span><br><span class="line"># 第一个默认的SSH Key</span><br><span class="line">Host github.com</span><br><span class="line">    HostName github.com</span><br><span class="line">    IdentityFile C:\\Users\\xx\\.ssh\\id_rsa</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line"></span><br><span class="line"># 第二个SSH Key</span><br><span class="line">Host gitlab.com</span><br><span class="line">    HostName gitlab.com</span><br><span class="line">    IdentityFile C:\\Users\\xx\\.ssh\\id_rsa_gitlab</span><br><span class="line">    PreferredAuthentications publickey</span><br></pre></td></tr></table></figure></p>
-<h2 id="4-为各自仓库配置不同的用户名和邮箱"><a href="#4-为各自仓库配置不同的用户名和邮箱" class="headerlink" title="4.为各自仓库配置不同的用户名和邮箱"></a>4.为各自仓库配置不同的用户名和邮箱</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --local user.name &apos;xx&apos; &amp;&amp; git config --local user.email &apos;xx@qq.com&apos;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/08/18/SpringMVC学习一/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     3.4k 字
-	</span>
-	<span title="阅读时长">
-     15 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/18/SpringMVC学习一/" itemprop="url">SpringMVC学习一</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-18T22:09:40+08:00">
-                2019-08-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringMVC/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringMVC</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/18/SpringMVC学习一/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/18/SpringMVC学习一/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3.4k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  15
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、是什么？"><a href="#一、是什么？" class="headerlink" title="一、是什么？"></a>一、是什么？</h2><p>MVC是一种设计思想既模型（Model）、视图（View）和控制器（Controller）使用这种分层的形式对其进行职能的划分。<br>而springMVC就是使用这种设计理念来快捷开发的web端框架。</p>
-<h2 id="二、技术对比"><a href="#二、技术对比" class="headerlink" title="二、技术对比"></a>二、技术对比</h2><p>说到Java的web开发就不得不提Struts2(没办法谁让我一开始学的就是这个)，Struts2也是控制层的框架那么springMVC与它的差别在哪呢？</p>
-<p>1.首先Struts2 是基于Filter实现而SpringMVC则采用Servlet实现。（Servlet与Filter的区别是servlet不具备传递性，其处理后直接响应，而Filter属于流式处理，它可以在调用filter,servlet的前后进行处理，属于函数回调。<em>函数回调在另一篇笔记中记载</em>）</p>
-<p>2.Struts2是类级别的拦截，一个类对应一个request上下文，而SpringMVC是方法级别的拦截，一个方法对应一个request上下文，一个方法跟一个url对应。从这点上考虑，SpringMVC更适合restful编程风格的请求.</p>
-<p>3.Struts2 有interceptor拦截器，而SpringMVC则使用的AOP。<br>（拦截器过滤器执行顺序：过滤前-拦截前-action执行-拦截后-过滤后）</p>
-<h2 id="三、原理实现"><a href="#三、原理实现" class="headerlink" title="三、原理实现"></a>三、原理实现</h2><p>1.Struts2原理图(网络图)<br><img src="http://tva1.sinaimg.cn/large/0060lm7Tly1g634zs91t0j30hs0kudhl.jpg" alt="Struts2"></p>
-<p>2.mvc原理图(网络图)<br><img src="http://tva1.sinaimg.cn/large/0060lm7Tly1g634zs44goj30rs0f4abn.jpg" alt="SpringMVC"></p>
-<h2 id="四、入门实践"><a href="#四、入门实践" class="headerlink" title="四、入门实践"></a>四、入门实践</h2><h3 id="1-准备"><a href="#1-准备" class="headerlink" title="1.准备"></a>1.准备</h3><p>jar包依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--mvc相关--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-webmvc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 全家桶必带 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-context<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 注解相关 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-aop<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="2-配置"><a href="#2-配置" class="headerlink" title="2.配置"></a>2.配置</h3><p>1.核心控制器-DispatcherServlet<br>在web.xml下配置<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置前端控制器--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>dispatcherServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>contextConfigLocation<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>classpath:springmvc.xml<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 启动服务时加载  大于0启动时加载 1,2,3,4,5...标识优先级  --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">load-on-startup</span>&gt;</span>1<span class="tag">&lt;/<span class="name">load-on-startup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>dispatcherServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<ol start="2">
-<li>SpringMVC 的配置文件<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:mvc</span>=<span class="string">"http://www.springframework.org/schema/mvc"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">"http://www.springframework.org/schema/context"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/mvc</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/mvc/spring-mvc.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/context</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/context/spring-context.xsd"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 包扫描 --&gt;</span>   </span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.lfc"</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 视图解析器对象 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"internalResourceViewResolver"</span> <span class="attr">class</span>=<span class="string">"org.springframework.web.servlet.view.InternalResourceViewResolver"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"prefix"</span> <span class="attr">value</span>=<span class="string">"/WEB-INF/pages/"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"suffix"</span> <span class="attr">value</span>=<span class="string">".jsp"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 开启SpringMVC框架注解的支持 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mvc:annotation-driven</span> <span class="attr">conversion-service</span>=<span class="string">"conversionService"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="3-程序编写"><a href="#3-程序编写" class="headerlink" title="3.程序编写"></a>3.程序编写</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/user"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">controller</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(path = <span class="string">"/hello"</span> )</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Hello SpringMVC"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试页面代码</span></span><br><span class="line">  &lt;a href="user/hello"&gt;入门程序&lt;/a&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="4-相关注解"><a href="#4-相关注解" class="headerlink" title="4.相关注解"></a>4.相关注解</h3><h4 id="1-RequestMapping"><a href="#1-RequestMapping" class="headerlink" title="1.@RequestMapping"></a>1.@RequestMapping</h4><p>可加类上和方法上，在类上时其url为一级目录，方法上时其url为二级目录。<br>属性：<br>value：用于指定请求的 URL。它和 path 属性的作用是一样的。<br>method：用于指定请求的方式。<br>params：用于指定限制请求参数的条件。它支持简单的表达式。要求请求参数的 key 和 value必须和配置的一模一样。<br>params = {“name”}，表示请求参数必须有 name<br>示例：<br>下面这段代码的访问路径是user/hello<br>请求方式必须为指定的post请求，表单请求的参数名必须为name.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/user"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">controller</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(path = <span class="string">"/hello"</span> ,method=RequestMethod.POST,params= &#123;<span class="string">"name"</span>&#125;)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Hello SpringMVC"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="2-RequestBody"><a href="#2-RequestBody" class="headerlink" title="2.@RequestBody"></a>2.@RequestBody</h4><p>作用：用于获取请求体的内容（get方法不可用！！！）<br>属性：required：是否必须有请求体，默认值是true<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(path=<span class="string">"/hello"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(@RequestBody String body)</span> </span>&#123;</span><br><span class="line"><span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="3-RequestParam"><a href="#3-RequestParam" class="headerlink" title="3.@RequestParam"></a>3.@RequestParam</h4><p>作用：把请求中指定名称的参数传递给控制器并重新赋值。(没有此注解前端传入参数需与方法入参保持一致)<br>属性：<br>value：请求参数中的名称<br>required：请求参数中是否必须提供此参数，默认值是true<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(@RequestParam(value=<span class="string">"username"</span>,required=<span class="keyword">false</span>)</span>String name) </span>&#123;</span><br><span class="line">System.out.println(name);</span><br><span class="line"><span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="4-PathVariable"><a href="#4-PathVariable" class="headerlink" title="4.@PathVariable"></a>4.@PathVariable</h4><p>作用：拥有绑定url中的占位符的。例如：url中有/delete/{id}，{id}就是占位符，RestFUl风格url，可请求路径一样，根据不同的请求执行后跳不同的方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href="user/hello/1"&gt;入门案例&lt;/a&gt;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RequestMapping</span>(path=<span class="string">"/hello/&#123;id&#125;"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(@PathVariable(value=<span class="string">"id"</span>)</span> String id) </span>&#123;</span><br><span class="line">System.out.println(id);</span><br><span class="line"><span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="5-RequestHeader"><a href="#5-RequestHeader" class="headerlink" title="5.@RequestHeader"></a>5.@RequestHeader</h4><p>作用：获取指定请求头的值<br>属性：value 请求头的名称。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(path=<span class="string">"/hello"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(@RequestHeader(value=<span class="string">"Accept"</span>)</span> String header) </span>&#123;</span><br><span class="line">System.out.println(header);</span><br><span class="line"><span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="6-CookieValue"><a href="#6-CookieValue" class="headerlink" title="6.@CookieValue"></a>6.@CookieValue</h4><p>作用：用于获取指定cookie的名称的值<br>属性: value：cookie的名称<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(path=<span class="string">"/hello"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(@CookieValue(value=<span class="string">"JSESSIONID"</span>)</span> String cookieValue) </span>&#123;</span><br><span class="line">System.out.println(cookieValue);</span><br><span class="line"><span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="7-ModelAttribute注解"><a href="#7-ModelAttribute注解" class="headerlink" title="7.ModelAttribute注解"></a>7.ModelAttribute注解</h4><p>作用</p>
-<ol>
-<li>出现在方法上：表示当前方法会在控制器方法执行前线执行。</li>
-<li>出现在参数上：获取指定的数据给参数赋值。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ModelAttribute</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testModelAttributes</span><span class="params">(Map&lt;String, String&gt; map)</span></span>&#123;</span><br><span class="line">    map.put(<span class="string">"abc"</span>, <span class="string">"ModelAttributes"</span>);</span><br><span class="line">    System.out.println(<span class="string">"ModelAttributes 执行了***************"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/testModelAttributes"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testModelAttributes1</span><span class="params">(@ModelAttribute(name = <span class="string">"abc"</span>)</span> String val)</span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"map值为："</span>+val);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h4 id="8-SessionAttributes注解"><a href="#8-SessionAttributes注解" class="headerlink" title="8.SessionAttributes注解"></a>8.SessionAttributes注解</h4><p>作用：用于多次执行控制器方法间的参数共享<br>属性:value：指定存入属性的名称<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(path=<span class="string">"/user"</span>)</span><br><span class="line"><span class="meta">@SessionAttributes</span>(value= &#123;<span class="string">"username"</span>,<span class="string">"password"</span>,<span class="string">"age"</span>&#125;,types=</span><br><span class="line">&#123;String.class,Integer.class&#125;) <span class="comment">// 把数据存入到session域对象中</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 向session中存入值</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(path=<span class="string">"/save"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">save</span><span class="params">(Model model)</span> </span>&#123;</span><br><span class="line">System.out.println(<span class="string">"向session域中保存数据"</span>);</span><br><span class="line">model.addAttribute(<span class="string">"username"</span>, <span class="string">"root"</span>);</span><br><span class="line">model.addAttribute(<span class="string">"password"</span>, <span class="string">"123"</span>);</span><br><span class="line">model.addAttribute(<span class="string">"age"</span>, <span class="number">20</span>);</span><br><span class="line"><span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 从session中获取值</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(path=<span class="string">"/find"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">find</span><span class="params">(ModelMap modelMap)</span> </span>&#123;</span><br><span class="line">String username = (String) modelMap.get(<span class="string">"username"</span>);</span><br><span class="line">String password = (String) modelMap.get(<span class="string">"password"</span>);</span><br><span class="line">Integer age = (Integer) modelMap.get(<span class="string">"age"</span>);</span><br><span class="line">System.out.println(username + <span class="string">" : "</span>+password +<span class="string">" : "</span>+age);</span><br><span class="line"><span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 清除值</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(path=<span class="string">"/delete"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">delete</span><span class="params">(SessionStatus status)</span> </span>&#123;</span><br><span class="line">status.setComplete();</span><br><span class="line"><span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="8-InitBinder-注解"><a href="#8-InitBinder-注解" class="headerlink" title="8.@InitBinder 注解"></a>8.@InitBinder 注解</h4><p>作用：@InitBinder 标识的方法,可以对 WebDataBinder 对象进行初始化。WebDataBinder 是 DataBinder 的子类,用于完成由表单字段到 JavaBean 属性的绑定。<br>• @InitBinder方法不能有返回值,它必须声明为void。<br>• @InitBinder方法的参数通常是是 WebDataBinder。<br>使用场景：对提交表单的数据进行转换绑定，如前台时间String转换为Date.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@InitBinder</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initBinder</span><span class="params">(WebDataBinder b)</span> </span>&#123;</span><br><span class="line">        b.registerCustomEditor(Date.class, <span class="keyword">new</span> ToolUtil());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h4 id="9-ControllerAdvice注解"><a href="#9-ControllerAdvice注解" class="headerlink" title="9.@ControllerAdvice注解"></a>9.@ControllerAdvice注解</h4><p>作用：@ControllerAdvice是@Component注解的一个延伸注解，Spring会自动扫描并检测被@ControllerAdvice所标注的类。@ControllerAdvice需要和@ExceptionHandler、@InitBinder以及@ModelAttribute注解搭配使用，主要是用来处理控制器所抛出的异常信息。首先，我们需要定义一个被@ControllerAdvice所标注的类，在该类中，定义一个用于处理具体异常的方法，并使用@ExceptionHandler注解进行标记。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**  </span></span><br><span class="line"><span class="comment"> * 1、通过<span class="doctag">@ControllerAdvice</span>注解可以将对于控制器的全局配置放在同一个位置。 </span></span><br><span class="line"><span class="comment"> * 2、注解了<span class="doctag">@Controller</span>的类的方法可以使用<span class="doctag">@ExceptionHandler</span>、<span class="doctag">@InitBinder</span>、<span class="doctag">@ModelAttribute</span>注解到方法上。 </span></span><br><span class="line"><span class="comment"> * 3、<span class="doctag">@ControllerAdvice</span>注解将作用在所有注解了<span class="doctag">@RequestMapping</span>的控制器的方法上。 </span></span><br><span class="line"><span class="comment"> * 4、<span class="doctag">@ExceptionHandler</span>：用于全局处理控制器里的异常。 </span></span><br><span class="line"><span class="comment"> * 5、<span class="doctag">@InitBinder</span>：用来设置WebDataBinder，用于自动绑定前台请求参数到Model中。 </span></span><br><span class="line"><span class="comment"> * 6、<span class="doctag">@ModelAttribute</span>：本来作用是绑定键值对到Model中，此处让全局的<span class="doctag">@RequestMapping</span>都能获得在此处设置的键值对 </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@ControllerAdvice</span>  </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GlobalControllerInterceptor</span>   </span></span><br><span class="line"><span class="class"></span>&#123;  </span><br><span class="line">    <span class="meta">@ModelAttribute</span>  </span><br><span class="line">    <span class="comment">//应用到所有@RequestMapping注解方法  </span></span><br><span class="line">    <span class="comment">//此处将键值对添加到全局，注解了@RequestMapping的方法都可以获得此键值对  </span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addUser</span><span class="params">(Model model)</span> </span>&#123;   </span><br><span class="line">        model.addAttribute(<span class="string">"msg"</span>, <span class="string">"此处将键值对添加到全局，注解了@RequestMapping的方法都可以获得此键值对"</span>);  </span><br><span class="line">    &#125;    </span><br><span class="line">    <span class="meta">@InitBinder</span>    </span><br><span class="line">    <span class="comment">//应用到所有@RequestMapping注解方法，在其执行之前初始化数据绑定器  </span></span><br><span class="line">    <span class="comment">//用来设置WebDataBinder，用于自动绑定前台请求参数到Model中。  </span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initBinder</span><span class="params">(WebDataBinder binder)</span> </span>&#123;</span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="meta">@ExceptionHandler</span>(Exception.class)    </span><br><span class="line">    <span class="comment">//应用到所有@RequestMapping注解的方法，在其抛出Exception异常时执行  </span></span><br><span class="line">    <span class="comment">//定义全局异常处理，value属性可以过滤拦截条件，此处拦截所有的Exception  </span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">processUnauthenticatedException</span><span class="params">(NativeWebRequest request, Exception e)</span> </span>&#123;    </span><br><span class="line">        <span class="keyword">return</span> <span class="string">"error"</span>; <span class="comment">//返回一个逻辑视图名    </span></span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="10-ResponseBody"><a href="#10-ResponseBody" class="headerlink" title="10.@ResponseBody"></a>10.@ResponseBody</h4><p>作用：该注解用于将 Controller 的方法返回的对象，通过 HttpMessageConverter 接口转换为指定格式的<br>数据如：json,xml 等，通过 Response 响应给客户端<br>如果在被@RestController标记的类中，则方法不需要使用@ResponseBody注解进行标注。@RestController相当于是@Controller和@ResponseBody的组合注解。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/testResponseJson"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@ResponseBody</span> <span class="function">Account <span class="title">testResponseJson</span><span class="params">(@RequestBody Account account)</span> </span>&#123;</span><br><span class="line">System.out.println(<span class="string">"异步请求："</span>+account);</span><br><span class="line"><span class="keyword">return</span> account;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="11-ExceptionHandler"><a href="#11-ExceptionHandler" class="headerlink" title="11.@ExceptionHandler"></a>11.@ExceptionHandler</h4><p>作用：用于标注处理特定类型异常类所抛出异常的方法。当控制器中的方法抛出异常时，Spring会自动捕获异常，并将捕获的异常信息传递给被@ExceptionHandler标注的方法。下面是使用该注解的一个示例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ExceptionHandler</span>(MyException.class)</span><br><span class="line"> <span class="meta">@ResponseBody</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> String <span class="title">handleException</span><span class="params">()</span></span>&#123;</span><br><span class="line">     <span class="keyword">return</span> <span class="string">"handle by ExceptionHandler."</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="12-ResponseStatus"><a href="#12-ResponseStatus" class="headerlink" title="12.@ResponseStatus"></a>12.@ResponseStatus</h4><p>作用：可以标注请求处理方法。使用此注解，可以指定响应所需要的HTTP STATUS。特别地，我们可以使用HttpStauts类对该注解的value属性进行赋值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseStatus</span>(value = HttpStatus.NOT_FOUND)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyException</span> <span class="keyword">extends</span> <span class="title">RuntimeException</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="5-请求参数乱码问题"><a href="#5-请求参数乱码问题" class="headerlink" title="5.请求参数乱码问题"></a>5.请求参数乱码问题</h3><p>1.post 请求方式<br>在 web.xml 中配置一个过滤器<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 设置过滤器中的属性值 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>encoding<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 启动过滤器 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>forceEncoding<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 过滤所有请求 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>CharacterEncodingFilter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line">  </span><br><span class="line">在 springmvc 的配置文件中可以配置，静态资源不过滤：</span><br><span class="line"><span class="comment">&lt;!-- location 表示路径，mapping 表示文件，**表示该目录下的文件以及子目录的文件 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mvc:resources</span> <span class="attr">location</span>=<span class="string">"/css/"</span> <span class="attr">mapping</span>=<span class="string">"/css/**"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mvc:resources</span> <span class="attr">location</span>=<span class="string">"/images/"</span> <span class="attr">mapping</span>=<span class="string">"/images/**"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mvc:resources</span> <span class="attr">location</span>=<span class="string">"/scripts/"</span> <span class="attr">mapping</span>=<span class="string">"/javascript/**"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>2.get 请求方式：<br>tomacat 对 GET和 POST 请求处理方式是不同的，GET请求的编码问题，要改 tomcat 的 server.xml配置文件<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">connectionTimeout</span>=<span class="string">"20000"</span> <span class="attr">port</span>=<span class="string">"8080"</span></span></span><br><span class="line"><span class="tag"><span class="attr">protocol</span>=<span class="string">"HTTP/1.1"</span> <span class="attr">redirectPort</span>=<span class="string">"8443"</span>/&gt;</span></span><br><span class="line">改为：</span><br><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">connectionTimeout</span>=<span class="string">"20000"</span> <span class="attr">port</span>=<span class="string">"8080"</span></span></span><br><span class="line"><span class="tag"><span class="attr">protocol</span>=<span class="string">"HTTP/1.1"</span> <span class="attr">redirectPort</span>=<span class="string">"8443"</span></span></span><br><span class="line"><span class="tag"><span class="attr">useBodyEncodingForURI</span>=<span class="string">"true"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>如果 ajax 请求仍然乱码把：<br>useBodyEncodingForURI=”true”改为 URIEncoding=”UTF-8”</p>
-<h3 id="6-类型转换"><a href="#6-类型转换" class="headerlink" title="6.类型转换"></a>6.类型转换</h3><p>前端传递过来的时间是String类型的，Controller  在接收时只能接收String类型的，如果使用入参Date则会导致类型转换异常，此时需对其进行处理。</p>
-<p><a href="user/deleteAccount?date=2018-01-01">根据日期删除账户</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/deleteAccount"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">deleteAccount</span><span class="params">(String date)</span> </span>&#123;</span><br><span class="line">System.out.println(<span class="string">"删除了账户。。。。"</span>+date);</span><br><span class="line"><span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="方法1："><a href="#方法1：" class="headerlink" title="方法1："></a>方法1：</h4><p>第一步：定义一个类，实现 Converter接口，该接口有两个泛型。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Converter</span>&lt;<span class="title">S</span>, <span class="title">T</span>&gt; </span>&#123;<span class="comment">//S:表示接受的类型，T：表示目标类型</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 实现类型转换的方法</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="function">T <span class="title">convert</span><span class="params">(S source)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 自定义类型转换器</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringToDateConverter</span> <span class="keyword">implements</span> <span class="title">Converter</span>&lt;<span class="title">String</span>, <span class="title">Date</span>&gt; </span>&#123;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 用于把 String 类型转成日期类型</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Date <span class="title">convert</span><span class="params">(String source)</span> </span>&#123;</span><br><span class="line">    DateFormat format = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(StringUtils.isEmpty(source)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"请输入要转换的日期"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        format = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd"</span>);</span><br><span class="line">        Date date = format.parse(source);</span><br><span class="line">        <span class="keyword">return</span> date;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"输入日期有误"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>第二步：在 spring 配置文件中配置类型转换器。<br>spring 配置类型转换器的机制是，将自定义的转换器注册到类型转换服务中去。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 配置类型转换器工厂 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"converterService"</span></span></span><br><span class="line"><span class="tag"><span class="attr">class</span>=<span class="string">"org.springframework.context.support.ConversionServiceFactoryBean"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 给工厂注入一个新的类型转换器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"converters"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 配置自定义类型转换器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"com.itheima.web.converter.StringToDateConverter"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>第三步：在 annotation-driven标签中引用配置的类型转换服务<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 引用自定义类型转换器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mvc:annotation-driven</span></span></span><br><span class="line"><span class="tag"><span class="attr">conversion-service</span>=<span class="string">"converterService"</span>&gt;</span><span class="tag">&lt;/<span class="name">mvc:annotation-driven</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="方法2："><a href="#方法2：" class="headerlink" title="方法2："></a>方法2：</h4><p>写一个DATE数据绑定类，然后在Controller 里面写 </p>
-<blockquote>
-<p>InitBinder</p>
-</blockquote>
-<p> 方法里面应用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.commons.lang.StringUtils;</span><br><span class="line"><span class="keyword">import</span> java.beans.PropertyEditorSupport;</span><br><span class="line"><span class="keyword">import</span> java.text.ParseException;</span><br><span class="line"><span class="keyword">import</span> java.text.SimpleDateFormat;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 时间转换类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ToolUtil</span> <span class="keyword">extends</span> <span class="title">PropertyEditorSupport</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAsText</span><span class="params">(String text)</span> <span class="keyword">throws</span> IllegalArgumentException </span>&#123;</span><br><span class="line">        SimpleDateFormat format = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>);</span><br><span class="line">        Date date = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//防止空数据出错</span></span><br><span class="line">            <span class="keyword">if</span>(StringUtils.isNotBlank(text))&#123;</span><br><span class="line">                date = format.parse(text);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ParseException e) &#123;</span><br><span class="line">            format = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd"</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                date = format.parse(text);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ParseException e1) &#123;</span><br><span class="line">                format = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM"</span>);</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    date = format.parse(text);</span><br><span class="line">                &#125;<span class="keyword">catch</span> (Exception e2) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        setValue(date);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后在initBinder 方法里直接引用<br><em>@InitBinder用于在@Controller中标注于方法，表示为当前控制器注册一个属性编辑器或者其他，只对当前的Controller有效。</em><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@InitBinder</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initBinder</span><span class="params">(WebDataBinder b)</span> </span>&#123;</span><br><span class="line">        b.registerCustomEditor(Date.class, <span class="keyword">new</span> ToolUtil());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/08/05/Spring-事务管理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     3.4k 字
-	</span>
-	<span title="阅读时长">
-     14 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/05/Spring-事务管理/" itemprop="url">Spring-事务管理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-05T22:18:04+08:00">
-                2019-08-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/05/Spring-事务管理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/05/Spring-事务管理/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3.4k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  14
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="什么是事务"><a href="#什么是事务" class="headerlink" title="什么是事务"></a>什么是事务</h2><p>Spring事务控制的目的是为了达到控制一组操作，要么都执行要么都不执行的一种操作。<br>ACID四大特性:</p>
-<ul>
-<li>原子性 ：最小执行单位，不可分割，要么都完成要么无效。</li>
-<li>一致性 ：保证数据库数据整体完整性，事务成功则整体数据修改，事务失败则数据回滚到之前的状态。</li>
-<li>隔离性 ：各事务之间是独立的，多个事务操作同一对象时，会串行等待方式执行，保证事务之间互不干扰。</li>
-<li>持久性 ：事务提交后数据会保存到数据库，之后的数据基于此次保存的数据为基础。</li>
-</ul>
-<h2 id="Spring事务控制的API"><a href="#Spring事务控制的API" class="headerlink" title="Spring事务控制的API"></a>Spring事务控制的API</h2><h3 id="1-PlatformTransactionManager"><a href="#1-PlatformTransactionManager" class="headerlink" title="1.PlatformTransactionManager"></a>1.PlatformTransactionManager</h3><p>此接口是Spring的事务管理器。它提供了常用操作事务的方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取事务状态信息</span></span><br><span class="line"><span class="function">TransactionStatus <span class="title">getTransaction</span><span class="params">(TransactionDefinition definition)</span></span></span><br><span class="line"><span class="function"><span class="comment">//提交事务</span></span></span><br><span class="line"><span class="function">Void <span class="title">commit</span><span class="params">(TransactionStatus status)</span> <span class="keyword">throws</span> TransactionException</span>;  </span><br><span class="line"><span class="comment">//回滚事务</span></span><br><span class="line"><span class="function">Void <span class="title">rollback</span><span class="params">(TransactionStatus status)</span> <span class="keyword">throws</span> TransactionException</span>;</span><br></pre></td></tr></table></figure></p>
-<p>现实开发中使用的是它的实现类进行数据操作，具体有：</p>
-<ol>
-<li><strong>org.springframework.jdbc.datasource.DataSourceTransactionManager</strong> 使用SpringJDBC 或者iBatis进行持久化数据时使用。</li>
-<li><strong>org.springframework.orm.hibernate5.HibernateTransactionManager</strong>  使用Hibernate进行持久化数据时使用。</li>
-<li><strong>org.springframework.orm.jpa.JpaTransactionManager</strong> 使用JPA进行持久化数据时使用。</li>
-<li><strong>org.springframework.transaction.jta.JtaTransactionManager</strong> 使用一个JTA来实现分布式事务管理，在一个事务跨越多个资源时使用。</li>
-</ol>
-<h3 id="2-TransactionDefinition"><a href="#2-TransactionDefinition" class="headerlink" title="2.TransactionDefinition"></a>2.TransactionDefinition</h3><p>事务管理器接口 PlatformTransactionManager 通过 getTransaction(TransactionDefinition definition) 方法来得到一个事务，这个方法里面的参数是 TransactionDefinition类，这个类就定义了一些基本的事务属性。</p>
-<p>方法如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TransactionDefinition</span> </span>&#123;</span><br><span class="line"><span class="comment">// 返回事务的传播行为</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getPropagationBehavior</span><span class="params">()</span></span>; </span><br><span class="line"><span class="comment">// 返回事务的隔离级别，事务管理器根据它来控制另外一个事务可以看到本事务内的哪些数据</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getIsolationLevel</span><span class="params">()</span></span>; </span><br><span class="line"><span class="comment">// 返回事务超时时间</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getTimeout</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">//返回事务的名字</span></span><br><span class="line"><span class="function">String <span class="title">getName</span><span class="params">()</span>；</span></span><br><span class="line"><span class="function"><span class="comment">// 返回是否为只读事务。 </span></span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isReadOnly</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="1-并发事务影响"><a href="#1-并发事务影响" class="headerlink" title="1.并发事务影响"></a>1.并发事务影响</h4><p>事务的隔离级别反映并发操作时受其他事务影响的程度，其中可能带来的问题有：</p>
-<ul>
-<li>脏读 ：又叫做读未提交，指的是当前事务对一数据进行了修改，但是并没有提交到数据库中，此时另一事务此时也访问了这个数据，并且使用了数据，而这时当前事务因为异常进行了数据回滚，此时另一事务读到的数据就是”脏数据”，根据脏数据是没法进行正确的操作的。</li>
-<li>不可重复读 ：在一个事务内，多次读取同一数据，而两次读取数据中间由另一事务对当前数据进行了修改，导致两次读取数据的值不一样。</li>
-<li>幻读 ： 与不可重复读类似，指的是，在一个事务内读取了若干行数据，接着另一事务插入了一些数据，并提交。在当前事务再次进行查询时会发现出现了一些本不存在的数据，就像幻觉一样。</li>
-<li>值丢失 ： 在当前事务修改某一数据时，另一事务并发修改同一数据，导致晚提交的事务覆盖了上一提交的事务，造成值丢失。<strong>（例如 A=10，事务1更新A=A+20,事务2更新A=A-10,最后导致A=0的与预期值A=20不符）</strong></li>
-</ul>
-<p><em>幻读 和 不可重复读的区别：<br>幻读重点在于新增和删除，而不可重复读的重点在于查询+修改。<br>不可重复读 和 脏读的区别：<br>脏读是当前事务读取了另一事务未提交的数据，而不可重复读是多次查询返回不同的数据值，因为当前数据被另一事务并发更改，并提交。</em></p>
-<h4 id="2-事务隔离级别"><a href="#2-事务隔离级别" class="headerlink" title="2.事务隔离级别"></a>2.事务隔离级别</h4><p>数据库中定义了4种隔离级别,分别是：</p>
-<ol>
-<li>read uncommitted 读未提交 所有事务可以看到未提交事务数据。</li>
-<li>read committed 读提交  只有事务提交后才可以被其他数据查询到。 Oracle 默认级别</li>
-<li>repeatable read 可重复读 (会产生幻读) Mysql默认级别</li>
-<li>Serializable 序列化 最高级别，强制事务按照顺序执行，在读的数据行上加上共享锁，可能产生大量的超时现象和锁竞争</li>
-</ol>
-<p>TransactionDefinition接口定义了5个隔离等级的常量：</p>
-<ul>
-<li>ISOLATION_DEFAULT ： 默认 使用数据库默认的隔离级别</li>
-<li>ISOLATION_READ_UNCOMMITTED ： 读未提交（可能会导致可能会导致脏读、幻读或不可重复读）</li>
-<li>ISOLATION_READ_COMMITTED 读已提交 （可避免脏读，不可避免幻读和不可重复读）</li>
-<li>ISOLATION_REPEATABLE_READ ：可重复读，同一字段多次读取结果一致，除非数据被本身事务进行修改（不可避免不可重复读）</li>
-<li>ISOLATION_SERIALIZABLE: 最高隔离界别 序列化操作（影响性能，慎用！）</li>
-</ul>
-<h4 id="3-事务传播"><a href="#3-事务传播" class="headerlink" title="3.事务传播"></a>3.事务传播</h4><p><strong>事务方法被另一事务调用时，必须指定事务应该如何传播。</strong>事务的嵌套，内层事务既可以开启新的事务，也可以将当前事务合并到外层事务中来。<br>具体有：<br><strong>支持当前事务型</strong></p>
-<ul>
-<li>PROPAGATION_REQUIRED：如果当前没有事务就新建事务，如果已有事务则加入该事务。</li>
-<li>PROPAGATION_SUPPORTS：如果当前没有事务就加入该事务，如果没有事务，则以没有事务方式运行。</li>
-<li>PROPAGATION_MANDATORY：如果当前存在事务加入该事务，如果没有事务则抛出异常。</li>
-<li><p><strong>不支持当前事务型</strong></p>
-</li>
-<li><p>PROPAGATION_REQUIRES_NEW：创建一个新事物，如果当前存在事务，则挂起当前事务。</p>
-</li>
-<li>PROPAGATION_NOT_SUPPORTED：以没有事务方式运行，如果有事务则将当前事务挂起。</li>
-<li>PROPAGATION_NEVER： 以非事务方式运行，如果存在事务则抛出异常。</li>
-</ul>
-<p><strong>其他</strong></p>
-<ul>
-<li>PROPAGATION_NESTED：当前存在事务，则创建事务作为当前事务的嵌套事务，如果没有则取值等价 PROPAGATION_REQUIRED。</li>
-</ul>
-<p><strong>PROPAGATION_NESTED 是Spring独有的，其启动的事务如果外部有事务的话内嵌于外部事务，此时内嵌事务不属于独立事务，它依赖外部事物，只有外部事物提交才能引起内部事务提交，内嵌子事务不得独立提交。当然外部事务回滚也会导致内部事务回滚。</strong> </p>
-<h4 id="4-超时时间"><a href="#4-超时时间" class="headerlink" title="4.超时时间"></a>4.超时时间</h4><p>超时时间指事务允许执行的最大时间，如果超过限制时间事务还没有完成，则自动回滚事务。默认值是-1，没有超时限制。如果有，以秒为单位进行设置。</p>
-<h4 id="5-只读属性"><a href="#5-只读属性" class="headerlink" title="5.只读属性"></a>5.只读属性</h4><p>事务只读属性指当前事务对事务访问资源进行只读操作还是读写操作。只读操作可提高事务处理性能，可在适当的地方使用。</p>
-<h4 id="6-回滚"><a href="#6-回滚" class="headerlink" title="6.回滚"></a>6.回滚</h4><p>默认情况下事务在运行期异常时会回滚，在检查型异常并不会回滚，但是可以声明事务遇到特定异常时回滚或不回滚，即使该异常是检查型异常。</p>
-<h3 id="3-TransactionStatus"><a href="#3-TransactionStatus" class="headerlink" title="3.TransactionStatus"></a>3.TransactionStatus</h3><p>TransactionStatus 接口用来记录事务的状态，该接口定义了一组方法可以获得某个时间点上事务对象的状态信息。<br>PlatformTransactionManager.getTransaction（）方法返回一个TransactionStatus对象，可能是一个新的事务或者已经存在的事务。<br>接口方法如下：</p>
-<ul>
-<li>boolean  isNewTransaction（）   <em>是否新事务</em></li>
-<li>boolean hasSavepoint（） <em>是否有恢复点</em></li>
-<li>void flush（） <em>刷新事务</em></li>
-<li>boolean isRollbackOnly() <em>是否回滚</em></li>
-<li>void setRollbackOnly() <em>设置为只回滚</em></li>
-<li>boolean isCompleted（）是否已完成*</li>
-</ul>
-<h2 id="配置方式"><a href="#配置方式" class="headerlink" title="配置方式"></a>配置方式</h2><h3 id="XML配置方式"><a href="#XML配置方式" class="headerlink" title="XML配置方式"></a>XML配置方式</h3><h4 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1.准备工作"></a>1.准备工作</h4><p>jar包依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-jdbc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.0.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-tx<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.0.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>配置文件约束配置导入aop和tx两个命名空间<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:aop</span>=<span class="string">"http://www.springframework.org/schema/aop"</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:tx</span>=<span class="string">"http://www.springframework.org/schema/tx"</span></span></span><br><span class="line"><span class="tag"><span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/tx</span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/tx/spring-tx.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/aop</span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/aop/spring-aop.xsd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>配置数据源<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:property-placeholder</span> <span class="attr">location</span>=<span class="string">"db.properties"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"com.mchange.v2.c3p0.ComboPooledDataSource"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--连接数据库的必备信息--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClass"</span> <span class="attr">value</span>=<span class="string">"$&#123;driverClass&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"jdbcUrl"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbcUrl&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"user"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbcUser&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"$&#123;password&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="2-事务配置步骤"><a href="#2-事务配置步骤" class="headerlink" title="2.事务配置步骤"></a>2.事务配置步骤</h4><h5 id="2-1-配置事务管理器"><a href="#2-1-配置事务管理器" class="headerlink" title="2.1 配置事务管理器"></a>2.1 配置事务管理器</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 配置一个事务管理器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"transactionManager"</span></span></span><br><span class="line"><span class="tag"><span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 注入 DataSource --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h5 id="2-2-配置事务通知引用事务管理器"><a href="#2-2-配置事务通知引用事务管理器" class="headerlink" title="2.2 配置事务通知引用事务管理器"></a>2.2 配置事务通知引用事务管理器</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 事务的配置 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">tx:advice</span> <span class="attr">id</span>=<span class="string">"txAdvice"</span> <span class="attr">transaction-manager</span>=<span class="string">"transactionManager"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">tx:advice</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h5 id="2-3-配置事务属性"><a href="#2-3-配置事务属性" class="headerlink" title="2.3 配置事务属性"></a>2.3 配置事务属性</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 指定方法名称：是业务核心方法</span></span><br><span class="line"><span class="comment">read-only：是否是只读事务。默认 false，不只读。</span></span><br><span class="line"><span class="comment">isolation：指定事务的隔离级别。默认值是使用数据库的默认隔离级别。</span></span><br><span class="line"><span class="comment">propagation：指定事务的传播行为。</span></span><br><span class="line"><span class="comment">timeout：指定超时时间。默认值为：-1。永不超时。</span></span><br><span class="line"><span class="comment">rollback-for：用于指定一个异常，当执行产生该异常时，事务回滚。产生其他异常，事务不回滚。</span></span><br><span class="line"><span class="comment">没有默认值，任何异常都回滚。</span></span><br><span class="line"><span class="comment">no-rollback-for：用于指定一个异常，当产生该异常时，事务不回滚，产生其他异常时，事务回</span></span><br><span class="line"><span class="comment">滚。没有默认值，任何异常都回滚。</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"*"</span> <span class="attr">read-only</span>=<span class="string">"false"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span>/&gt;</span><span class="comment">&lt;!-- REQUIRED 有事务就加入，没有则新建 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"find*"</span> <span class="attr">read-only</span>=<span class="string">"true"</span> <span class="attr">propagation</span>=<span class="string">"SUPPORTS"</span>/&gt;</span> <span class="comment">&lt;!-- 在这里对find开头的查询方法使用只读事务 ；SUPPORTS 当前有事务，则加入，没有则无事务--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">tx:attributes</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h5 id="2-4-配置切入点表达式"><a href="#2-4-配置切入点表达式" class="headerlink" title="2.4 配置切入点表达式"></a>2.4 配置切入点表达式</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 配置 aop --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 配置切入点表达式 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">expression</span>=<span class="string">"execution(* com.lfc.service.impl.*.*(..))"</span> <span class="attr">id</span>=<span class="string">"pt1"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h5 id="2-5-配置切入点表达式和事务通知的对应关系、"><a href="#2-5-配置切入点表达式和事务通知的对应关系、" class="headerlink" title="2.5 配置切入点表达式和事务通知的对应关系、"></a>2.5 配置切入点表达式和事务通知的对应关系、</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 在aop:config 标签内部：建立事务的通知和切入点表达式的关系 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:advisor</span> <span class="attr">advice-ref</span>=<span class="string">"txAdvice"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pt1"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-<p>汇总<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 配置账户的持久层--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"accountDao"</span> <span class="attr">class</span>=<span class="string">"com.itheima.dao.impl.AccountDaoImpl"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 配置数据源--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">context:property-placeholder</span> <span class="attr">location</span>=<span class="string">"db.properties"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"com.mchange.v2.c3p0.ComboPooledDataSource"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--连接数据库的必备信息--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClass"</span> <span class="attr">value</span>=<span class="string">"$&#123;driverClass&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"jdbcUrl"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbcUrl&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"user"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbcUser&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"$&#123;password&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 配置事务管理器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"transactionManager"</span> <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 配置事务的通知--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">tx:advice</span> <span class="attr">id</span>=<span class="string">"txAdvice"</span> <span class="attr">transaction-manager</span>=<span class="string">"transactionManager"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"*"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span> <span class="attr">read-only</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"find*"</span> <span class="attr">propagation</span>=<span class="string">"SUPPORTS"</span> <span class="attr">read-only</span>=<span class="string">"true"</span>&gt;</span><span class="tag">&lt;/<span class="name">tx:method</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">tx:advice</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 配置aop--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置切入点表达式--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">id</span>=<span class="string">"pt1"</span> <span class="attr">expression</span>=<span class="string">"execution(* com.lfc.service.impl.*.*(..))"</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:pointcut</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--建立切入点表达式和事务通知的对应关系 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:advisor</span> <span class="attr">advice-ref</span>=<span class="string">"txAdvice"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pt1"</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:advisor</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="注解配置方式"><a href="#注解配置方式" class="headerlink" title="注解配置方式"></a>注解配置方式</h3><h4 id="1-准备工作-1"><a href="#1-准备工作-1" class="headerlink" title="1.准备工作"></a>1.准备工作</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 配置 spring 创建容器时要扫描的包 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.lfc"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-<p>数据源同xml配置</p>
-<h4 id="2-事务配置步骤-1"><a href="#2-事务配置步骤-1" class="headerlink" title="2.事务配置步骤"></a>2.事务配置步骤</h4><h5 id="2-1-配置事务管理器注入数据源"><a href="#2-1-配置事务管理器注入数据源" class="headerlink" title="2.1 配置事务管理器注入数据源"></a>2.1 配置事务管理器注入数据源</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 配置事务管理器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"transactionManager"</span></span></span><br><span class="line"><span class="tag"><span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h5 id="2-2-业务层使用-Transactional-注解"><a href="#2-2-业务层使用-Transactional-注解" class="headerlink" title="2.2 业务层使用 @Transactional 注解"></a>2.2 业务层使用 @Transactional 注解</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span>(<span class="string">"accountService"</span>)</span><br><span class="line"><span class="meta">@Transactional</span>(readOnly=<span class="keyword">true</span>,propagation=Propagation.SUPPORTS)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AccountServiceImpl</span> <span class="keyword">implements</span> <span class="title">IAccountService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> IAccountDao accountDao;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Account <span class="title">findAccountById</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> accountDao.findAccountById(id);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="meta">@Transactional</span>(readOnly=<span class="keyword">false</span>,propagation=Propagation.REQUIRED)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transfer</span><span class="params">(String id, String name)</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>该注解的属性和 xml 中的属性含义一致。该注解可以出现在接口上，类上和方法上。<br>出现接口上，表示该接口的所有实现类都有事务支持。<br>出现在类上，表示类中所有方法有事务支持<br>出现在方法上，表示方法有事务支持。<br>以上三个位置的优先级：方法&gt;类&gt;接口</strong></p>
-<h5 id="2-3-配置文件中开启Spring对注解事务的支持"><a href="#2-3-配置文件中开启Spring对注解事务的支持" class="headerlink" title="2.3 配置文件中开启Spring对注解事务的支持"></a>2.3 配置文件中开启Spring对注解事务的支持</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 开启 spring 对注解事务的支持 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">tx:annotation-driven</span> <span class="attr">transaction-manager</span>=<span class="string">"transactionManager"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="纯注解式配置（不使用xml配置文件）"><a href="#纯注解式配置（不使用xml配置文件）" class="headerlink" title="纯注解式配置（不使用xml配置文件）"></a>纯注解式配置（不使用xml配置文件）</h4><p>主配置类  替代bean.xml<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span>    <span class="comment">//该类作为spring的xml配置文件中的&lt;beans&gt;</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(<span class="string">"com.lfc"</span>)    <span class="comment">//扫描配置包下被注解过的类</span></span><br><span class="line"><span class="meta">@Import</span>(&#123;JdbcConfig.class,TransactionConfig.class&#125;) <span class="comment">//导入另外两个配置类</span></span><br><span class="line"><span class="meta">@PropertySource</span>(<span class="string">"db.properties"</span>)</span><br><span class="line"><span class="meta">@EnableTransactionManagement</span>  <span class="comment">//事务注解</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringConfigurantion</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>数据源 配置类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JdbcConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;driverClass&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String driver;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;jdbcUrl&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String url;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;jdbcUser&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;password&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span>(name = <span class="string">"jdbcTemplate"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> JdbcTemplate <span class="title">createJdbcTemplate</span><span class="params">(DataSource dataSource)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建数据源对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span>(name=<span class="string">"dataSource"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">createDataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">        DriverManagerDataSource ds = <span class="keyword">new</span> DriverManagerDataSource();</span><br><span class="line">        ds.setDriverClassName(driver);</span><br><span class="line">        ds.setUrl(url);</span><br><span class="line">        ds.setUsername(username);</span><br><span class="line">        ds.setPassword(password);</span><br><span class="line">        <span class="keyword">return</span> ds;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>事务相关配置类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TransactionConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span>(name=<span class="string">"transactionManager"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> PlatformTransactionManager <span class="title">reateTransactionManager</span><span class="params">(DataSource dataSource)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DataSourceTransactionManager(dataSource);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2721,7 +2627,7 @@ User　        #　用户名
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

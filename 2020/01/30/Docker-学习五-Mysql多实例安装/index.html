@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="算法,">
+  <meta name="keywords" content="Docker,">
 
 
 
@@ -79,22 +79,18 @@
 
 
 
-<meta name="description" content="如何设计一个工业级的散列函数？何为一个工业级的散列表？工业级的散列表应该具有哪些特性？1.支持快速的查询、插入、删除操作； 2.内存占用合理，不能浪费过多空间； 3.性能稳定，散列函数生成的值要尽可能的均匀分布，在极端情况下，散列表的性能也不会退化到无法接受的情况。 方案：如何设计这样一个散列表呢？根据前面的知识点，从3个方面来考虑设计思路：   1.设计一个不复杂，散列值尽可能分布均匀的散列函数">
-<meta name="keywords" content="算法">
+<meta name="description" content="一、数据卷准备1.创建数据卷123docker volume create mysql_dbdatadocker volume ls # 查看docker volume inspect mysql_dbdata 删除数据卷12$ docker rm -v &amp;lt;container_id&amp;gt; # 删除容器及关联$ docker volume rm &amp;lt;volume_name&amp;gt; # 删">
+<meta name="keywords" content="Docker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="散列表（中）">
-<meta property="og:url" content="http://iamlfc.top/2019/05/21/散列表（中）/index.html">
+<meta property="og:title" content="Docker-学习五(Mysql多实例安装)">
+<meta property="og:url" content="http://iamlfc.top/2020/01/30/Docker-学习五-Mysql多实例安装/index.html">
 <meta property="og:site_name" content="邪恶小代码">
-<meta property="og:description" content="如何设计一个工业级的散列函数？何为一个工业级的散列表？工业级的散列表应该具有哪些特性？1.支持快速的查询、插入、删除操作； 2.内存占用合理，不能浪费过多空间； 3.性能稳定，散列函数生成的值要尽可能的均匀分布，在极端情况下，散列表的性能也不会退化到无法接受的情况。 方案：如何设计这样一个散列表呢？根据前面的知识点，从3个方面来考虑设计思路：   1.设计一个不复杂，散列值尽可能分布均匀的散列函数">
+<meta property="og:description" content="一、数据卷准备1.创建数据卷123docker volume create mysql_dbdatadocker volume ls # 查看docker volume inspect mysql_dbdata 删除数据卷12$ docker rm -v &amp;lt;container_id&amp;gt; # 删除容器及关联$ docker volume rm &amp;lt;volume_name&amp;gt; # 删">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g33k21nm2lj30vq0l07a8.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g33kdeu374j30vq0ldgx4.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g33kxyy3zkj30vq0ghdix.jpg">
-<meta property="og:updated_time" content="2019-05-23T14:06:09.814Z">
+<meta property="og:updated_time" content="2020-01-30T15:33:53.008Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="散列表（中）">
-<meta name="twitter:description" content="如何设计一个工业级的散列函数？何为一个工业级的散列表？工业级的散列表应该具有哪些特性？1.支持快速的查询、插入、删除操作； 2.内存占用合理，不能浪费过多空间； 3.性能稳定，散列函数生成的值要尽可能的均匀分布，在极端情况下，散列表的性能也不会退化到无法接受的情况。 方案：如何设计这样一个散列表呢？根据前面的知识点，从3个方面来考虑设计思路：   1.设计一个不复杂，散列值尽可能分布均匀的散列函数">
-<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g33k21nm2lj30vq0l07a8.jpg">
+<meta name="twitter:title" content="Docker-学习五(Mysql多实例安装)">
+<meta name="twitter:description" content="一、数据卷准备1.创建数据卷123docker volume create mysql_dbdatadocker volume ls # 查看docker volume inspect mysql_dbdata 删除数据卷12$ docker rm -v &amp;lt;container_id&amp;gt; # 删除容器及关联$ docker volume rm &amp;lt;volume_name&amp;gt; # 删">
 
 
 
@@ -124,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://iamlfc.top/2019/05/21/散列表（中）/">
+  <link rel="canonical" href="http://iamlfc.top/2020/01/30/Docker-学习五-Mysql多实例安装/">
 
 
 
 
 
-  <title>散列表（中） | 邪恶小代码</title>
+  <title>Docker-学习五(Mysql多实例安装) | 邪恶小代码</title>
   
 
 
@@ -289,7 +285,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/05/21/散列表（中）/">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2020/01/30/Docker-学习五-Mysql多实例安装/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="李斯大炮">
@@ -301,7 +297,7 @@
       <meta itemprop="name" content="邪恶小代码">
     </span>
 	<span title="字数统计">
-     1.6k 字
+     1.2k 字
 	</span>
 	<span title="阅读时长">
      5 分钟
@@ -311,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">散列表（中）</h1>
+          <h1 class="post-title" itemprop="name headline">Docker-学习五(Mysql多实例安装)</h1>
         
 
         <div class="post-meta">
@@ -323,8 +319,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-21T23:26:28+08:00">
-                2019-05-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-30T20:50:14+08:00">
+                2020-01-30
               </time>
             
 
@@ -346,8 +342,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法与数据结构/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
+                  <a href="/categories/Docker镜像/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker镜像</span>
                   </a>
                 </span>
 
@@ -364,8 +360,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/05/21/散列表（中）/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/21/散列表（中）/" itemprop="commentCount"></span>
+                <a href="/2020/01/30/Docker-学习五-Mysql多实例安装/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/30/Docker-学习五-Mysql多实例安装/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -387,7 +383,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.6k
+                  1.2k
                 </span>
               
 
@@ -424,25 +420,36 @@
       
 
       
-        <h1 id="如何设计一个工业级的散列函数？"><a href="#如何设计一个工业级的散列函数？" class="headerlink" title="如何设计一个工业级的散列函数？"></a>如何设计一个工业级的散列函数？</h1><h2 id="何为一个工业级的散列表？工业级的散列表应该具有哪些特性？"><a href="#何为一个工业级的散列表？工业级的散列表应该具有哪些特性？" class="headerlink" title="何为一个工业级的散列表？工业级的散列表应该具有哪些特性？"></a>何为一个工业级的散列表？工业级的散列表应该具有哪些特性？</h2><pre><code>1.支持快速的查询、插入、删除操作；
-2.内存占用合理，不能浪费过多空间；
-3.性能稳定，散列函数生成的值要尽可能的均匀分布，在极端情况下，散列表的性能也不会退化到无法接受的情况。
-</code></pre><p>方案：<br>如何设计这样一个散列表呢？根据前面的知识点，从3个方面来考虑设计思路：<br>   <strong>1.设计一个不复杂，散列值尽可能分布均匀的散列函数；<br>    2.定义装载因子阈值，并且设计高效动态扩容策略；<br>    3.选择合适的散列冲突解决方法。</strong></p>
-<p>步骤拆分：</p>
-<h2 id="一、如何设计散列函数？"><a href="#一、如何设计散列函数？" class="headerlink" title="一、如何设计散列函数？"></a>一、如何设计散列函数？</h2><p>1.要尽可能让散列后的值随机且均匀分布，这样会尽可能减少散列冲突，即便冲突之后，分配到每个槽内的数据也比较均匀。<br>2.除此之外，散列函数的设计也不能太复杂，太复杂就会太耗时间，也会影响到散列表的性能。<br>3.常见的散列函数设计方法：直接寻址法、平方取中法、折叠法、随机数法等。</p>
-<h2 id="二、如何根据装载因子动态扩容？"><a href="#二、如何根据装载因子动态扩容？" class="headerlink" title="二、如何根据装载因子动态扩容？"></a>二、如何根据装载因子动态扩容？</h2><h3 id="1-如何设置装载因子阈值？"><a href="#1-如何设置装载因子阈值？" class="headerlink" title="1.如何设置装载因子阈值？"></a>1.如何设置装载因子阈值？</h3><ul>
-<li>装载因子越大，说明散列表中的元素越多，空闲的位置就越少，冲突的概率就越大，对于动态的散列表，<strong>可以通过设置装载因子的阈值来控制是扩容还是缩容</strong>，支持动态扩容的散列表，创建一个更大的散列表将数据迁移到新散列表中,如果每次扩容都是原来大小的两倍，那么扩容后的负载因子就会降为原来的一半。（<strong>插入数据的时间复杂度使用摊还分析法，均摊复杂度O(1)</strong>）<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g33k21nm2lj30vq0l07a8.jpg" alt="avatar"></li>
-<li>装载因子的阈值设置需要权衡时间复杂度和空间复杂度。如果内存空间不紧张，对执行效率要求很高，可以降低装载因子的阈值；相反，如果内存空间紧张，对执行效率要求又不高，可以增加装载因子的阈值。</li>
-</ul>
-<h3 id="2-如何避免低效扩容？"><a href="#2-如何避免低效扩容？" class="headerlink" title="2.如何避免低效扩容？"></a>2.如何避免低效扩容？</h3><p>大部分情况下散列表插入一个数据都很快，但是当负载因子到达阀值，需要进行扩容，再插入数据，再扩容的过程中因为散列表大小进行了改变所以存储的位置也得到了改变，这个时候插入数据就会变得很慢。<br> <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g33kdeu374j30vq0ldgx4.jpg" alt="avatar"></p>
-<ul>
-<li>分批扩容的插入操作：当有新数据要插入时，我们将数据插入新的散列表，并且从老的散列表中拿出一个数据放入新散列表。每次插入都重复上面的过程。这样插入操作就变得很快了。</li>
-<li>分批扩容的查询操作：先查新散列表，再查老散列表。</li>
-<li>通过分批扩容的方式，任何情况下，插入一个数据的时间复杂度都是O(1)。</li>
-</ul>
-<h2 id="三、如何选择散列冲突解决方法？"><a href="#三、如何选择散列冲突解决方法？" class="headerlink" title="三、如何选择散列冲突解决方法？"></a>三、如何选择散列冲突解决方法？</h2><p><strong>常见的2中方法：开放寻址法和链表法。</strong><br>1.<strong>链表法对内存的空间利用率更高，链表节点可以在冲突时再创建，并不需要开放寻址法提前将空间申请好。其对大装载因子的容忍度更高。开放寻址适用于装载因子小于1的情景，接近1的时候，就会出现大量的散列冲突，导致大量探测，再散列，性能会下降很多。但是对于链表法来说只要散列函数值均匀，即使装载因子变成了10，也只是链表的长度拉长了，虽然查找效率变慢，但是比顺序查找还是要快很多。</strong>而且，我们还可以通过将链表法中的链表改造成其他动态查找数据结构，比如红黑树、跳表，来避免散列表时间复杂度退化成O(n)，抵御散列冲突攻击。<br> <img src="https://ws3.sinaimg.cn/large/005BYqpggy1g33kxyy3zkj30vq0ghdix.jpg" alt="avatar"><br>2.<strong>开放寻址法可以利用CPU缓存加快查询速度但是删除数据比较麻烦，并不能直接删除，需要标记已经删除掉的数据，而且每个冲突的数据都在数组中，冲突的代价很高，装载因子也不能设置的过大，导致了此方法比较浪费内存空间。</strong>但是对于小规模数据、装载因子不高的散列表，比较适合用。</p>
-<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><p>基于链表的散列冲突方法比较适合存储大对象，大数据量的散列表，因为对于大对象而言散列表中存储的指针大小基本可以忽略了，对于比较小的对象存储，是比较消耗内存的。但是比起开放寻址法它更加的灵活，支持更多的优化策略，比如红黑树代替链表。</p>
-<h3 id="举例分析"><a href="#举例分析" class="headerlink" title="举例分析"></a>举例分析</h3><p><strong>1.初始大小</strong><br>Java中的HashMap的默认初始大小是16，可以在预先知道大小时修改默认配置，减少扩容次数。<br><strong>2.装载因子和动态扩容</strong><br>最大装载因子默认是0.75，当元素个数超过了 0.75 * size 的时候，就会启动扩容，每次扩容是原来的两倍。<br><strong>3.散列冲突解决方法</strong><br>HashMap底层使用链表法来解决冲突，负载因子和散列函数设计的再合理也会出现拉链过场的情况，严重影响HashMap的性能。<br>在JDK1.8版本中，引入了红黑树。当链表长度太长（默认为8）时，链表就转化为红黑树。利用红黑树快速增删改查的特点提高性能，在红黑树节点少于8个的时候又将红黑树转化为链表。（在数据量矫情的情况下，红黑树要维护平衡，和链表比起来性能上没什么优势）<br><strong>4.散列函数</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h = key.hashCode()；</span><br><span class="line">    <span class="keyword">return</span> (h ^ (h &gt;&gt;&gt; <span class="number">16</span>)) &amp; (capitity -<span class="number">1</span>); <span class="comment">//capicity 表示散列表的大小</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h2 id="一、数据卷准备"><a href="#一、数据卷准备" class="headerlink" title="一、数据卷准备"></a>一、数据卷准备</h2><h3 id="1-创建数据卷"><a href="#1-创建数据卷" class="headerlink" title="1.创建数据卷"></a>1.创建数据卷</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker volume create mysql_dbdata</span><br><span class="line">docker volume ls # 查看</span><br><span class="line">docker volume inspect mysql_dbdata</span><br></pre></td></tr></table></figure>
+<p>删除数据卷<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker rm -v &lt;container_id&gt; # 删除容器及关联</span><br><span class="line"><span class="meta">$</span> docker volume rm &lt;volume_name&gt; # 删除数据卷</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-创建数据卷容器"><a href="#2-创建数据卷容器" class="headerlink" title="2.创建数据卷容器"></a>2.创建数据卷容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -v mysql_dbdata:/var/lib/mysql/ --name mysql_dbdata ubuntu</span><br></pre></td></tr></table></figure>
+<p>默认-v 挂载的是匿名数据卷，可先创建数据卷指定名称，再挂载到宿主机本地目录。  <strong>“:”前为数据卷名称，后面为宿主机地址。</strong>（这点与数据卷挂载时不一致，<strong>数据卷挂载”:”前面是宿主机本地地址，后面是容器内地址</strong>。）<br>默认执行权限是RW，若想设置只读需添加:ro<br>例如：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -v mysql_dbdata:/var/lib/mysql/:ro --name mysql_dbdata ubuntu</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-创建容器来挂载mysql-dbdata的数据。"><a href="#3-创建容器来挂载mysql-dbdata的数据。" class="headerlink" title="3.创建容器来挂载mysql_dbdata的数据。"></a>3.创建容器来挂载mysql_dbdata的数据。</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --volumes-from mysql_dbdata --name db1 ubuntu</span><br><span class="line">docker run -it --volumes-from mysql_dbdata --name db2 ubuntu</span><br></pre></td></tr></table></figure>
+<p>db1和db2 都挂载同一个数据卷到相同的/var/lib/mysql/ 目录。三个容器任何一方在该目录下的写入，其他容器都可以看到。</p>
+<h2 id="二、容器启动"><a href="#二、容器启动" class="headerlink" title="二、容器启动"></a>二、容器启动</h2><h3 id="1-启动mysql容器并挂载数据卷容器"><a href="#1-启动mysql容器并挂载数据卷容器" class="headerlink" title="1.启动mysql容器并挂载数据卷容器"></a>1.启动mysql容器并挂载数据卷容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 23333:3306 --name db_mysql_1 -v $(PWD)/my.cnf:/etc/mysql/my.cnf  --volumes-from db1 -e MYSQL_USER="lfc" -e MYSQL_ROOT_PASSWORD=123456 mysql/mysql-server</span><br></pre></td></tr></table></figure>
+<h3 id="2-宿主机查看容器日志"><a href="#2-宿主机查看容器日志" class="headerlink" title="2.宿主机查看容器日志"></a>2.宿主机查看容器日志</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#实时查看docker容器日志</span><br><span class="line">$ sudo docker logs -f -t --tail 行数 容器名</span><br><span class="line">#例：实时查看docker容器名为s12的最后10行日志</span><br><span class="line">$ sudo docker logs -f -t --tail 10 s12</span><br></pre></td></tr></table></figure>
+<h2 id="三、数据迁移备份"><a href="#三、数据迁移备份" class="headerlink" title="三、数据迁移备份"></a>三、数据迁移备份</h2><h3 id="1-备份数据"><a href="#1-备份数据" class="headerlink" title="1.备份数据"></a>1.备份数据</h3><p>（–volumes-from mysql_dbdata）新建容器挂载该容器卷<br>（-v $(pwd):/backup）并且将宿主机当前目录挂载到新容器backup下。<br>（tar cvf /backup/backup.tar /var/lib/mysql）将容器数据卷内数据打包至backup下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name backup_copy --volumes-from mysql_dbdata -v $(pwd):/backup ubuntu tar cvf /backup/backup.tar /var/lib/mysql</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-数据恢复"><a href="#2-数据恢复" class="headerlink" title="2.数据恢复"></a>2.数据恢复</h3><p>新建数据卷容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -v /var/lib/mysql --name mysql_dbdata2 ubuntu /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p>另创建一个容器挂载mysql_dbdata2 的容器并使用untar将备份文件解压到挂载的容器卷中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name copydata --volumes-from mysql_dbdata2 -v $(pwd):/backup busybox tar xvf /backup/backup.tar</span><br></pre></td></tr></table></figure></p>
+<h3 id="四、加载新实例"><a href="#四、加载新实例" class="headerlink" title="四、加载新实例"></a>四、加载新实例</h3><h3 id="1-新建实例加载mysql-dbdata2数据卷容器"><a href="#1-新建实例加载mysql-dbdata2数据卷容器" class="headerlink" title="1.新建实例加载mysql_dbdata2数据卷容器"></a>1.新建实例加载mysql_dbdata2数据卷容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 24444:3306 --name db_mysql_1 -v $(PWD)/my.cnf:/etc/mysql/my.cnf  --volumes-from mysql_dbdata2 -e MYSQL_USER="lfc" -e MYSQL_ROOT_PASSWORD=123456 mysql/mysql-server</span><br></pre></td></tr></table></figure>
+<h2 id="五、Mysql使用"><a href="#五、Mysql使用" class="headerlink" title="五、Mysql使用"></a>五、Mysql使用</h2><h3 id="1-基本操作"><a href="#1-基本操作" class="headerlink" title="1.基本操作"></a>1.基本操作</h3><table><br>   <tr><br>      <td>操作</td><br>      <td>SQL </td><br>   </tr><br>   <tr><br>      <td>查询所有数据库    </td><br>      <td>show databases;</td><br>   </tr><br>   <tr><br>      <td>查看活跃连接    </td><br>      <td>show processlist;</td><br>   </tr><br>    <tr><br>      <td>创建数据库</td><br>      <td>create database blog default character set utf8;</td><br>   </tr><br>    <tr><br>      <td>查看数据库的默认字符集</td><br>      <td>show create database blog;</td><br>   </tr><br>   <tr><br>      <td>删除数据库</td><br>      <td>drop database blog;</td><br>   </tr><br>   <tr><br>      <td>修改数据库</td><br>      <td>alter database blog default character set gbk;</td><br>   </tr><br>   <tr><br>      <td>选择数据库</td><br>      <td>use blog;</td><br>   </tr><br>   <tr><br>      <td>看所有表</td><br>      <td>show tables;</td><br>   </tr><br>   <tr><br>      <td>创建表</td><br>      <td>create table student(sid int,sname varchar(20));</td><br>   </tr><br>   <tr><br>      <td>查看表结构</td><br>      <td>desc student;</td><br>   </tr><br>    <tr><br>      <td>删除表</td><br>      <td>drop table student;</td><br>   </tr><br>    <tr><br>      <td>添加字段</td><br>      <td>alter table student add sgender varchar(2);<br></td><br>   </tr><br>    <tr><br>      <td>删除字段</td><br>      <td>alter table student drop sgender;</td><br>   </tr><br>    <tr><br>      <td>修改字段类型</td><br>      <td>alter table student modify sgender varchar(100);</td><br>   </tr><br>    <tr><br>      <td>修改字段名称</td><br>      <td>alter table student change sgender gender varchar(2);</td><br>   </tr><br>    <tr><br>      <td>修改表名称</td><br>      <td>alter table student rename to teacher;</td><br>   </tr><br></table>
+
+
+<h3 id="2-问题汇总"><a href="#2-问题汇总" class="headerlink" title="2.问题汇总"></a>2.问题汇总</h3><h4 id="1-ERROR-1130"><a href="#1-ERROR-1130" class="headerlink" title="1.ERROR 1130"></a>1.ERROR 1130</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR 1130: Host &apos;192.168.1.3&apos; is not allowed to connect to this</span><br></pre></td></tr></table></figure>
+<p>mysql不允许远程登录，需使用命令行对其进行设置，具体方法有两种，授权法和改表法。</p>
+<h5 id="1-使用root权限登录"><a href="#1-使用root权限登录" class="headerlink" title="1.使用root权限登录"></a>1.使用root权限登录</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
+<h5 id="2-改表法"><a href="#2-改表法" class="headerlink" title="2.改表法"></a>2.改表法</h5><p>使用localhost的主机登录，登入后更改mysql数据库中user表里的host项，”localhost”更改成”%”。% 号为所有，也可改成某固定IP。<br>命令<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> mysql;</span><br><span class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> host = <span class="string">'%'</span> <span class="keyword">where</span> <span class="keyword">user</span> = <span class="string">'root'</span>;</span><br><span class="line"><span class="keyword">select</span> host, <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure></p>
+<h5 id="3-授权法"><a href="#3-授权法" class="headerlink" title="3.授权法"></a>3.授权法</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">'lfc'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'123456'</span> <span class="keyword">PASSWORD</span> <span class="keyword">EXPIRE</span> <span class="keyword">NEVER</span>; </span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">'lfc'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">WITH</span> mysql_native_password <span class="keyword">BY</span> <span class="string">'123456'</span>;</span><br></pre></td></tr></table></figure>
+<p>mysql8.0之后进行了修改，授权和创建用户是分开设置的。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">'lfc'</span>@<span class="string">'%'</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">'123456'</span>;</span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">ALL</span> <span class="keyword">PRIVILEGES</span> <span class="keyword">on</span> *.* <span class="keyword">TO</span> <span class="string">'lfc'</span>@<span class="string">'%'</span> ; <span class="comment"># 前面的*是指定数据库，后面的*指定的是表。</span></span><br></pre></td></tr></table></figure></p>
+<p>创建账户:create user ‘用户名‘@’访问主机’ identified by ‘密码’;<br>赋予权限:grant 权限列表 on 数据库 to ‘用户名‘@’访问主机’ ;(修改权限时在后面加with grant option)</p>
+<h4 id="2-Error-Code-1044"><a href="#2-Error-Code-1044" class="headerlink" title="2.Error Code: 1044."></a>2.Error Code: 1044.</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error Code: 1044. Access denied for user &apos;root&apos;@&apos;%&apos; to database</span><br></pre></td></tr></table></figure>
+<p>授权的权限没有打开： Grant_priv is set to N for root@%. 修复下<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">user</span> <span class="keyword">SET</span> Grant_priv=<span class="string">'Y'</span>, Super_priv=<span class="string">'Y'</span> <span class="keyword">WHERE</span> <span class="keyword">User</span>=<span class="string">'lfc'</span>;</span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>; <span class="comment">#刷新</span></span><br></pre></td></tr></table></figure></p>
+<p>MySQL 常见数据类型<br>在 MySQL 中常见的数据类型如下：</p>
+<blockquote>
+<p>1) 整数类型 包括 TINYINT、SMALLINT、MEDIUMINT、INT、BIGINT，浮点数类型 FLOAT 和<br>DOUBLE，定点数类型 DECIMAL。 2) 日期/时间类型 包括 YEAR、TIME、DATE、DATETIME 和<br>TIMESTAMP。 3) 字符串类型 包括 CHAR、VARCHAR、BINARY、VARBINARY、BLOB、TEXT、ENUM 和<br>SET 等。 4) 二进制类型 包括 BIT、BINARY、VARBINARY、TINYBLOB、BLOB、MEDIUMBLOB 和<br>LONGBLOB。</p>
+</blockquote>
+<h5 id="时区问题"><a href="#时区问题" class="headerlink" title="时区问题"></a>时区问题</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select now(); #查看mysql系统时间。和当前时间做对比</span><br><span class="line">set global time_zone = &apos;+8:00&apos;; #设置时区更改为东八区</span><br><span class="line">flush privileges;  #刷新权限</span><br></pre></td></tr></table></figure>
+<p>然后退出后重新登录就可以了.</p>
 
       
     </div>
@@ -460,7 +467,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/算法/" rel="tag"># 算法</a>
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
           
         </div>
       
@@ -473,8 +480,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/20/散列表（上）/" rel="next" title="散列表（上）">
-                <i class="fa fa-chevron-left"></i> 散列表（上）
+              <a href="/2020/01/28/Docker-学习四-数据管理/" rel="next" title="Docker-学习四(数据管理)">
+                <i class="fa fa-chevron-left"></i> Docker-学习四(数据管理)
               </a>
             
           </div>
@@ -483,8 +490,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/05/26/hexo搭建个人博客/" rel="prev" title="hexo搭建个人博客">
-                hexo搭建个人博客 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/01/30/Docker学习六-操作系统使用/" rel="prev" title="Docker学习六 (操作系统使用)">
+                Docker学习六 (操作系统使用) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -662,7 +669,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#如何设计一个工业级的散列函数？"><span class="nav-number">1.</span> <span class="nav-text">如何设计一个工业级的散列函数？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#何为一个工业级的散列表？工业级的散列表应该具有哪些特性？"><span class="nav-number">1.1.</span> <span class="nav-text">何为一个工业级的散列表？工业级的散列表应该具有哪些特性？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一、如何设计散列函数？"><span class="nav-number">1.2.</span> <span class="nav-text">一、如何设计散列函数？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、如何根据装载因子动态扩容？"><span class="nav-number">1.3.</span> <span class="nav-text">二、如何根据装载因子动态扩容？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-如何设置装载因子阈值？"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.如何设置装载因子阈值？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-如何避免低效扩容？"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.如何避免低效扩容？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、如何选择散列冲突解决方法？"><span class="nav-number">1.4.</span> <span class="nav-text">三、如何选择散列冲突解决方法？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、总结"><span class="nav-number">1.5.</span> <span class="nav-text">四、总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#举例分析"><span class="nav-number">1.5.1.</span> <span class="nav-text">举例分析</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、数据卷准备"><span class="nav-number">1.</span> <span class="nav-text">一、数据卷准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建数据卷"><span class="nav-number">1.1.</span> <span class="nav-text">1.创建数据卷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-创建数据卷容器"><span class="nav-number">1.2.</span> <span class="nav-text">2.创建数据卷容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-创建容器来挂载mysql-dbdata的数据。"><span class="nav-number">1.3.</span> <span class="nav-text">3.创建容器来挂载mysql_dbdata的数据。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、容器启动"><span class="nav-number">2.</span> <span class="nav-text">二、容器启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-启动mysql容器并挂载数据卷容器"><span class="nav-number">2.1.</span> <span class="nav-text">1.启动mysql容器并挂载数据卷容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-宿主机查看容器日志"><span class="nav-number">2.2.</span> <span class="nav-text">2.宿主机查看容器日志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、数据迁移备份"><span class="nav-number">3.</span> <span class="nav-text">三、数据迁移备份</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-备份数据"><span class="nav-number">3.1.</span> <span class="nav-text">1.备份数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-数据恢复"><span class="nav-number">3.2.</span> <span class="nav-text">2.数据恢复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、加载新实例"><span class="nav-number">3.3.</span> <span class="nav-text">四、加载新实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-新建实例加载mysql-dbdata2数据卷容器"><span class="nav-number">3.4.</span> <span class="nav-text">1.新建实例加载mysql_dbdata2数据卷容器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、Mysql使用"><span class="nav-number">4.</span> <span class="nav-text">五、Mysql使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-基本操作"><span class="nav-number">4.1.</span> <span class="nav-text">1.基本操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-问题汇总"><span class="nav-number">4.2.</span> <span class="nav-text">2.问题汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-ERROR-1130"><span class="nav-number">4.2.1.</span> <span class="nav-text">1.ERROR 1130</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-使用root权限登录"><span class="nav-number">4.2.1.1.</span> <span class="nav-text">1.使用root权限登录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-改表法"><span class="nav-number">4.2.1.2.</span> <span class="nav-text">2.改表法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-授权法"><span class="nav-number">4.2.1.3.</span> <span class="nav-text">3.授权法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Error-Code-1044"><span class="nav-number">4.2.2.</span> <span class="nav-text">2.Error Code: 1044.</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#时区问题"><span class="nav-number">4.2.2.1.</span> <span class="nav-text">时区问题</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -828,9 +835,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://iamlfc.top/2019/05/21/散列表（中）/';
-          this.page.identifier = '2019/05/21/散列表（中）/';
-          this.page.title = '散列表（中）';
+          this.page.url = 'http://iamlfc.top/2020/01/30/Docker-学习五-Mysql多实例安装/';
+          this.page.identifier = '2020/01/30/Docker-学习五-Mysql多实例安装/';
+          this.page.title = 'Docker-学习五(Mysql多实例安装)';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://.disqus.com/embed.js';
