@@ -284,6 +284,209 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2020/01/27/Docker-学习三-Docker仓库/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     663 字
+	</span>
+	<span title="阅读时长">
+     2 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/27/Docker-学习三-Docker仓库/" itemprop="url">Docker-学习三(Docker仓库)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-27T20:10:35+08:00">
+                2020-01-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker镜像/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker镜像</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/27/Docker-学习三-Docker仓库/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/27/Docker-学习三-Docker仓库/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  663
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>docker仓库（Repository）是集中存放镜像的地方，与git概念类似，分为公共仓库和私有仓库。一般与注册服务器（Registry）容易混淆。注册服务器是存放仓库的服务器，其中可有多个仓库。</p>
+<h1 id="内容提要"><a href="#内容提要" class="headerlink" title="内容提要"></a>内容提要</h1><p>使用Docker Hub官方仓库，登陆下载，及私有仓库的搭建等操作。</p>
+<h2 id="Docker-Hub-公共仓库"><a href="#Docker-Hub-公共仓库" class="headerlink" title="Docker Hub 公共仓库"></a>Docker Hub 公共仓库</h2><p>Docker官方维护了一个公共镜像仓库 <a href="https://hub.docker.com" target="_blank" rel="noopener">https://hub.docker.com</a> ，大部分镜像可以从官方下载。</p>
+<h3 id="1-登陆"><a href="#1-登陆" class="headerlink" title="1.登陆"></a>1.登陆</h3><p>在官网进行注册账号，通过命令执行docker login 来输入用户名密码进行登陆，本地用户目录的.dockercfg中将保存用户的认证信息。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-基本操作"><a href="#2-基本操作" class="headerlink" title="2.基本操作"></a>2.基本操作</h3><p>不需要登陆也可以使用 docker search 查询官方镜像，也可以使用docker pull命令将其下载到本地。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker search mysql -s 10</span><br><span class="line">docker pull centos</span><br></pre></td></tr></table></figure>
+<p>可以使用docker push 命令来将本地镜像推送到 Docker<br>Hub<br>直接推送镜像时会报错：<strong>denied: requested access to the resource is denied</strong><br>因为没有提交权限，此时应该将要推送的镜像添加tag，将其与docker Hub仓库路径保持一致。<br><img src="https://i.loli.net/2019/11/28/Hl3Rz52YUaJqBtA.png" alt="DockerHub.png"><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker tag test:0.1 lisidapao/test:v1.0</span><br><span class="line">docker push lisidapao/test</span><br></pre></td></tr></table></figure></p>
+<h2 id="搭建本地私有仓库"><a href="#搭建本地私有仓库" class="headerlink" title="搭建本地私有仓库"></a>搭建本地私有仓库</h2><h3 id="1-使用registry-镜像创建私有仓库"><a href="#1-使用registry-镜像创建私有仓库" class="headerlink" title="1.使用registry 镜像创建私有仓库"></a>1.使用registry 镜像创建私有仓库</h3><p>通过官方提供的 registry 镜像来简单搭建一套本地私<br>有仓库环境<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 5000:5000 registry</span><br></pre></td></tr></table></figure></p>
+<p>通过- v参数来将镜像文件存放在本地的指定路径<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 5000:5000 -v /opt/data/registry:/tmp/registry registry</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-管理私有仓库"><a href="#2-管理私有仓库" class="headerlink" title="2. 管理私有仓库"></a>2. 管理私有仓库</h3><p>获取仓库服务的ip地址，再开一个虚拟机模拟本地将本地镜像tag标记为：<strong>仓库IP:5000/test</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag ubuntu:14.04 10.0.2.2:5000/test</span><br></pre></td></tr></table></figure></p>
+<p>使用docker push 上传标记的镜像：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push 10.0.2.2:5000/test</span><br></pre></td></tr></table></figure></p>
+<p>用curl 查看仓库10.0.2.2： 5000 中的镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://10.0.2.2:5000/v1/search</span><br></pre></td></tr></table></figure></p>
+<p>结果中可以看到{“description”：””，”name”：”library/test”}，表明镜像已经成功上传了。现在可以到任意一台能访问到 10.0.2.2地址的机器去下载这个镜像了。</p>
+<p>版本较新的Docker版本对安全性要求比较高，要求仓库支持SSL/TLS证书。内部使用的私有仓库，可以关闭对此的检查。<br>添加如下参数，标识信任该仓库，不进行证书检查，重启Docker 服务配置生效<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DOCKER_OPTS="--insecure-registry 10.0.2.2:5000"</span><br></pre></td></tr></table></figure></p>
+<h2 id="国内仓库配置"><a href="#国内仓库配置" class="headerlink" title="国内仓库配置"></a>国内仓库配置</h2><p>阿里云，时速云，网易云等相关：<a href="https://www.cnblogs.com/wushuaishuai/p/9984228.html" target="_blank" rel="noopener">https://www.cnblogs.com/wushuaishuai/p/9984228.html</a></p>
+<p>参考资料：Docker技术入门与实战</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2020/01/12/Jenkins-Svn-Ant持续集成/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2254,266 +2457,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/10/SpringCloud学习五-GateWay网关/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     2k 字
-	</span>
-	<span title="阅读时长">
-     9 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/10/SpringCloud学习五-GateWay网关/" itemprop="url">SpringCloud学习五-GateWay网关</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-10T23:51:40+08:00">
-                2019-10-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/" itemprop="url" rel="index">
-                    <span itemprop="name">框架</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架/spring/SpringCloud/GateWay/" itemprop="url" rel="index">
-                    <span itemprop="name">GateWay</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/10/SpringCloud学习五-GateWay网关/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/10/SpringCloud学习五-GateWay网关/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  9
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="1-GateWay是什么？"><a href="#1-GateWay是什么？" class="headerlink" title="1.GateWay是什么？"></a>1.GateWay是什么？</h2><p>GateWay 是SpringCloud 生态系统中的网关，目标是替代Zuul，同样提供了限流，监控，路由转发、权限校验等功能。</p>
-<p>相关名词：</p>
-<ul>
-<li>Route（路由）：这是网关的基本构建块。它由一个 ID，一个目标 URI，一组断言和一组过滤器定义。如果断言为真，则路由匹配。</li>
-<li>Predicate（断言）：这是一个 Java 8 的 Predicate。输入类型是一个 ServerWebExchange。我们可以使用它来匹配来自 HTTP 请求的任何内容，例如 headers 或参数。</li>
-<li>Filter（过滤器）：这是org.springframework.cloud.gateway.filter.GatewayFilter的实例，我们可以使用它修改请求和响应。</li>
-</ul>
-<p><a href="http://tva1.sinaimg.cn/large/007X8olVly1g7thifgswnj30hv0l7dh6.jpg" target="_blank" rel="noopener">工作流程：</a><br><img src="https://i.loli.net/2019/10/10/fvwEDGOQBUj3utk.png" alt="GateWay.png"></p>
-<p>客户端向 Spring Cloud Gateway 发出请求，如果HandlerMapping中找到了请求相匹配的路由，将其发送到Web Handler。Handler再通过指定过滤器链将请求发送到实际服务之星业务逻辑，然后返回。虚线是过滤器可能会在发送代理请求之前pre活之后post执行业务逻辑。</p>
-<h2 id="2-创建工程"><a href="#2-创建工程" class="headerlink" title="2.创建工程"></a>2.创建工程</h2><h3 id="2-1依赖"><a href="#2-1依赖" class="headerlink" title="2.1依赖"></a>2.1依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-gateway&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-webflux&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-<p><strong>注意：springcloud gateway使用的web框架为webflux，和springMVC不兼容。</strong></p>
-<h3 id="2-2代码"><a href="#2-2代码" class="headerlink" title="2.2代码"></a>2.2代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GateWayApplication</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		SpringApplication.run(GateWayApplication.class, args);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Bean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> RouteLocator <span class="title">customRouteLocator</span><span class="params">(RouteLocatorBuilder builder)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> builder.routes()</span><br><span class="line">				.route(<span class="string">"test_route"</span>, r -&gt; r.path(<span class="string">"/test"</span>)</span><br><span class="line">						.uri(<span class="string">"http://baidu.com"</span>))</span><br><span class="line">				.build();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>路由有两种配置方式，一种是像上面这样配置一个id名为test_route的路由，当访问项目地址/test的时候，会自动转发到baidu.com。<br>另一种是在配置文件中配置，下面介绍。</p>
-<h3 id="2-3配置文件"><a href="#2-3配置文件" class="headerlink" title="2.3配置文件"></a>2.3配置文件</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    gateway:</span></span><br><span class="line"><span class="attr">      routes:</span></span><br><span class="line"><span class="attr">      - id:</span> <span class="string">test_route</span></span><br><span class="line"><span class="attr">        uri:</span> <span class="attr">http://www.baidu.com</span></span><br><span class="line"><span class="attr">        predicates:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">Path=/foo/**</span></span><br><span class="line"><span class="attr">        filters:</span></span><br><span class="line"><span class="bullet">            -</span> <span class="string">StripPrefix=1</span></span><br></pre></td></tr></table></figure>
-<p>字段含义如下：</p>
-<ul>
-<li>id: 自定有路由id，唯一</li>
-<li>uri: 跳转的目标地址</li>
-<li>predicates: 路由条件</li>
-<li>filters： 过滤规则</li>
-</ul>
-<p>上面配置的意思是配置了一个id为test_route的路由规则，当访问项目地址/foo/hello的时候自动转发到地址baidu.com。如果上面例子中没有加一个StripPrefix=1过滤器，则目标uri为<a href="http://localhost:8000/foo/bar，StripPrefix过滤器是去掉一个路径。" target="_blank" rel="noopener">http://localhost:8000/foo/bar，StripPrefix过滤器是去掉一个路径。</a><br>routes配置和代码配置保留一处即可。</p>
-<h2 id="3-路由规则详解"><a href="#3-路由规则详解" class="headerlink" title="3.路由规则详解"></a>3.路由规则详解</h2><blockquote>
-<p>Predicate 来源于 Java 8，是 Java 8 中引入的一个函数，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）。可以用于接口请求参数校验、判断新老数据是否有变化需要进行更新操作。<br>在 Spring Cloud Gateway 中 Spring 利用 Predicate 的特性实现了各种路由匹配规则，有通过 Header、请求参数等不同的条件来进行作为条件匹配到对应的路由。<a href="http://tva1.sinaimg.cn/large/007X8olVly1g7til1ktyfj30rg0eb12w.jpg" target="_blank" rel="noopener">网上有一张图总结了 Spring Cloud 内置的几种 Predicate 的实现。</a></p>
-</blockquote>
-<p><img src="https://i.loli.net/2019/10/10/8XzQH2WSkTOesJq.png" alt="spring-cloud-gateway3.png"></p>
-<h3 id="3-1时间匹配"><a href="#3-1时间匹配" class="headerlink" title="3.1时间匹配"></a>3.1时间匹配</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    gateway:</span></span><br><span class="line"><span class="attr">      routes:</span></span><br><span class="line"><span class="attr">       - id:</span> <span class="string">time_route</span></span><br><span class="line"><span class="attr">        uri:</span> <span class="attr">http://ityouknow.com</span></span><br><span class="line"><span class="attr">        predicates:</span></span><br><span class="line"><span class="bullet">         -</span> <span class="string">After=2018-01-20T06:06:06+08:00[Asia/Shanghai]</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>Spring 是通过 ZonedDateTime 来对时间进行的对比，ZonedDateTime 是 Java 8<br>中日期时间功能里，用于表示带时区的日期与时间信息的类，ZonedDateTime<br>支持通过时区来设置时间，中国的时区是：Asia/Shanghai。 After Route Predicate<br>是指在这个时间之后的请求都转发到目标地址。上面的示例是指，请求时间在<br>2018年1月20日6点6分6秒之后的所有请求都转发到地址<a href="http://ityouknow.com。+08:00是指时间和UTC时间相差八个小时，时间地区为Asia/Shanghai。" target="_blank" rel="noopener">http://ityouknow.com。+08:00是指时间和UTC时间相差八个小时，时间地区为Asia/Shanghai。</a></p>
-</blockquote>
-<h3 id="3-2-Cookie匹配"><a href="#3-2-Cookie匹配" class="headerlink" title="3.2 Cookie匹配"></a>3.2 Cookie匹配</h3><p>Cookie Route Predicate 可以接收两个参数，一个是 Cookie name ,一个是正则表达式，路由规则会通过获取对应的 Cookie name 值和正则表达式去匹配，如果匹配上就会执行路由，如果没有匹配上则不执行。<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    gateway:</span></span><br><span class="line"><span class="attr">      routes:</span></span><br><span class="line"><span class="attr">       - id:</span> <span class="string">cookie_route</span></span><br><span class="line"><span class="attr">         uri:</span> <span class="attr">http://ityouknow.com</span></span><br><span class="line"><span class="attr">         predicates:</span></span><br><span class="line"><span class="bullet">         -</span> <span class="string">Cookie=ityouknow,</span> <span class="string">kee.e</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="3-3-通过请求路径匹配-常用"><a href="#3-3-通过请求路径匹配-常用" class="headerlink" title="3.3 通过请求路径匹配(常用)"></a>3.3 通过请求路径匹配(常用)</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    gateway:</span></span><br><span class="line"><span class="attr">      routes:</span></span><br><span class="line"><span class="attr">      - id:</span> <span class="string">host_route</span></span><br><span class="line"><span class="attr">        uri:</span> <span class="attr">http://baidu.com</span></span><br><span class="line"><span class="attr">        predicates:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">Path=/foo/&#123;segment&#125;</span></span><br></pre></td></tr></table></figure>
-<p>如果请求路径符合要求，则此路由将匹配，例如：/foo/1 或者 /foo/bar。<br>使用 curl 测试，命令行输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:8080/foo/1</span><br></pre></td></tr></table></figure></p>
-<h3 id="3-4通过请求参数匹配"><a href="#3-4通过请求参数匹配" class="headerlink" title="3.4通过请求参数匹配"></a>3.4通过请求参数匹配</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    gateway:</span></span><br><span class="line"><span class="attr">      routes:</span></span><br><span class="line"><span class="attr">      - id:</span> <span class="string">query_route</span></span><br><span class="line"><span class="attr">        uri:</span> <span class="attr">http://ityouknow.com</span></span><br><span class="line"><span class="attr">        predicates:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">Query=smile</span></span><br></pre></td></tr></table></figure>
-<p>这样配置，只要请求中包含 smile 属性的参数即可匹配路由。<br>使用 curl 测试，命令行输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl localhost:8080?smile=x&amp;id=2</span><br></pre></td></tr></table></figure></p>
-<h2 id="4-利用过滤器修改接口的返回报文（后置过滤）"><a href="#4-利用过滤器修改接口的返回报文（后置过滤）" class="headerlink" title="4.利用过滤器修改接口的返回报文（后置过滤）"></a>4.利用过滤器修改接口的返回报文（后置过滤）</h2><p>各个子服务返回的报文各异，需要在网关对返回报文进行包装统一返回格式。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ResponseFilter</span>  <span class="keyword">implements</span> <span class="title">GlobalFilter</span>, <span class="title">Ordered</span> </span>&#123;</span><br><span class="line">    <span class="comment">//白名单</span></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;filter.url.white.list.rsp&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String[] skipAuthUrls ;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Mono&lt;Void&gt; <span class="title">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> </span>&#123;</span><br><span class="line">        ServerHttpResponse originalResponse = exchange.getResponse();</span><br><span class="line">        String url = exchange.getRequest().getURI().getPath();</span><br><span class="line">        <span class="comment">//跳过不需要验证的路径</span></span><br><span class="line">        <span class="keyword">if</span>(Arrays.asList(skipAuthUrls).contains(url))&#123;</span><br><span class="line">            <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">        &#125;</span><br><span class="line">        DataBufferFactory bufferFactory = originalResponse.bufferFactory();</span><br><span class="line">        ServerHttpResponseDecorator decoratedResponse = <span class="keyword">new</span> ServerHttpResponseDecorator(originalResponse) &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> Mono&lt;Void&gt; <span class="title">writeWith</span><span class="params">(Publisher&lt;? extends DataBuffer&gt; body)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (body <span class="keyword">instanceof</span> Flux) &#123;</span><br><span class="line">                    Flux&lt;? extends DataBuffer&gt; fluxBody = (Flux&lt;? extends DataBuffer&gt;) body;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">super</span>.writeWith(fluxBody.map(dataBuffer -&gt; &#123;</span><br><span class="line">                        <span class="comment">// probably should reuse buffers</span></span><br><span class="line">                        <span class="keyword">byte</span>[] content = <span class="keyword">new</span> <span class="keyword">byte</span>[dataBuffer.readableByteCount()];</span><br><span class="line">                        dataBuffer.read(content);</span><br><span class="line">                        <span class="comment">// 释放掉内存</span></span><br><span class="line">                        DataBufferUtils.release(dataBuffer);</span><br><span class="line">                        String rs = <span class="keyword">new</span> String(content, Charset.forName(<span class="string">"UTF-8"</span>));</span><br><span class="line">                        <span class="comment">//默认失败</span></span><br><span class="line">                        CommonResult commonResult = CommonResult.failed();</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            <span class="keyword">if</span>(StringUtils.isNotBlank(rs))&#123;</span><br><span class="line">                                JsonResult jsonResult= JSONObject.parseObject(rs,JsonResult.class);</span><br><span class="line">                                <span class="keyword">if</span>(<span class="keyword">null</span> != jsonResult )&#123;</span><br><span class="line">                                    <span class="keyword">if</span>(<span class="number">0</span> == jsonResult.getCode())&#123;</span><br><span class="line">                                        commonResult = CommonResult.success(jsonResult.getData(),jsonResult.getMessage());</span><br><span class="line">                                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                                        commonResult = CommonResult.failed(jsonResult.getMessage());</span><br><span class="line">                                    &#125;</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                            log.error(<span class="string">"转换异常，异常报文：&#123;&#125;"</span>,rs);</span><br><span class="line">                            log.error(e.getMessage(),e);</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">byte</span>[] newRs = JSON.toJSONString(commonResult).getBytes(Charset.forName(<span class="string">"UTF-8"</span>));</span><br><span class="line">                        originalResponse.getHeaders().setContentLength(newRs.length);<span class="comment">//如果不重新设置长度则收不到消息。</span></span><br><span class="line">                        <span class="keyword">return</span> bufferFactory.wrap(newRs);</span><br><span class="line">                    &#125;));</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">super</span>.writeWith(body);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> chain.filter(exchange.mutate().response(decoratedResponse).build());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 功能描述: 执行优先级</span></span><br><span class="line"><span class="comment">     * 此处order需要小于-1，需要先于NettyWriteResponseFilter过滤器执行</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>:</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span>:</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@auther</span>: lfc</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span>: 2019/8/25 18:56</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getOrder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">99</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>需要注意的是order需要小于-1，需要先于NettyWriteResponseFilter过滤器执行。</p>
-<h2 id="5-过滤器拦截权限认证-前置过滤"><a href="#5-过滤器拦截权限认证-前置过滤" class="headerlink" title="5.过滤器拦截权限认证(前置过滤)"></a>5.过滤器拦截权限认证(前置过滤)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AuthFilter</span> <span class="keyword">implements</span> <span class="title">GlobalFilter</span>, <span class="title">Ordered</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;filter.url.white.list.req&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String[] skipAuthUrls;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String jwtBlacklistKeyFormat;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Mono&lt;Void&gt; <span class="title">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> </span>&#123;</span><br><span class="line">        String url = exchange.getRequest().getURI().getPath();</span><br><span class="line">        <span class="comment">//跳过不需要验证的路径</span></span><br><span class="line">        <span class="keyword">if</span>(Arrays.asList(skipAuthUrls).contains(url))&#123;</span><br><span class="line">            <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//从请求头中取出token</span></span><br><span class="line">        String token = exchange.getRequest().getHeaders().getFirst(<span class="string">"Authorization"</span>);</span><br><span class="line">        <span class="comment">//未携带token或token在黑名单内</span></span><br><span class="line">        <span class="keyword">if</span> (token == <span class="keyword">null</span> ||</span><br><span class="line">                token.isEmpty() ||</span><br><span class="line">                isBlackToken(token)) &#123;</span><br><span class="line">            <span class="keyword">if</span>(log.isDebugEnabled() &amp;&amp; isBlackToken(token))&#123;</span><br><span class="line">                log.debug(<span class="string">"**********此token已加入黑名单**********"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            ServerHttpResponse originalResponse = exchange.getResponse();</span><br><span class="line">            originalResponse.setStatusCode(HttpStatus.OK);</span><br><span class="line">            originalResponse.getHeaders().add(<span class="string">"Content-Type"</span>, <span class="string">"application/json;charset=UTF-8"</span>);</span><br><span class="line">            <span class="keyword">byte</span>[] response = JSONObject.toJSONString(CommonResult.unauthorized(<span class="keyword">null</span>)).getBytes(StandardCharsets.UTF_8);</span><br><span class="line">            DataBuffer buffer = originalResponse.bufferFactory().wrap(response);</span><br><span class="line">            <span class="keyword">return</span> originalResponse.writeWith(Flux.just(buffer));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//取出token包含的身份</span></span><br><span class="line">        String data = JWTUtil.getData(token, Constant.JWT_TYPE);</span><br><span class="line">        <span class="keyword">if</span>(data.isEmpty())&#123;</span><br><span class="line">            ServerHttpResponse originalResponse = exchange.getResponse();</span><br><span class="line">            originalResponse.setStatusCode(HttpStatus.OK);</span><br><span class="line">            originalResponse.getHeaders().add(<span class="string">"Content-Type"</span>, <span class="string">"application/json;charset=UTF-8"</span>);</span><br><span class="line">            <span class="keyword">byte</span>[] response = JSONObject.toJSONString(CommonResult.forbidden(<span class="keyword">null</span>)).getBytes(StandardCharsets.UTF_8);</span><br><span class="line">            DataBuffer buffer = originalResponse.bufferFactory().wrap(response);</span><br><span class="line">            <span class="keyword">return</span> originalResponse.writeWith(Flux.just(buffer));</span><br><span class="line">        &#125;</span><br><span class="line">        UserDTO ud = JSONObject.parseObject(data,UserDTO.class);</span><br><span class="line">        <span class="comment">// 1.解析判断是否被修改 2.根据token 获取redis中的数据以此判断是否超时或有效</span></span><br><span class="line">        <span class="keyword">if</span>(!JWTUtil.verify(token) || StringUtils.isBlank(JedisUtil.getJson(ud.getJti())))&#123;</span><br><span class="line">            ServerHttpResponse originalResponse = exchange.getResponse();</span><br><span class="line">            originalResponse.setStatusCode(HttpStatus.OK);</span><br><span class="line">            originalResponse.getHeaders().add(<span class="string">"Content-Type"</span>, <span class="string">"application/json;charset=UTF-8"</span>);</span><br><span class="line">            <span class="keyword">byte</span>[] response = JSONObject.toJSONString(CommonResult.tamperToken(<span class="keyword">null</span>)).getBytes(StandardCharsets.UTF_8);</span><br><span class="line">            DataBuffer buffer = originalResponse.bufferFactory().wrap(response);</span><br><span class="line">            <span class="keyword">return</span> originalResponse.writeWith(Flux.just(buffer));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//redis 更新过期时间</span></span><br><span class="line">        JedisUtil.setJson(ud.getJti(),token,Constant.EXRP_HOUR);</span><br><span class="line">        data = JWTUtil.sign(JSONObject.toJSONString(ud));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将现在的request，添加当前身份</span></span><br><span class="line">        ServerHttpRequest mutableReq = exchange.getRequest().mutate().header(<span class="string">"Authorization"</span>, data).build();</span><br><span class="line">        ServerWebExchange mutableExchange = exchange.mutate().request(mutableReq).build();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> chain.filter(mutableExchange);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getOrder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">100</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 功能描述: 判断token是否在黑名单内</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@auther</span>: lfc</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span>: 2019/9/9 0:34</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isBlackToken</span><span class="params">(String token)</span></span>&#123;</span><br><span class="line"><span class="comment">//        assert token != null;</span></span><br><span class="line"><span class="comment">//        return stringRedisTemplate.hasKey(String.format(jwtBlacklistKeyFormat, token));</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>GateWay中区分前置过滤还是后置过滤取决于动作在chain.filter方法前还是之后，之后回调的是后置，之前调用的是前置。</p>
-<p>参考资源：<a href="http://www.ityouknow.com/springcloud/2018/12/12/spring-cloud-gateway-start.html" target="_blank" rel="noopener">纯洁微笑</a><br>          <a href="https://blog.csdn.net/forezp/article/details/83792388" target="_blank" rel="noopener">方志鹏-深入理解Spring Cloud与微服务构建</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2567,7 +2510,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

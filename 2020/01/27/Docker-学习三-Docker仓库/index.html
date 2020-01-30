@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Docker,">
 
 
 
@@ -79,16 +79,20 @@
 
 
 
-<meta name="description" content="我从不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现更广阔的人生，那样的自由才是珍贵的、有价值的。我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="邪恶小代码">
-<meta property="og:url" content="http://iamlfc.top/categories/框架/page/2/index.html">
+<meta name="description" content="docker仓库（Repository）是集中存放镜像的地方，与git概念类似，分为公共仓库和私有仓库。一般与注册服务器（Registry）容易混淆。注册服务器是存放仓库的服务器，其中可有多个仓库。 内容提要使用Docker Hub官方仓库，登陆下载，及私有仓库的搭建等操作。 Docker Hub 公共仓库Docker官方维护了一个公共镜像仓库 https://hub.docker.com ，大部">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker-学习三(Docker仓库)">
+<meta property="og:url" content="http://iamlfc.top/2020/01/27/Docker-学习三-Docker仓库/index.html">
 <meta property="og:site_name" content="邪恶小代码">
-<meta property="og:description" content="我从不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现更广阔的人生，那样的自由才是珍贵的、有价值的。我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。">
+<meta property="og:description" content="docker仓库（Repository）是集中存放镜像的地方，与git概念类似，分为公共仓库和私有仓库。一般与注册服务器（Registry）容易混淆。注册服务器是存放仓库的服务器，其中可有多个仓库。 内容提要使用Docker Hub官方仓库，登陆下载，及私有仓库的搭建等操作。 Docker Hub 公共仓库Docker官方维护了一个公共镜像仓库 https://hub.docker.com ，大部">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2019/11/28/Hl3Rz52YUaJqBtA.png">
+<meta property="og:updated_time" content="2020-01-30T15:19:56.057Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="邪恶小代码">
-<meta name="twitter:description" content="我从不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现更广阔的人生，那样的自由才是珍贵的、有价值的。我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。">
+<meta name="twitter:title" content="Docker-学习三(Docker仓库)">
+<meta name="twitter:description" content="docker仓库（Repository）是集中存放镜像的地方，与git概念类似，分为公共仓库和私有仓库。一般与注册服务器（Registry）容易混淆。注册服务器是存放仓库的服务器，其中可有多个仓库。 内容提要使用Docker Hub官方仓库，登陆下载，及私有仓库的搭建等操作。 Docker Hub 公共仓库Docker官方维护了一个公共镜像仓库 https://hub.docker.com ，大部">
+<meta name="twitter:image" content="https://i.loli.net/2019/11/28/Hl3Rz52YUaJqBtA.png">
 
 
 
@@ -118,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://iamlfc.top/categories/框架/page/2/">
+  <link rel="canonical" href="http://iamlfc.top/2020/01/27/Docker-学习三-Docker仓库/">
 
 
 
 
 
-  <title>分类: 框架 | 邪恶小代码</title>
+  <title>Docker-学习三(Docker仓库) | 邪恶小代码</title>
   
 
 
@@ -143,7 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -269,291 +273,230 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block category">
-
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>框架<small>分类</small>
-        </h1>
-      </div>
-
-      
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2020/01/27/Docker-学习三-Docker仓库/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     663 字
+	</span>
+	<span title="阅读时长">
+     2 分钟
+	</span>
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/07/21/Spring学习十-JDBCTemplate/" itemprop="url">
-              
-                <span itemprop="name">Spring学习十-JDBCTemplate</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Docker-学习三(Docker仓库)</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-21T22:55:57+08:00" content="2019-07-21">
-          07-21
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-27T20:10:35+08:00">
+                2020-01-27
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker镜像/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker镜像</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/27/Docker-学习三-Docker仓库/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/27/Docker-学习三-Docker仓库/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  663
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/06/30/Spring学习九-AOP/" itemprop="url">
-              
-                <span itemprop="name">Spring学习九-AOP</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-30T00:06:46+08:00" content="2019-06-30">
-          06-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/06/23/Spring学习八-之动态代理/" itemprop="url">
-              
-                <span itemprop="name">Spring学习八-之动态代理</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-23T22:39:21+08:00" content="2019-06-23">
-          06-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/06/16/Spring学习七-Spring整合Junit的配置/" itemprop="url">
-              
-                <span itemprop="name">Spring学习七-Spring整合Junit的配置</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-16T00:30:09+08:00" content="2019-06-16">
-          06-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/06/15/Spring学习六-注解IOC/" itemprop="url">
-              
-                <span itemprop="name">Spring学习六-注解IOC</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-15T00:41:58+08:00" content="2019-06-15">
-          06-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/06/10/Spirng学习五-依赖注入的几种方式/" itemprop="url">
-              
-                <span itemprop="name">Spirng学习五-依赖注入的几种方式</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-10T22:58:18+08:00" content="2019-06-10">
-          06-10
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/06/09/Spirng学习四-SpringBean的作用域/" itemprop="url">
-              
-                <span itemprop="name">Spirng学习四-SpringBean的作用域</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-09T00:15:41+08:00" content="2019-06-09">
-          06-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/06/05/Spring学习三-ApplicationContext/" itemprop="url">
-              
-                <span itemprop="name">Spring学习三-ApplicationContext</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-05T00:23:59+08:00" content="2019-06-05">
-          06-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/05/30/spring学习二/" itemprop="url">
-              
-                <span itemprop="name">spring学习二</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-05-30T00:43:37+08:00" content="2019-05-30">
-          05-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/05/28/Spring学习一-IOC、DI/" itemprop="url">
-              
-                <span itemprop="name">Spring学习一 IOC、DI</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-05-28T00:15:46+08:00" content="2019-05-28">
-          05-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+        <p>docker仓库（Repository）是集中存放镜像的地方，与git概念类似，分为公共仓库和私有仓库。一般与注册服务器（Registry）容易混淆。注册服务器是存放仓库的服务器，其中可有多个仓库。</p>
+<h1 id="内容提要"><a href="#内容提要" class="headerlink" title="内容提要"></a>内容提要</h1><p>使用Docker Hub官方仓库，登陆下载，及私有仓库的搭建等操作。</p>
+<h2 id="Docker-Hub-公共仓库"><a href="#Docker-Hub-公共仓库" class="headerlink" title="Docker Hub 公共仓库"></a>Docker Hub 公共仓库</h2><p>Docker官方维护了一个公共镜像仓库 <a href="https://hub.docker.com" target="_blank" rel="noopener">https://hub.docker.com</a> ，大部分镜像可以从官方下载。</p>
+<h3 id="1-登陆"><a href="#1-登陆" class="headerlink" title="1.登陆"></a>1.登陆</h3><p>在官网进行注册账号，通过命令执行docker login 来输入用户名密码进行登陆，本地用户目录的.dockercfg中将保存用户的认证信息。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-基本操作"><a href="#2-基本操作" class="headerlink" title="2.基本操作"></a>2.基本操作</h3><p>不需要登陆也可以使用 docker search 查询官方镜像，也可以使用docker pull命令将其下载到本地。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker search mysql -s 10</span><br><span class="line">docker pull centos</span><br></pre></td></tr></table></figure>
+<p>可以使用docker push 命令来将本地镜像推送到 Docker<br>Hub<br>直接推送镜像时会报错：<strong>denied: requested access to the resource is denied</strong><br>因为没有提交权限，此时应该将要推送的镜像添加tag，将其与docker Hub仓库路径保持一致。<br><img src="https://i.loli.net/2019/11/28/Hl3Rz52YUaJqBtA.png" alt="DockerHub.png"><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker tag test:0.1 lisidapao/test:v1.0</span><br><span class="line">docker push lisidapao/test</span><br></pre></td></tr></table></figure></p>
+<h2 id="搭建本地私有仓库"><a href="#搭建本地私有仓库" class="headerlink" title="搭建本地私有仓库"></a>搭建本地私有仓库</h2><h3 id="1-使用registry-镜像创建私有仓库"><a href="#1-使用registry-镜像创建私有仓库" class="headerlink" title="1.使用registry 镜像创建私有仓库"></a>1.使用registry 镜像创建私有仓库</h3><p>通过官方提供的 registry 镜像来简单搭建一套本地私<br>有仓库环境<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 5000:5000 registry</span><br></pre></td></tr></table></figure></p>
+<p>通过- v参数来将镜像文件存放在本地的指定路径<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 5000:5000 -v /opt/data/registry:/tmp/registry registry</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-管理私有仓库"><a href="#2-管理私有仓库" class="headerlink" title="2. 管理私有仓库"></a>2. 管理私有仓库</h3><p>获取仓库服务的ip地址，再开一个虚拟机模拟本地将本地镜像tag标记为：<strong>仓库IP:5000/test</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag ubuntu:14.04 10.0.2.2:5000/test</span><br></pre></td></tr></table></figure></p>
+<p>使用docker push 上传标记的镜像：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push 10.0.2.2:5000/test</span><br></pre></td></tr></table></figure></p>
+<p>用curl 查看仓库10.0.2.2： 5000 中的镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://10.0.2.2:5000/v1/search</span><br></pre></td></tr></table></figure></p>
+<p>结果中可以看到{“description”：””，”name”：”library/test”}，表明镜像已经成功上传了。现在可以到任意一台能访问到 10.0.2.2地址的机器去下载这个镜像了。</p>
+<p>版本较新的Docker版本对安全性要求比较高，要求仓库支持SSL/TLS证书。内部使用的私有仓库，可以关闭对此的检查。<br>添加如下参数，标识信任该仓库，不进行证书检查，重启Docker 服务配置生效<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DOCKER_OPTS="--insecure-registry 10.0.2.2:5000"</span><br></pre></td></tr></table></figure></p>
+<h2 id="国内仓库配置"><a href="#国内仓库配置" class="headerlink" title="国内仓库配置"></a>国内仓库配置</h2><p>阿里云，时速云，网易云等相关：<a href="https://www.cnblogs.com/wushuaishuai/p/9984228.html" target="_blank" rel="noopener">https://www.cnblogs.com/wushuaishuai/p/9984228.html</a></p>
+<p>参考资料：Docker技术入门与实战</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/12/Jenkins-Svn-Ant持续集成/" rel="next" title="Jenkins + Svn + Ant持续集成">
+                <i class="fa fa-chevron-left"></i> Jenkins + Svn + Ant持续集成
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/categories/框架/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/categories/框架/">1</a><span class="page-number current">2</span>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -561,6 +504,16 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDQyNC8yMDk1Ng=="></div>
+    </div>
+
+
+  
+
+
 
 
         </div>
@@ -582,8 +535,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -681,6 +643,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#内容提要"><span class="nav-number">1.</span> <span class="nav-text">内容提要</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-Hub-公共仓库"><span class="nav-number">1.1.</span> <span class="nav-text">Docker Hub 公共仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-登陆"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.登陆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-基本操作"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.基本操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建本地私有仓库"><span class="nav-number">1.2.</span> <span class="nav-text">搭建本地私有仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-使用registry-镜像创建私有仓库"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.使用registry 镜像创建私有仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-管理私有仓库"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 管理私有仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#国内仓库配置"><span class="nav-number">1.3.</span> <span class="nav-text">国内仓库配置</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -817,6 +795,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -834,6 +816,18 @@
       <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://iamlfc.top/2020/01/27/Docker-学习三-Docker仓库/';
+          this.page.identifier = '2020/01/27/Docker-学习三-Docker仓库/';
+          this.page.title = 'Docker-学习三(Docker仓库)';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
@@ -853,6 +847,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 

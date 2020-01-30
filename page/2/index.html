@@ -284,6 +284,266 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/10/SpringCloud学习五-GateWay网关/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李斯大炮">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/nini.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邪恶小代码">
+    </span>
+	<span title="字数统计">
+     2k 字
+	</span>
+	<span title="阅读时长">
+     9 分钟
+	</span>
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/10/SpringCloud学习五-GateWay网关/" itemprop="url">SpringCloud学习五-GateWay网关</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-10T23:51:40+08:00">
+                2019-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringCloud</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/spring/SpringCloud/GateWay/" itemprop="url" rel="index">
+                    <span itemprop="name">GateWay</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/10/SpringCloud学习五-GateWay网关/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/10/SpringCloud学习五-GateWay网关/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="1-GateWay是什么？"><a href="#1-GateWay是什么？" class="headerlink" title="1.GateWay是什么？"></a>1.GateWay是什么？</h2><p>GateWay 是SpringCloud 生态系统中的网关，目标是替代Zuul，同样提供了限流，监控，路由转发、权限校验等功能。</p>
+<p>相关名词：</p>
+<ul>
+<li>Route（路由）：这是网关的基本构建块。它由一个 ID，一个目标 URI，一组断言和一组过滤器定义。如果断言为真，则路由匹配。</li>
+<li>Predicate（断言）：这是一个 Java 8 的 Predicate。输入类型是一个 ServerWebExchange。我们可以使用它来匹配来自 HTTP 请求的任何内容，例如 headers 或参数。</li>
+<li>Filter（过滤器）：这是org.springframework.cloud.gateway.filter.GatewayFilter的实例，我们可以使用它修改请求和响应。</li>
+</ul>
+<p><a href="http://tva1.sinaimg.cn/large/007X8olVly1g7thifgswnj30hv0l7dh6.jpg" target="_blank" rel="noopener">工作流程：</a><br><img src="https://i.loli.net/2019/10/10/fvwEDGOQBUj3utk.png" alt="GateWay.png"></p>
+<p>客户端向 Spring Cloud Gateway 发出请求，如果HandlerMapping中找到了请求相匹配的路由，将其发送到Web Handler。Handler再通过指定过滤器链将请求发送到实际服务之星业务逻辑，然后返回。虚线是过滤器可能会在发送代理请求之前pre活之后post执行业务逻辑。</p>
+<h2 id="2-创建工程"><a href="#2-创建工程" class="headerlink" title="2.创建工程"></a>2.创建工程</h2><h3 id="2-1依赖"><a href="#2-1依赖" class="headerlink" title="2.1依赖"></a>2.1依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-gateway&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-webflux&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>注意：springcloud gateway使用的web框架为webflux，和springMVC不兼容。</strong></p>
+<h3 id="2-2代码"><a href="#2-2代码" class="headerlink" title="2.2代码"></a>2.2代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GateWayApplication</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		SpringApplication.run(GateWayApplication.class, args);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Bean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> RouteLocator <span class="title">customRouteLocator</span><span class="params">(RouteLocatorBuilder builder)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> builder.routes()</span><br><span class="line">				.route(<span class="string">"test_route"</span>, r -&gt; r.path(<span class="string">"/test"</span>)</span><br><span class="line">						.uri(<span class="string">"http://baidu.com"</span>))</span><br><span class="line">				.build();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>路由有两种配置方式，一种是像上面这样配置一个id名为test_route的路由，当访问项目地址/test的时候，会自动转发到baidu.com。<br>另一种是在配置文件中配置，下面介绍。</p>
+<h3 id="2-3配置文件"><a href="#2-3配置文件" class="headerlink" title="2.3配置文件"></a>2.3配置文件</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    gateway:</span></span><br><span class="line"><span class="attr">      routes:</span></span><br><span class="line"><span class="attr">      - id:</span> <span class="string">test_route</span></span><br><span class="line"><span class="attr">        uri:</span> <span class="attr">http://www.baidu.com</span></span><br><span class="line"><span class="attr">        predicates:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">Path=/foo/**</span></span><br><span class="line"><span class="attr">        filters:</span></span><br><span class="line"><span class="bullet">            -</span> <span class="string">StripPrefix=1</span></span><br></pre></td></tr></table></figure>
+<p>字段含义如下：</p>
+<ul>
+<li>id: 自定有路由id，唯一</li>
+<li>uri: 跳转的目标地址</li>
+<li>predicates: 路由条件</li>
+<li>filters： 过滤规则</li>
+</ul>
+<p>上面配置的意思是配置了一个id为test_route的路由规则，当访问项目地址/foo/hello的时候自动转发到地址baidu.com。如果上面例子中没有加一个StripPrefix=1过滤器，则目标uri为<a href="http://localhost:8000/foo/bar，StripPrefix过滤器是去掉一个路径。" target="_blank" rel="noopener">http://localhost:8000/foo/bar，StripPrefix过滤器是去掉一个路径。</a><br>routes配置和代码配置保留一处即可。</p>
+<h2 id="3-路由规则详解"><a href="#3-路由规则详解" class="headerlink" title="3.路由规则详解"></a>3.路由规则详解</h2><blockquote>
+<p>Predicate 来源于 Java 8，是 Java 8 中引入的一个函数，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）。可以用于接口请求参数校验、判断新老数据是否有变化需要进行更新操作。<br>在 Spring Cloud Gateway 中 Spring 利用 Predicate 的特性实现了各种路由匹配规则，有通过 Header、请求参数等不同的条件来进行作为条件匹配到对应的路由。<a href="http://tva1.sinaimg.cn/large/007X8olVly1g7til1ktyfj30rg0eb12w.jpg" target="_blank" rel="noopener">网上有一张图总结了 Spring Cloud 内置的几种 Predicate 的实现。</a></p>
+</blockquote>
+<p><img src="https://i.loli.net/2019/10/10/8XzQH2WSkTOesJq.png" alt="spring-cloud-gateway3.png"></p>
+<h3 id="3-1时间匹配"><a href="#3-1时间匹配" class="headerlink" title="3.1时间匹配"></a>3.1时间匹配</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    gateway:</span></span><br><span class="line"><span class="attr">      routes:</span></span><br><span class="line"><span class="attr">       - id:</span> <span class="string">time_route</span></span><br><span class="line"><span class="attr">        uri:</span> <span class="attr">http://ityouknow.com</span></span><br><span class="line"><span class="attr">        predicates:</span></span><br><span class="line"><span class="bullet">         -</span> <span class="string">After=2018-01-20T06:06:06+08:00[Asia/Shanghai]</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Spring 是通过 ZonedDateTime 来对时间进行的对比，ZonedDateTime 是 Java 8<br>中日期时间功能里，用于表示带时区的日期与时间信息的类，ZonedDateTime<br>支持通过时区来设置时间，中国的时区是：Asia/Shanghai。 After Route Predicate<br>是指在这个时间之后的请求都转发到目标地址。上面的示例是指，请求时间在<br>2018年1月20日6点6分6秒之后的所有请求都转发到地址<a href="http://ityouknow.com。+08:00是指时间和UTC时间相差八个小时，时间地区为Asia/Shanghai。" target="_blank" rel="noopener">http://ityouknow.com。+08:00是指时间和UTC时间相差八个小时，时间地区为Asia/Shanghai。</a></p>
+</blockquote>
+<h3 id="3-2-Cookie匹配"><a href="#3-2-Cookie匹配" class="headerlink" title="3.2 Cookie匹配"></a>3.2 Cookie匹配</h3><p>Cookie Route Predicate 可以接收两个参数，一个是 Cookie name ,一个是正则表达式，路由规则会通过获取对应的 Cookie name 值和正则表达式去匹配，如果匹配上就会执行路由，如果没有匹配上则不执行。<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    gateway:</span></span><br><span class="line"><span class="attr">      routes:</span></span><br><span class="line"><span class="attr">       - id:</span> <span class="string">cookie_route</span></span><br><span class="line"><span class="attr">         uri:</span> <span class="attr">http://ityouknow.com</span></span><br><span class="line"><span class="attr">         predicates:</span></span><br><span class="line"><span class="bullet">         -</span> <span class="string">Cookie=ityouknow,</span> <span class="string">kee.e</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="3-3-通过请求路径匹配-常用"><a href="#3-3-通过请求路径匹配-常用" class="headerlink" title="3.3 通过请求路径匹配(常用)"></a>3.3 通过请求路径匹配(常用)</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    gateway:</span></span><br><span class="line"><span class="attr">      routes:</span></span><br><span class="line"><span class="attr">      - id:</span> <span class="string">host_route</span></span><br><span class="line"><span class="attr">        uri:</span> <span class="attr">http://baidu.com</span></span><br><span class="line"><span class="attr">        predicates:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">Path=/foo/&#123;segment&#125;</span></span><br></pre></td></tr></table></figure>
+<p>如果请求路径符合要求，则此路由将匹配，例如：/foo/1 或者 /foo/bar。<br>使用 curl 测试，命令行输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:8080/foo/1</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-4通过请求参数匹配"><a href="#3-4通过请求参数匹配" class="headerlink" title="3.4通过请求参数匹配"></a>3.4通过请求参数匹配</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  cloud:</span></span><br><span class="line"><span class="attr">    gateway:</span></span><br><span class="line"><span class="attr">      routes:</span></span><br><span class="line"><span class="attr">      - id:</span> <span class="string">query_route</span></span><br><span class="line"><span class="attr">        uri:</span> <span class="attr">http://ityouknow.com</span></span><br><span class="line"><span class="attr">        predicates:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">Query=smile</span></span><br></pre></td></tr></table></figure>
+<p>这样配置，只要请求中包含 smile 属性的参数即可匹配路由。<br>使用 curl 测试，命令行输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl localhost:8080?smile=x&amp;id=2</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-利用过滤器修改接口的返回报文（后置过滤）"><a href="#4-利用过滤器修改接口的返回报文（后置过滤）" class="headerlink" title="4.利用过滤器修改接口的返回报文（后置过滤）"></a>4.利用过滤器修改接口的返回报文（后置过滤）</h2><p>各个子服务返回的报文各异，需要在网关对返回报文进行包装统一返回格式。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ResponseFilter</span>  <span class="keyword">implements</span> <span class="title">GlobalFilter</span>, <span class="title">Ordered</span> </span>&#123;</span><br><span class="line">    <span class="comment">//白名单</span></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;filter.url.white.list.rsp&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String[] skipAuthUrls ;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Mono&lt;Void&gt; <span class="title">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> </span>&#123;</span><br><span class="line">        ServerHttpResponse originalResponse = exchange.getResponse();</span><br><span class="line">        String url = exchange.getRequest().getURI().getPath();</span><br><span class="line">        <span class="comment">//跳过不需要验证的路径</span></span><br><span class="line">        <span class="keyword">if</span>(Arrays.asList(skipAuthUrls).contains(url))&#123;</span><br><span class="line">            <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">        &#125;</span><br><span class="line">        DataBufferFactory bufferFactory = originalResponse.bufferFactory();</span><br><span class="line">        ServerHttpResponseDecorator decoratedResponse = <span class="keyword">new</span> ServerHttpResponseDecorator(originalResponse) &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> Mono&lt;Void&gt; <span class="title">writeWith</span><span class="params">(Publisher&lt;? extends DataBuffer&gt; body)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (body <span class="keyword">instanceof</span> Flux) &#123;</span><br><span class="line">                    Flux&lt;? extends DataBuffer&gt; fluxBody = (Flux&lt;? extends DataBuffer&gt;) body;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">super</span>.writeWith(fluxBody.map(dataBuffer -&gt; &#123;</span><br><span class="line">                        <span class="comment">// probably should reuse buffers</span></span><br><span class="line">                        <span class="keyword">byte</span>[] content = <span class="keyword">new</span> <span class="keyword">byte</span>[dataBuffer.readableByteCount()];</span><br><span class="line">                        dataBuffer.read(content);</span><br><span class="line">                        <span class="comment">// 释放掉内存</span></span><br><span class="line">                        DataBufferUtils.release(dataBuffer);</span><br><span class="line">                        String rs = <span class="keyword">new</span> String(content, Charset.forName(<span class="string">"UTF-8"</span>));</span><br><span class="line">                        <span class="comment">//默认失败</span></span><br><span class="line">                        CommonResult commonResult = CommonResult.failed();</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            <span class="keyword">if</span>(StringUtils.isNotBlank(rs))&#123;</span><br><span class="line">                                JsonResult jsonResult= JSONObject.parseObject(rs,JsonResult.class);</span><br><span class="line">                                <span class="keyword">if</span>(<span class="keyword">null</span> != jsonResult )&#123;</span><br><span class="line">                                    <span class="keyword">if</span>(<span class="number">0</span> == jsonResult.getCode())&#123;</span><br><span class="line">                                        commonResult = CommonResult.success(jsonResult.getData(),jsonResult.getMessage());</span><br><span class="line">                                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                                        commonResult = CommonResult.failed(jsonResult.getMessage());</span><br><span class="line">                                    &#125;</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                            log.error(<span class="string">"转换异常，异常报文：&#123;&#125;"</span>,rs);</span><br><span class="line">                            log.error(e.getMessage(),e);</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">byte</span>[] newRs = JSON.toJSONString(commonResult).getBytes(Charset.forName(<span class="string">"UTF-8"</span>));</span><br><span class="line">                        originalResponse.getHeaders().setContentLength(newRs.length);<span class="comment">//如果不重新设置长度则收不到消息。</span></span><br><span class="line">                        <span class="keyword">return</span> bufferFactory.wrap(newRs);</span><br><span class="line">                    &#125;));</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">super</span>.writeWith(body);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> chain.filter(exchange.mutate().response(decoratedResponse).build());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 功能描述: 执行优先级</span></span><br><span class="line"><span class="comment">     * 此处order需要小于-1，需要先于NettyWriteResponseFilter过滤器执行</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>:</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span>:</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@auther</span>: lfc</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span>: 2019/8/25 18:56</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getOrder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">99</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>需要注意的是order需要小于-1，需要先于NettyWriteResponseFilter过滤器执行。</p>
+<h2 id="5-过滤器拦截权限认证-前置过滤"><a href="#5-过滤器拦截权限认证-前置过滤" class="headerlink" title="5.过滤器拦截权限认证(前置过滤)"></a>5.过滤器拦截权限认证(前置过滤)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AuthFilter</span> <span class="keyword">implements</span> <span class="title">GlobalFilter</span>, <span class="title">Ordered</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;filter.url.white.list.req&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String[] skipAuthUrls;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String jwtBlacklistKeyFormat;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Mono&lt;Void&gt; <span class="title">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> </span>&#123;</span><br><span class="line">        String url = exchange.getRequest().getURI().getPath();</span><br><span class="line">        <span class="comment">//跳过不需要验证的路径</span></span><br><span class="line">        <span class="keyword">if</span>(Arrays.asList(skipAuthUrls).contains(url))&#123;</span><br><span class="line">            <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//从请求头中取出token</span></span><br><span class="line">        String token = exchange.getRequest().getHeaders().getFirst(<span class="string">"Authorization"</span>);</span><br><span class="line">        <span class="comment">//未携带token或token在黑名单内</span></span><br><span class="line">        <span class="keyword">if</span> (token == <span class="keyword">null</span> ||</span><br><span class="line">                token.isEmpty() ||</span><br><span class="line">                isBlackToken(token)) &#123;</span><br><span class="line">            <span class="keyword">if</span>(log.isDebugEnabled() &amp;&amp; isBlackToken(token))&#123;</span><br><span class="line">                log.debug(<span class="string">"**********此token已加入黑名单**********"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            ServerHttpResponse originalResponse = exchange.getResponse();</span><br><span class="line">            originalResponse.setStatusCode(HttpStatus.OK);</span><br><span class="line">            originalResponse.getHeaders().add(<span class="string">"Content-Type"</span>, <span class="string">"application/json;charset=UTF-8"</span>);</span><br><span class="line">            <span class="keyword">byte</span>[] response = JSONObject.toJSONString(CommonResult.unauthorized(<span class="keyword">null</span>)).getBytes(StandardCharsets.UTF_8);</span><br><span class="line">            DataBuffer buffer = originalResponse.bufferFactory().wrap(response);</span><br><span class="line">            <span class="keyword">return</span> originalResponse.writeWith(Flux.just(buffer));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//取出token包含的身份</span></span><br><span class="line">        String data = JWTUtil.getData(token, Constant.JWT_TYPE);</span><br><span class="line">        <span class="keyword">if</span>(data.isEmpty())&#123;</span><br><span class="line">            ServerHttpResponse originalResponse = exchange.getResponse();</span><br><span class="line">            originalResponse.setStatusCode(HttpStatus.OK);</span><br><span class="line">            originalResponse.getHeaders().add(<span class="string">"Content-Type"</span>, <span class="string">"application/json;charset=UTF-8"</span>);</span><br><span class="line">            <span class="keyword">byte</span>[] response = JSONObject.toJSONString(CommonResult.forbidden(<span class="keyword">null</span>)).getBytes(StandardCharsets.UTF_8);</span><br><span class="line">            DataBuffer buffer = originalResponse.bufferFactory().wrap(response);</span><br><span class="line">            <span class="keyword">return</span> originalResponse.writeWith(Flux.just(buffer));</span><br><span class="line">        &#125;</span><br><span class="line">        UserDTO ud = JSONObject.parseObject(data,UserDTO.class);</span><br><span class="line">        <span class="comment">// 1.解析判断是否被修改 2.根据token 获取redis中的数据以此判断是否超时或有效</span></span><br><span class="line">        <span class="keyword">if</span>(!JWTUtil.verify(token) || StringUtils.isBlank(JedisUtil.getJson(ud.getJti())))&#123;</span><br><span class="line">            ServerHttpResponse originalResponse = exchange.getResponse();</span><br><span class="line">            originalResponse.setStatusCode(HttpStatus.OK);</span><br><span class="line">            originalResponse.getHeaders().add(<span class="string">"Content-Type"</span>, <span class="string">"application/json;charset=UTF-8"</span>);</span><br><span class="line">            <span class="keyword">byte</span>[] response = JSONObject.toJSONString(CommonResult.tamperToken(<span class="keyword">null</span>)).getBytes(StandardCharsets.UTF_8);</span><br><span class="line">            DataBuffer buffer = originalResponse.bufferFactory().wrap(response);</span><br><span class="line">            <span class="keyword">return</span> originalResponse.writeWith(Flux.just(buffer));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//redis 更新过期时间</span></span><br><span class="line">        JedisUtil.setJson(ud.getJti(),token,Constant.EXRP_HOUR);</span><br><span class="line">        data = JWTUtil.sign(JSONObject.toJSONString(ud));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将现在的request，添加当前身份</span></span><br><span class="line">        ServerHttpRequest mutableReq = exchange.getRequest().mutate().header(<span class="string">"Authorization"</span>, data).build();</span><br><span class="line">        ServerWebExchange mutableExchange = exchange.mutate().request(mutableReq).build();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> chain.filter(mutableExchange);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getOrder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">100</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 功能描述: 判断token是否在黑名单内</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@auther</span>: lfc</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span>: 2019/9/9 0:34</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isBlackToken</span><span class="params">(String token)</span></span>&#123;</span><br><span class="line"><span class="comment">//        assert token != null;</span></span><br><span class="line"><span class="comment">//        return stringRedisTemplate.hasKey(String.format(jwtBlacklistKeyFormat, token));</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>GateWay中区分前置过滤还是后置过滤取决于动作在chain.filter方法前还是之后，之后回调的是后置，之前调用的是前置。</p>
+<p>参考资源：<a href="http://www.ityouknow.com/springcloud/2018/12/12/spring-cloud-gateway-start.html" target="_blank" rel="noopener">纯洁微笑</a><br>          <a href="https://blog.csdn.net/forezp/article/details/83792388" target="_blank" rel="noopener">方志鹏-深入理解Spring Cloud与微服务构建</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/10/10/日志输出使用姿势/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2408,224 +2668,6 @@ User　        #　用户名
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iamlfc.top/2019/08/04/HashMap多线程环境下死循环问题（记一次生产问题）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李斯大炮">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/uploads/nini.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="邪恶小代码">
-    </span>
-	<span title="字数统计">
-     2.1k 字
-	</span>
-	<span title="阅读时长">
-     9 分钟
-	</span>
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/04/HashMap多线程环境下死循环问题（记一次生产问题）/" itemprop="url">HashMap多线程环境下死循环问题（记一次生产问题）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-04T23:34:45+08:00">
-                2019-08-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/避坑指南/" itemprop="url" rel="index">
-                    <span itemprop="name">避坑指南</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/避坑指南/算法与数据结构/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/04/HashMap多线程环境下死循环问题（记一次生产问题）/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/04/HashMap多线程环境下死循环问题（记一次生产问题）/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.1k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  9
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>算法与数据结构</p>
-<h2 id="一-问题"><a href="#一-问题" class="headerlink" title="一.问题"></a>一.问题</h2><p>今天在工作的时候项目组的同事说他们系统生产环境有线程stuck了，我抱着学习生产问题定位的心态凑合过去。了解到出现此问题时，操作员有多人使用同一帐号在系统中进行操作，且此种情况之前因为大批量的人员登录系统出现过。在拿到了报错日志时，在其中一段日志细节中突然发现了些许端倪。</p>
-<p><img src="https://img.vim-cn.com/06/3a829bd16d0b00dab9bc05e1080bbfe85e6040.png" alt="日志报错"><br><em>下面连接防止图片连接失效备份图库（忽略）</em><br><a href="https://ws3.sinaimg.cn/large/006Xmmmgly1g5ke0d338mj31fl0gdwg3.jpg" target="_blank" rel="noopener">https://ws3.sinaimg.cn/large/006Xmmmgly1g5ke0d338mj31fl0gdwg3.jpg</a><br><a href="https://img04.sogoucdn.com/app/a/100520146/0265cf53f113ead98c352ee1c3bec72a" target="_blank" rel="noopener">https://img04.sogoucdn.com/app/a/100520146/0265cf53f113ead98c352ee1c3bec72a</a></p>
-<p>来整理一下线索，由于多人使用同一帐号进行操作出现，且有大量人员登录进行操作时出现，联想到之前看耗子叔的一篇文章讲述关于多线程环境下操作map导致死循环问题，是否是因为HashMap在执行put的方法时线程阻塞了呢？</p>
-<h2 id="二-定位"><a href="#二-定位" class="headerlink" title="二.定位"></a>二.定位</h2><p>在查看调用处的代码时发现，此处是cas-client的一个jar包。<br>点开了jar包中SingleSignOutFilter这个类找到了其中doFilter方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span> <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">    HttpServletRequest request = (HttpServletRequest)servletRequest;</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">"POST"</span>.equals(request.getMethod())) &#123;</span><br><span class="line">      String logoutRequest = request.getParameter(<span class="string">"logoutRequest"</span>);</span><br><span class="line">      <span class="keyword">if</span> (CommonUtils.isNotBlank(logoutRequest))&#123;</span><br><span class="line">        <span class="keyword">if</span> (log.isTraceEnabled()) &#123;</span><br><span class="line">          log.trace(<span class="string">"Logout request=["</span> + logoutRequest + <span class="string">"]"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        String sessionIdentifier = XmlUtils.getTextForElement(logoutRequest, <span class="string">"SessionIndex"</span>);</span><br><span class="line">        <span class="keyword">if</span> (CommonUtils.isNotBlank(sessionIdentifier)) &#123;</span><br><span class="line">          HttpSession session = SESSION_MAPPING_STORAGE.removeSessionByMappingId(sessionIdentifier);</span><br><span class="line">          <span class="keyword">if</span> (session != <span class="keyword">null</span>) &#123;</span><br><span class="line">            String sessionID = session.getId();</span><br><span class="line">            <span class="keyword">if</span> (log.isDebugEnabled()) &#123;</span><br><span class="line">              log.debug(<span class="string">"Invalidating session ["</span> + sessionID + <span class="string">"] for ST ["</span> + sessionIdentifier + <span class="string">"]"</span>);</span><br><span class="line">            &#125;<span class="keyword">try</span>&#123;</span><br><span class="line">              session.invalidate();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalStateException e) &#123;</span><br><span class="line">              log.debug(e, e);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      String artifact = request.getParameter(<span class="keyword">this</span>.artifactParameterName);</span><br><span class="line">      HttpSession session = request.getSession();</span><br><span class="line">      <span class="keyword">if</span> ((log.isDebugEnabled()) &amp;&amp; (session != <span class="keyword">null</span>)) &#123;</span><br><span class="line">        log.debug(<span class="string">"Storing session identifier for "</span> + session.getId());</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (CommonUtils.isNotBlank(artifact)) &#123;</span><br><span class="line">        SESSION_MAPPING_STORAGE.addSessionById(artifact, session);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    filterChain.doFilter(servletRequest, servletResponse);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p><em>此代码反编译而成，语法稍有变化</em><br>代码中的32行是引发报错的地方，根据SESSION_MAPPING_STORAGE 查看其代码定义处。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> SessionMappingStorage SESSION_MAPPING_STORAGE = <span class="keyword">new</span> HashMapBackedSessionMappingStorage();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SingleSignOutFilter</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.artifactParameterName = <span class="string">"ticket"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>SESSION_MAPPING_STORAGE 的key值是获取的请求中的ticket，而value则是当前session，下面来看SESSION_MAPPING_STORAGE到底是个啥。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMapBackedSessionMappingStorage</span></span></span><br><span class="line"><span class="class">  <span class="keyword">implements</span> <span class="title">SessionMappingStorage</span></span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Map MANAGED_SESSIONS;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Map ID_TO_SESSION_KEY_MAPPING;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">HashMapBackedSessionMappingStorage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.MANAGED_SESSIONS = <span class="keyword">new</span> HashMap();</span><br><span class="line">    <span class="keyword">this</span>.ID_TO_SESSION_KEY_MAPPING = <span class="keyword">new</span> HashMap(); </span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addSessionById</span><span class="params">(String mappingId, HttpSession session)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.ID_TO_SESSION_KEY_MAPPING.put(session.getId(), mappingId);</span><br><span class="line">    <span class="keyword">this</span>.MANAGED_SESSIONS.put(mappingId, session);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeBySessionById</span><span class="params">(String sessionId)</span></span>&#123;</span><br><span class="line">    String key = (String)<span class="keyword">this</span>.ID_TO_SESSION_KEY_MAPPING.get(sessionId);</span><br><span class="line">    <span class="keyword">this</span>.MANAGED_SESSIONS.remove(key);</span><br><span class="line">    <span class="keyword">this</span>.ID_TO_SESSION_KEY_MAPPING.remove(sessionId);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> HttpSession <span class="title">removeSessionByMappingId</span><span class="params">(String mappingId)</span> </span>&#123;</span><br><span class="line">    HttpSession session = (HttpSession)<span class="keyword">this</span>.MANAGED_SESSIONS.get(mappingId);</span><br><span class="line">    <span class="keyword">if</span> (session != <span class="keyword">null</span>) &#123;</span><br><span class="line">      removeBySessionById(session.getId());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> session;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>SessionMappingStorage 是一个接口而HashMapBackedSessionMappingStorage 是它的实现类，其中11行addSessionById方法中的MANAGED_SESSIONS、ID_TO_SESSION_KEY_MAPPING都是使用的HashMap！且用final修饰，联想到此类在SingleSignOutFilter中使用时定义为static，自此找到问题所在。<br>考虑到可能是由于jar包太过久远，查看了后续发布的jar包，其中对map操作时进行了加锁。<br><img src="https://img.vim-cn.com/15/fb751f594328b59f8e82899feb1130d6e76551.png" alt="新版jar包修改内容"><br><em>下面连接防止图片连接失效备份图库（忽略）</em><br><a href="https://ws1.sinaimg.cn/large/006Xmmmggy1g5kdyihqz8j30uy0adt9q.jpg" target="_blank" rel="noopener">https://ws1.sinaimg.cn/large/006Xmmmggy1g5kdyihqz8j30uy0adt9q.jpg</a><br><a href="https://i.loli.net/2019/08/01/5d42c85b65f4599497.jpg" target="_blank" rel="noopener">https://i.loli.net/2019/08/01/5d42c85b65f4599497.jpg</a></p>
-<h2 id="三-分析"><a href="#三-分析" class="headerlink" title="三.分析"></a>三.分析</h2><p>为何HashMap在多线程环境下使用会有死循环问题呢？在此来回顾下其具体原理。</p>
-<h3 id="1-HashMap-是什么？"><a href="#1-HashMap-是什么？" class="headerlink" title="1.HashMap 是什么？"></a>1.HashMap 是什么？</h3><p>hashMap是一个散列表，来源于数组，借助散列函数对数组进行了扩展，利用数组支持下标随机访问元素的特性进行存储。当key被加入的时候会通过散列函数计算出这个数组的下标i然后将这个&lt; key，value &gt;插入到array[i]中，如果有两个不同的key被计算到了同一个i的位置，叫做hash冲突，这时在数组i的位置会横向扩展成一个链表。（JDK1.8之前）</p>
-<h3 id="2-源码实现"><a href="#2-源码实现" class="headerlink" title="2.源码实现"></a>2.源码实现</h3><p>源码：<br>put方法实现<br>1、判断key是否已经存在<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> putForNullKey(value);</span><br><span class="line">    <span class="keyword">int</span> hash = hash(key);</span><br><span class="line">    <span class="keyword">int</span> i = indexFor(hash, table.length);</span><br><span class="line">    <span class="comment">// 如果key已经存在，则替换value，并返回旧值</span></span><br><span class="line">    <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[i]; e != <span class="keyword">null</span>; e = e.next) &#123;</span><br><span class="line">        Object k;</span><br><span class="line">        <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) &#123;</span><br><span class="line">            V oldValue = e.value;</span><br><span class="line">            e.value = value;</span><br><span class="line">            e.recordAccess(<span class="keyword">this</span>);</span><br><span class="line">            <span class="keyword">return</span> oldValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    modCount++;</span><br><span class="line">    <span class="comment">// key不存在，则插入新的元素</span></span><br><span class="line">    addEntry(hash, key, value, i);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>2、检查容量是否达到阈值threshold<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addEntry</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">int</span> bucketIndex)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ((size &gt;= threshold) &amp;&amp; (<span class="keyword">null</span> != table[bucketIndex])) &#123;</span><br><span class="line">        resize(<span class="number">2</span> * table.length);</span><br><span class="line">        hash = (<span class="keyword">null</span> != key) ? hash(key) : <span class="number">0</span>;</span><br><span class="line">        bucketIndex = indexFor(hash, table.length);</span><br><span class="line">    &#125;</span><br><span class="line">    createEntry(hash, key, value, bucketIndex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>如果元素个数已经达到阈值，则扩容，并把原来的元素移动过去。<br>3、扩容实现<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> newCapacity)</span></span>&#123;</span><br><span class="line">    Entry[] oldTable = table;</span><br><span class="line">    <span class="keyword">int</span> oldCapacity = oldTable.length;</span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">//创建一个新的Hash Table</span></span><br><span class="line">    Entry[] newTable = <span class="keyword">new</span> Entry[newCapacity];</span><br><span class="line">    <span class="comment">//将Old Hash Table上的数据迁移到New Hash Table上</span></span><br><span class="line">    transfer(newTable);</span><br><span class="line">    table = newTable;</span><br><span class="line">    threshold = (<span class="keyword">int</span>)(newCapacity * loadFactor);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>4、通过方法将数据迁移到扩容后的数组<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">transfer</span><span class="params">(Entry[] newTable)</span></span>&#123;</span><br><span class="line">    Entry[] src = table;</span><br><span class="line">    <span class="keyword">int</span> newCapacity = newTable.length;</span><br><span class="line">    <span class="comment">//下面这段代码的意思是：</span></span><br><span class="line">    <span class="comment">//  从OldTable里摘一个元素出来，然后放到NewTable中</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; src.length; j++) &#123;</span><br><span class="line">        Entry&lt;K,V&gt; e = src[j];</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</span><br><span class="line">            src[j] = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                <span class="comment">//获得下一节点</span></span><br><span class="line">                Entry&lt;K,V&gt; next = e.next;</span><br><span class="line">                <span class="comment">//计算得到新数组下标位置</span></span><br><span class="line">                <span class="keyword">int</span> i = indexFor(e.hash, newCapacity);</span><br><span class="line">                <span class="comment">//头插法，将当前节点next指向新数组，如果为空则为null，如果有值则获得其值 </span></span><br><span class="line">                e.next = newTable[i];</span><br><span class="line">                <span class="comment">//将数组赋值为新插入的链表头</span></span><br><span class="line">                newTable[i] = e;</span><br><span class="line">                e = next;</span><br><span class="line">            &#125; <span class="keyword">while</span> (e != <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>原链表值a-b-c-null ，使用头插法链表反转后循环结果依次为 a-null, b-a-null, c-b-a-null<br>ok上述流程在单线程环境下是没有问题的，来看一下多线程场景。</p>
-<h3 id="3-多线程场景"><a href="#3-多线程场景" class="headerlink" title="3.多线程场景"></a>3.多线程场景</h3><p>假设HashMap初始化大小为2，插入了三个节点，且三个都在同一hash槽内，此处设置其负载因子为1，元素数量达到3，此时触发了扩容。<br><img src="https://i.loli.net/2019/08/02/5d43cd39b552a60748.jpg" alt="原始数组"><br><em>下面连接防止图片连接失效备份图库（忽略）</em><br><a href="https://ws2.sinaimg.cn/large/006Xmmmggy1g5la5c7yg3j30cw04zwea.jpg" target="_blank" rel="noopener">https://ws2.sinaimg.cn/large/006Xmmmggy1g5la5c7yg3j30cw04zwea.jpg</a></p>
-<p>插入第4个节点时，发生rehash，假设现在有两个线程同时进行，线程1和线程2，两个线程都会新建新的数组。<br><img src="https://i.loli.net/2019/08/02/5d43ce31ce00c24734.jpg" alt="触发rehash"><br><a href="https://ws1.sinaimg.cn/large/006Xmmmgly1g5la9qndm9j30ja08ddfp.jpg" target="_blank" rel="noopener">https://ws1.sinaimg.cn/large/006Xmmmgly1g5la9qndm9j30ja08ddfp.jpg</a><br>如果线程2 在执行到 Entry&lt;K,V&gt; next = e.next;之后，cpu时间片用完了，这时变量e指向节点a，变量next指向节点b。<br>线程2继续执行，此时<figure class="highlight plain"><figcaption><span>i </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">第一次循环移动节点a</span><br><span class="line">![第一次循环][5]</span><br><span class="line">https://ws2.sinaimg.cn/large/006Xmmmgly1g5las8g1pbj308p08pjr7.jpg</span><br><span class="line"></span><br><span class="line">第二次循环移动节点b</span><br><span class="line">![第二次循环][6]</span><br><span class="line">https://ws3.sinaimg.cn/large/006Xmmmgly1g5lav75hmej309d07y0sk.jpg</span><br><span class="line">使用的头插法，这里的顺序是反过来的继续移动节点c</span><br><span class="line">![第三次循环][7]</span><br><span class="line">https://ws2.sinaimg.cn/large/006Xmmmggy1g5laxk0dkrj30bj07ojr8.jpg</span><br><span class="line">在这个时候线程1的时间片用完，内部的oldTable还没有设置成新的数组， 线程2 开始执行。</span><br><span class="line">此时回顾下线程2时间片到了的时候</span><br><span class="line">变量e指向节点a，变量next指向节点b。**（注意此时因为线程1的干扰，这里的节点b.next已经不在指向c而是指向了a）**</span><br></pre></td></tr></table></figure></p>
-<p>1.首先插入节点a，e=next循环。Entry&lt; K,V &gt; next = e.next 此时next为a，e为b。再次插入节点b，e=next循环。<br>2.第三次循环进来的时候执行完Entry&lt; K,V &gt; next = e.next; e为a节点，a的next指向null，next为null(循环退出条件)。<br>3.e.next = newTable[i]; 此时newTable[i]指向节点b，链表节点依次为b-a-null。而e.next =b,就等于把a的next指向了b，这样a和b就互相引用了，形成了一个环。<br>4.newTable[i] = e 把节点a放到了数组i位置此时链表节点依次为a-b-a（环）<br>5.e=next 变量e=null 此时满足 while (e != null)条件，退出循环。<br><code>`</code><br>最终引用关系：<br><img src="https://i.loli.net/2019/08/02/5d43d523b32e674511.jpg" alt="首先插入节点a"><br><a href="https://ws1.sinaimg.cn/large/006Xmmmggy1g5lb4k5z52j30o609mq2x.jpg" target="_blank" rel="noopener">https://ws1.sinaimg.cn/large/006Xmmmggy1g5lb4k5z52j30o609mq2x.jpg</a><br>节点a和节点b的互相引用形成了一个环，当把当前newTable[i]赋值到原来的oldTable中时。数组在使用对应的get时就会发生死循环。并且因为a、b节点的互相引用也会导致c节点的丢失。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>并发场景下，发生扩容时，可能会产生链表循环，在执行get时触发死循环，引起cpu100%，所以并发环境下一定要慎用HashMap。要并发可以使用线程安全的ConcurrentHashmap或者对map操作时加锁。</p>
-<p>参考资料：<a href="https://coolshell.cn/articles/9606.html" target="_blank" rel="noopener">coolshell</a>   <a href="https://juejin.im/post/5a66a08d5188253dc3321da0" target="_blank" rel="noopener">占小狼</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2679,7 +2721,7 @@ User　        #　用户名
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
